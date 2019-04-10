@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import { Container, Row, Col, Button } from 'reactstrap';
-import Web3 from 'web3';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import { Container, Row, Col, Button } from 'reactstrap'
+import Web3 from 'web3'
+import { connect } from 'react-redux'
+import { firestoreConnect } from 'react-redux-firebase'
+import { compose } from 'redux'
 
 import './App.css';
 
@@ -23,8 +25,6 @@ class App extends Component {
                 }
             ]
         }    
- 
-
     }
     
     async componentDidMount(){
@@ -41,13 +41,12 @@ class App extends Component {
         })
         
     }
-
-    
-
     
     render() {
         
         const { rank } = this.props;
+        const {question} = this.props.question;
+        console.log(this.props.question.project_hunter) // can get data from firebase
 
         return (   
             <div>
@@ -63,7 +62,8 @@ class App extends Component {
                                     </Col>
                                     <Col className = "question_box">
                                         <div className ="question_position">
-                                            <h1 >question </h1>
+                                            <h1>Question</h1>
+                                            {/* <h1 >{question.project_hunter.B0V9KVe5UzoD9z4GgWhC.question} </h1> */}
                                         </div>
                                     </Col>
                                 </div>
@@ -72,17 +72,20 @@ class App extends Component {
                                     <div className = "answer_position">
                                         <Col >
                                             <Button className = "answer_box" outline color="primary">
-                                                {} cau 1
+                                                A.
+                                                {/* A. {question.project_hunter.B0V9KVe5UzoD9z4GgWhC.answer[0]} */}
                                             </Button>
                                         </Col>                                        
                                         <Col >
                                             <Button className = "answer_box" outline color="primary">
-                                                {} cau 1
+                                                B.
+                                                {/* B. {question.project_hunter.B0V9KVe5UzoD9z4GgWhC.answer[1]} */}
                                             </Button>
                                         </Col>
                                         <Col >
                                             <Button className = "answer_box" outline color="primary">
-                                                {} cau 1
+                                                C.
+                                                {/* C. {question.project_hunter.B0V9KVe5UzoD9z4GgWhC.answer[2]} */}
                                             </Button>
                                         </Col>
                                     </div>                                    
@@ -116,15 +119,21 @@ class App extends Component {
                     </Row>
                 </Container>
             </div>
-                  
         );
     }
 }
 
 const mapStatetoProps = (state) => {
+    // console.log(state.firestore.data) // get data firebase 
     return {
+        question : state.firestore.data,
         rank : state.rank.ranking
     }
 }
 
-export default connect(mapStatetoProps)(App);
+export default compose(
+    connect(mapStatetoProps),
+    firestoreConnect([
+        { collection : 'project_hunter'}
+    ])
+)(App);
