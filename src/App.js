@@ -45,53 +45,53 @@ class App extends Component {
     render() {
         
         const { rank } = this.props;
-        const {question} = this.props.question;
-        console.log(this.props.question.project_hunter) // can get data from firebase
+        const { question } = this.props;
+        console.log(question) // can get data from firebase
 
         return (   
             <div>
                 <Container>
                     <Row className="set_height">
-                        <Col className = "box_color" xs="8">
-                            <div className="margin_box ">
-                                {/* question */}
-                                <div className = "question"> 
-                                    <Col className = "user_account">
-                                        <h5><strong>Your account :</strong> {this.state.account}</h5>
-                                        <p><strong>Balance :</strong> {this.state.balance} <strong>ETH</strong></p>
-                                    </Col>
-                                    <Col className = "question_box">
-                                        <div className ="question_position">
-                                            <h1>Question</h1>
-                                            {/* <h1 >{question.project_hunter.B0V9KVe5UzoD9z4GgWhC.question} </h1> */}
+                        {question && question.map(ques =>{
+                            return (
+                                <Col key={ques.id} className = "box_color" xs="8">
+                                    <div className="margin_box ">
+                                        {/* question */}
+                                        <div className = "question"> 
+                                            <Col className = "user_account">
+                                                <h5><strong>Your account :</strong> {this.state.account}</h5>
+                                                <p><strong>Balance :</strong> {this.state.balance} <strong>ETH</strong></p>
+                                            </Col>
+                                            <Col className = "question_box">
+                                                <div className ="question_position">
+                                                    <h1>{ques.question}</h1>
+                                                </div>
+                                            </Col>
                                         </div>
-                                    </Col>
-                                </div>
-                                {/* answer */}
-                                <Col className = "question">
-                                    <div className = "answer_position">
-                                        <Col >
-                                            <Button className = "answer_box" outline color="primary">
-                                                A.
-                                                {/* A. {question.project_hunter.B0V9KVe5UzoD9z4GgWhC.answer[0]} */}
-                                            </Button>
-                                        </Col>                                        
-                                        <Col >
-                                            <Button className = "answer_box" outline color="primary">
-                                                B.
-                                                {/* B. {question.project_hunter.B0V9KVe5UzoD9z4GgWhC.answer[1]} */}
-                                            </Button>
+                                        {/* answer */}
+                                        <Col className = "question">
+                                            <div className = "answer_position">
+                                                <Col >
+                                                    <Button className = "answer_box" outline color="primary">
+                                                        A. {ques.answer[0]}
+                                                    </Button>
+                                                </Col>                                        
+                                                <Col >
+                                                    <Button className = "answer_box" outline color="primary">
+                                                        B. {ques.answer[1]}
+                                                    </Button>
+                                                </Col>
+                                                <Col >
+                                                    <Button className = "answer_box" outline color="primary">
+                                                        C. {ques.answer[2]}
+                                                    </Button>
+                                                </Col>
+                                            </div>                                    
                                         </Col>
-                                        <Col >
-                                            <Button className = "answer_box" outline color="primary">
-                                                C.
-                                                {/* C. {question.project_hunter.B0V9KVe5UzoD9z4GgWhC.answer[2]} */}
-                                            </Button>
-                                        </Col>
-                                    </div>                                    
+                                    </div>
                                 </Col>
-                            </div>
-                        </Col>
+                            )
+                        })}                         
                         <Col className = "box_color" xs="4">
                             <div className="ranking margin_box" >
                                 {/* Ranking */}
@@ -124,9 +124,8 @@ class App extends Component {
 }
 
 const mapStatetoProps = (state) => {
-    // console.log(state.firestore.data) // get data firebase 
     return {
-        question : state.firestore.data,
+        question : state.firestore.ordered.project_hunter,
         rank : state.rank.ranking
     }
 }
