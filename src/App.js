@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from 'reactstrap';
 import Web3 from 'web3';
-
+import { connect } from 'react-redux';
 
 import './App.css';
 
@@ -40,67 +40,16 @@ class App extends Component {
             this.setState({balance})
         })
         
-
-        await this.ranking();
-    }
-
-    async ranking (){
-        var ranking = [{
-            account : '0x4c637fc36eca2da2d5214b53c0aec272f31f7e53',
-            correct : 5
-        },{
-            account : '0x4c637fc36eca2d02d5214b53c0aec272f31f7e54',
-            correct : 5
-        },{
-            account : '0x4c637fc36eca2d02d5214b53c0aec272f31f7333',
-            correct : 9
-        },{
-            account : '0x4c637fc36eca2s02d5214b53c0a02272f31f7e53',
-            correct : 8
-        },{
-            account : '0x4c637fc36eca2d02dasd4b53c0a02272f31f7e53',
-            correct : 9
-        },{
-            account : '0x4c637fc36eca2d02daaaab53c0a02272f31f7e53',
-            correct : 8
-        },{
-            account : '0x4c637fc36eca2d02dwe14b53c0a02272f31f7e53',
-            correct : 9
-        },{
-            account : '0x4c637fc36eca2d02dret4b53c0a02272f31f7e53',
-            correct : 8
-        },{
-            account : '0x4c637fc36eca2d02d5211233c0a02272f31f7e53',
-            correct : 9
-        },{
-            account : '0x4c637fc36eca2d02d521wertc0a02272f31f7e53',
-            correct : 8
-        },{
-            account : '0x4c637fc36eca2d02d9214b53c0ee2272f31f7e53',
-            correct : 9
-        },{
-            account : '0x4c637fc36eca1232d5214b53www02272f31f7e53',
-            correct : 8
-        },{
-            account : '0x4c637fca6eca2d02d5214b5ec0a02272f31f7e53',
-            correct : 9
-        },{
-            account : '0x4c637fc36eca2d02d5214b53c0a02272f31f7e53',
-            correct : 8
-        }]
-
-        await this.setState({
-            ranking : ranking
-        })
-
-        await this.state.ranking.forEach(rank => {
-            // console.log(rank);
-        });
     }
 
     
+
+    
     render() {
-        return (
+        
+        const { rank } = this.props;
+
+        return (   
             <div>
                 <Container>
                     <Row className="set_height">
@@ -149,7 +98,7 @@ class App extends Component {
                                 {/* member ranking */}
                                 <div className = "person_rank_box">
                                     {
-                                        this.state.ranking.map(rank => (
+                                        rank.map(rank => (
                                             <div key={rank.account} className = "person_rank">
                                                 <p className = "user_account">
                                                     <span className = "ellipsis">{rank.account}</span>
@@ -172,4 +121,10 @@ class App extends Component {
     }
 }
 
-export default App;
+const mapStatetoProps = (state) => {
+    return {
+        rank : state.rank.ranking
+    }
+}
+
+export default connect(mapStatetoProps)(App);
