@@ -12,12 +12,6 @@ import { reduxFirestore,getFirestore } from 'redux-firestore';
 import { reactReduxFirebase, getFirebase } from 'react-redux-firebase';
 import config from './config/config'
 
-// const store = createStore(rootReducer,
-//     compose(
-//         applyMiddleware(thunk)
-//     )
-// );
-
 const store = createStore(rootReducer,    
     compose(
         applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})),
@@ -30,7 +24,7 @@ ReactDOM.render(
         <Provider store= {store}>
             <App />
         </Provider>
-    , document.getElementById('root'));
+, document.getElementById('root'));
 
 
 serviceWorker.unregister();
