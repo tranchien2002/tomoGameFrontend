@@ -29,10 +29,10 @@ class PlayerLayout extends Component {
             this.setState({account})
         });
 
-        await web3.eth.getBalance(this.state.account).then((balance)=>{
-            balance = web3.utils.fromWei(balance);
-            this.setState({balance})
-        })
+        // await web3.eth.getBalance(this.state.account).then((balance)=>{
+        //     balance = web3.utils.fromWei(balance);
+        //     this.setState({balance})
+        // })
         
     }
     

@@ -4,27 +4,21 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createStore, applyMiddleware, compose } from 'redux';
-import rootReducer from './store/reducers/rootReducer';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import { reduxFirestore,getFirestore } from 'redux-firestore';
-import { reactReduxFirebase, getFirebase } from 'react-redux-firebase';
-import config from './config/config'
+import store from 'store';
 
-const store = createStore(rootReducer,    
-    compose(
-        applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})),
-        reactReduxFirebase(config), // redux binding for firebase
-        reduxFirestore(config) // redux bindings for firestore
-    )
-);
 
+const appRoot = document.getElementById('root');
 ReactDOM.render(
         <Provider store= {store}>
             <App />
         </Provider>
-, document.getElementById('root'));
+, appRoot);
+
+
+window.addEventListener('load', async () => {
+    
+})
 
 
 serviceWorker.unregister();
