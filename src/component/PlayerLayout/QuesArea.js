@@ -3,6 +3,7 @@ import '../App.css';
 import { Col, Button } from 'reactstrap'
 
 const QuesArea = (accQues) => {
+    // console.log(accQues)
     return(
         <Col className = "box_color" xs="8">
             <div className="margin_box ">

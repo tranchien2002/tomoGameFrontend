@@ -3,8 +3,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import PlayerLayout from './component/PlayerLayout/PlayerLayout'
 import AdminLayout from './component/AdminLayout/AdminLayout'
 
-
-class App extends Component {    
+class App extends Component {
+    
     render() {
         return (
           <BrowserRouter>

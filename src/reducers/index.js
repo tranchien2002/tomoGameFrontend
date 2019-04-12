@@ -2,13 +2,13 @@ import quesReducer from './quesReducer';
 import rankReducer from './rankReducer';
 import { combineReducers } from 'redux';
 import { firestoreReducer } from 'redux-firestore';
-import accountReducer from './accountReducer';
+import tomoReducer from './tomoReducer'
 
 const rootReducer = combineReducers({
-    account: accountReducer,
     ques: quesReducer,
     rank: rankReducer,
-    firestore: firestoreReducer
+    firestore: firestoreReducer,
+    tomo: tomoReducer
 })
 
-export default rootReducer
+export default rootReducer;

@@ -1,0 +1,16 @@
+.margin_box{
+    border-radius: 10px;
+    background-color: #ffffff;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.admin_quesbox{
+    margin: 2%;
+}
+
+.admin_question_box{
+    height: 85vh;
+    overflow: auto;
+}
