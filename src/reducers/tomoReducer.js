@@ -9,7 +9,22 @@ const initialState = {
 }
 
 const tomoReducer = (state = initialState, action) => {
-    return state;
+    switch (action.type) {
+        case actions.WEB3_CONNECT:
+            return {
+                ...state,
+                web3: action.web3,
+                account: action.account
+            }
+        case actions.INSTANTIATE_CONTRACT:
+            return {
+                ...state,
+                factory: action.factory,
+                game: action.game
+            }
+        default:
+            return state;
+    }
 }
 
 export default tomoReducer;

@@ -23,7 +23,7 @@ class PlayerLayout extends Component {
     
     async componentDidMount(){
 
-        const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+        const web3 = await new Web3(Web3.givenProvider);
 
         await web3.eth.getCoinbase().then((account)=>{
             this.setState({account})
