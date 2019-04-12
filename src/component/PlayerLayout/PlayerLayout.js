@@ -39,11 +39,13 @@ class PlayerLayout extends Component {
     render() {   
         const { rank } = this.props;
         const { question } = this.props;
+        // console.log(question);
         return (   
             <div>
                 <Container>
                     <Row className="set_height">
                         {question && question.map(ques => (
+                            // ques.id= '9VjqRPa9EzCARyXCB0EA'
                              <QuesArea key = {ques.id} ques ={ques} acc={this.state}/> 
                         ))}
                         <RankArea rank = {rank} />
@@ -64,6 +66,9 @@ const mapStatetoProps = (state) => {
 export default compose(
     connect(mapStatetoProps),
     firestoreConnect([
-        { collection : 'project_hunter'}
+        { 
+            collection : 'project_hunter',
+            doc : '9VjqRPa9EzCARyXCB0EA'      
+        }
     ])
 )(PlayerLayout);
