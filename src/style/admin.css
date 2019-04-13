@@ -11,6 +11,10 @@
 }
 
 .admin_question_box{
-    height: 85vh;
+    height: 70vh;
     overflow: auto;
+}
+
+.button_bounty{
+    margin: 2%;
 }
