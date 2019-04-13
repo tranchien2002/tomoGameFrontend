@@ -21,7 +21,7 @@ class AdminLayout extends Component {
     
     render() {   
         const {question} =this.props;
-        console.log(question)
+        
         return (   
             <div>
                 <Container>
@@ -31,15 +31,12 @@ class AdminLayout extends Component {
                                 <h1>Select the next question</h1>
                             </div>
                             <div className="admin_question_box">
-                                    {/* <div className = "admin_quesbox">
-                                            <Adminselectques ques ={question.question}/> 
-                                    </div> */}
-                                {/* {
+                                {
                                     question && question.map(ques => (
                                         <div className = "admin_quesbox" key = {ques.id}>
                                             <Adminselectques ques ={ques.question}/> 
                                         </div>                                
-                                ))} */}
+                                ))}
                             </div>
                             <div className ="button_bounty">
                                 <Row>
@@ -61,15 +58,8 @@ class AdminLayout extends Component {
 
 const mapStatetoProps = (state) => {
     // console.log(state.ques.questionID[0])
-
-    const question = state.firestore.data.project_hunter
-    const id = Math.floor(Math.random()*10);
-    const quesID =state.ques.questionID[id];
-    const ques = question ? question[quesID] : null
-
     return {
-        question : ques
-        // question : state.firestore.ordered.project_hunter,
+        question : state.firestore.ordered.project_hunter,
     }
 }
 

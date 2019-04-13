@@ -1,9 +1,9 @@
 import React from 'react';
 import '../App.css';
 import { Col, Button } from 'reactstrap'
+import  { Link } from "react-router-dom"
 
 const QuesArea = (accQues) => {
-    // console.log(accQues)
     return(
         <Col className = "box_color" xs="8">
             <div className="margin_box ">
@@ -23,19 +23,25 @@ const QuesArea = (accQues) => {
                 <Col className = "question">
                     <div className = "answer_position">
                         <Col >
-                            <Button className = "answer_box" outline color="primary">
-                                A. {accQues.ques.answer[0]}
-                            </Button>
+                            <Link to='/'>
+                                <Button className = "answer_box" outline color="primary">
+                                    A. {accQues.ques.answer[0]}
+                                </Button>
+                            </Link>
                         </Col>                                        
                         <Col >
-                            <Button className = "answer_box" outline color="primary">
-                                B. {accQues.ques.answer[1]}
-                            </Button>
+                            <Link to='/'>
+                                <Button className = "answer_box" outline color="primary">
+                                    B. {accQues.ques.answer[1]}
+                                </Button>
+                            </Link>                            
                         </Col>
                         <Col >
-                            <Button className = "answer_box" outline color="primary">
-                                C. {accQues.ques.answer[2]}
-                            </Button>
+                            <Link to='/admin'>
+                                <Button className = "answer_box" outline color="primary">
+                                    C. {accQues.ques.answer[2]}
+                                </Button>
+                            </Link>                            
                         </Col>
                     </div>                                    
                 </Col>
