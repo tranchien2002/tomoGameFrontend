@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Col} from 'reactstrap'
+import { Container, Col, Row, Button} from 'reactstrap'
 // import '../../style/admin.css';
 import Adminselectques from './Adminselectques'
 import { connect } from 'react-redux'
@@ -36,6 +36,16 @@ class AdminLayout extends Component {
                                             <Adminselectques ques ={ques.question}/> 
                                         </div>                                
                                 ))}
+                            </div>
+                            <div className ="button_bounty">
+                                <Row>
+                                    <Col>
+                                        <Button color="primary">Single Question</Button>
+                                    </Col>
+                                    <Col>
+                                        <Button color="primary">All Bounty</Button>
+                                    </Col>
+                                </Row>
                             </div>
                         </div>
                     </Col>
