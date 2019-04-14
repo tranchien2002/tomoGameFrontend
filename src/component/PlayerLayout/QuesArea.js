@@ -3,7 +3,6 @@ import '../App.css';
 import { Col, Button } from 'reactstrap'
 
 const QuesArea = (accQues) => {
-    // console.log(accQues)
     return(
         <Col className = "box_color" xs="8">
             <div className="margin_box ">
@@ -30,12 +29,12 @@ const QuesArea = (accQues) => {
                         <Col >
                             <Button className = "answer_box" outline color="primary">
                                 B. {accQues.ques.answer[1]}
-                            </Button>
+                            </Button>                            
                         </Col>
                         <Col >
                             <Button className = "answer_box" outline color="primary">
                                 C. {accQues.ques.answer[2]}
-                            </Button>
+                            </Button>                            
                         </Col>
                     </div>                                    
                 </Col>

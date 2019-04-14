@@ -21,6 +21,7 @@ class AdminLayout extends Component {
     
     render() {   
         const {question} =this.props;
+        
         return (   
             <div>
                 <Container>
@@ -56,6 +57,7 @@ class AdminLayout extends Component {
 }
 
 const mapStatetoProps = (state) => {
+    // console.log(state.ques.questionID[0])
     return {
         question : state.firestore.ordered.project_hunter,
     }
@@ -64,7 +66,9 @@ const mapStatetoProps = (state) => {
 export default compose(
     connect(mapStatetoProps),
     firestoreConnect([
-        { collection : 'project_hunter'}
+        { 
+            collection : 'project_hunter',
+        }
     ])
 )(AdminLayout);
 
