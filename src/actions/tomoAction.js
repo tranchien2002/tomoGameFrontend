@@ -34,9 +34,9 @@ export const instantiateContracts = () => async (dispatch, getState) => {
     const factory = new web3.eth.Contract(Factory.abi, factoryAddress);
     let listGame = await factory.methods.getAllGames().call({ from });
     let currentGameAddress = listGame[listGame.length - 1]
-    // const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress)
-    // dispatch({
-    //     factory,
-    //     game
-    // })
+    const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress)
+    dispatch({
+        factory,
+        game
+    })
 }

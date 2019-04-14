@@ -4,7 +4,6 @@ const initState = {
         "B0V9KVe5UzoD9z4GgWhC", 
         "HDPNq6jadapxJ9K0uGCp", 
         "Hxj9Qt1Ak4zWc5RcS1P4", 
-        "OyzLac9XdxHXyvjbQIIV", 
         "alu8LGj3o6qVdxHmlowY", 
         "cjWj9HcfUcknRAE6wyuW", 
         "kzbzrsJkhnQ0tbU46PKL", 
@@ -14,6 +13,13 @@ const initState = {
 }
 
 const quesReducer = (state = initState, action) => {
+    switch(action.type){
+        case 'GET_QUES' :
+            console.log('get ques')
+            return state
+        default:
+    }
+
     return state
 }
 
