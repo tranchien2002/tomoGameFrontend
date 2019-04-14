@@ -1,7 +1,6 @@
 import React from 'react';
 import '../App.css';
 import { Col, Button } from 'reactstrap'
-import  { Link } from "react-router-dom"
 
 const QuesArea = (accQues) => {
     return(
@@ -23,25 +22,19 @@ const QuesArea = (accQues) => {
                 <Col className = "question">
                     <div className = "answer_position">
                         <Col >
-                            <Link to='/'>
-                                <Button className = "answer_box" outline color="primary">
-                                    A. {accQues.ques.answer[0]}
-                                </Button>
-                            </Link>
+                            <Button className = "answer_box" outline color="primary">
+                                A. {accQues.ques.answer[0]}
+                            </Button>
                         </Col>                                        
                         <Col >
-                            <Link to='/'>
-                                <Button className = "answer_box" outline color="primary">
-                                    B. {accQues.ques.answer[1]}
-                                </Button>
-                            </Link>                            
+                            <Button className = "answer_box" outline color="primary">
+                                B. {accQues.ques.answer[1]}
+                            </Button>                            
                         </Col>
                         <Col >
-                            <Link to='/admin'>
-                                <Button className = "answer_box" outline color="primary">
-                                    C. {accQues.ques.answer[2]}
-                                </Button>
-                            </Link>                            
+                            <Button className = "answer_box" outline color="primary">
+                                C. {accQues.ques.answer[2]}
+                            </Button>                            
                         </Col>
                     </div>                                    
                 </Col>
