@@ -9,14 +9,16 @@ const initState = {
         "kzbzrsJkhnQ0tbU46PKL", 
         "wTNdMEShNGVpz8Umhilq", 
         "z5ce3Npiw5Rk2j2us6Vp"
-    ]
+    ],
+    correct : null
 }
 
 const quesReducer = (state = initState, action) => {
     switch(action.type){
         case 'GET_QUES' :
-            console.log('get ques')
-            return state
+            return {
+                ...state,
+            }
         default:
     }
 

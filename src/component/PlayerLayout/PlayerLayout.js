@@ -35,6 +35,10 @@ class PlayerLayout extends Component {
         })
         
     }
+
+    clickA = ()=>{
+        console.log("hello")
+    }
     
     render() {   
         const { rank } = this.props;

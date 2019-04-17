@@ -4,27 +4,42 @@ import * as actions from '../../actions/quesAction'
 import store from '../../store';
 import '../App.css';
 
-async function clickA(){
-    console.log("clickA")
-    await store.dispatch(actions.getQues());
+const clickA = (answer)=> {
+    if(answer === 0){
+        console.log("Dung");
+        store.dispatch(actions.getQues());
+    }else {
+        console.log("Sai");
+        store.dispatch(actions.getQues());
+    }
+    
 }
 
-async function clickB(){
-    console.log("clickB")
-    await store.dispatch(actions.getQues());
+function clickB(answer){
+    if(answer === 1){
+        console.log("Dung");
+        store.dispatch(actions.getQues());
+    }else {
+        store.dispatch(actions.getQues());
+        console.log("Sai");
+    }
 }
 
-async function clickC(){
-    console.log("clickC")
-    await store.dispatch(actions.getQues());
+function clickC(answer){
+    if(answer === 2){
+        console.log("Dung");
+        store.dispatch(actions.getQues());
+    }else {
+        console.log("Sai");
+        store.dispatch(actions.getQues());
+    }
 }
 
 const QuesArea = (accQues) => {
-    console.log(accQues.ques)
+    const answer = accQues.ques.correct;
     return(
         <Col className = "box_color" xs="8">
             <div className="margin_box ">
-                {/* question */}
                 <div className = "question"> 
                     <Col className = "user_account">
                         <h5><strong>Your account :</strong> {accQues.acc.account}</h5>
@@ -36,21 +51,20 @@ const QuesArea = (accQues) => {
                         </div>
                     </Col>
                 </div>
-                {/* answer */}
                 <Col className = "question">
                     <div className = "answer_position">
                         <Col >
-                            <Button onClick={clickA} className = "answer_box" outline color="primary">
+                            <Button onClick={(e) => clickA(answer)} className = "answer_box" outline color="primary">
                                 A. {accQues.ques.answer[0]}
                             </Button>
                         </Col>                                        
                         <Col >
-                            <Button onClick={clickB} className = "answer_box" outline color="primary">
+                            <Button onClick={(e) => clickB(answer)} className = "answer_box" outline color="primary">
                                 B. {accQues.ques.answer[1]}
                             </Button>                            
                         </Col>
                         <Col >
-                            <Button onClick={clickC} className = "answer_box" outline color="primary">
+                            <Button onClick={(e) => clickC(answer)} className = "answer_box" outline color="primary">
                                 C. {accQues.ques.answer[2]}
                             </Button>                            
                         </Col>
@@ -58,7 +72,7 @@ const QuesArea = (accQues) => {
                 </Col>
             </div>
         </Col>
-    ) 
+    )
 }
 
 export default QuesArea;

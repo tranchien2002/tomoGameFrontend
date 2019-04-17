@@ -1,16 +1,16 @@
 import React from 'react'
 import { Col } from 'reactstrap'
+import ScoreBoard from './ScoreBoard'
 import '../App.css';
 
 const RankArea = ({rank}) => {
     return (
         <Col className = "box_color" xs="4">
-            <div className="ranking margin_box" >
-                {/* Ranking */}
+            <ScoreBoard />  
+            <div className="rank" >
                 <div className = "ranking_title">
-                    <h1>Ranking</h1>
+                    <h2>Ranking</h2>
                 </div>
-                {/* member ranking */}
                 <div className = "person_rank_box">
                     {
                         rank.map(rank => (
