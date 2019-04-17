@@ -2,6 +2,7 @@ import Web3 from 'web3';
 import Factory from 'contracts/Factory.json';
 import Game from 'contracts/Game.json';
 import { default as contract } from 'truffle-contract'
+import { AST_EmptyStatement } from 'terser';
 
 export const WEB3_CONNECT = 'WEB3_CONNECT';
 export const web3Connect = () => async dispatch => {
@@ -41,4 +42,119 @@ export const instantiateContracts = () => async (dispatch, getState) => {
         factory,
         game
     })
+}
+
+export const SET_BOUNTY = 'SET_BOUNTY'
+export const setBounty = () => async (dispatch, getState) => {
+  const state = getState();
+  const from = state.tomo.account;
+  const game = state.tomo.game;
+  if (game) {
+    await game.methods
+      .setBounty()
+      .send({from: from, value: 10 ** 19}, (e,r) => {
+        if(!e) {
+          dispatch({
+            type: SET_BOUNTY,
+            bounty: state.tomo.bounty
+          })
+        } else {
+          console.log("Error setBounty", e)
+        }
+      })
+  }
+}
+
+export const SET_QUESTION = 'SET_QUESTION'
+export const setQuestion = (correctAnswer) => async (dispatch, getState) => {
+  const state = getState();
+  const from = state.tomo.account;
+  const game = state.tomo.game;
+  await game.methods
+    .setQuestion(correctAnswer)
+    .call({from: from}, (e, r) => {
+      if(!e) {
+        dispatch({
+          type: SET_QUESTION,
+          questioning: true
+        })
+      } else {
+        console.log("Error setQuestion", e)
+      }
+    })
+}
+
+export const ANSWER = 'ANSWER'
+export const answer = (answer) => async (dispatch, getState) => {
+  const state = getState();
+  const game = state.tomo.game;
+  const from = state.tomo.account;
+  await game.methods
+    .answer(answer)
+    .send({from: from, value: 2*10**18}, (e,r) => {
+      if(!e) {
+        dispatch({
+          type: ANSWER,
+          questioning: false,
+          questionBounty: state.tomo.questionBounty + 2
+        })
+      } else {
+        console.log("Error answer", e)
+      }
+    })
+}
+
+export const SHARE_QUESTION_BOUNTY = 'SHARE_QUESTION_BOUNTY'
+export const shareQuestionBounty = () => async (dispatch, getState) => {
+  const state = getState();
+  const game = state.tomo.game;
+  const from = state.tomo.account;
+  await game.methods
+    .shareQuestionBounty()
+    .call({from: from}, (e, r) => {
+      if(!e) {
+        dispatch({
+          type: SHARE_QUESTION_BOUNTY,
+          questionBounty: 0
+        })
+      } else {
+        console.log("Error bounty question", e)
+      }
+    })
+}
+
+export const SHARE_BOUNTY = 'SHARE_BOUNTY'
+export const shareBounty = () => async (dispatch, getState) => {
+  const state = getState();
+  const game = state.tomo.game;
+  const from = state.tomo.account;
+  await game.methods
+    .shareBounty()
+    .call({from: from}, (e, r) => {
+      if(!e) {
+        dispatch({
+          type: SHARE_QUESTION_BOUNTY,
+          bounty: 0
+        })
+      } else {
+        console.log("Error bounty question", e)
+      }
+    })
+}
+
+export const FETCH_WIN_COUNT = 'FETCH_WIN_COUNT'
+export const fetchWinCount = () => async (dispatch, getState) => {
+  const state = getState();
+  const game = state.tomo.game;
+  const from = state.tomo.account;
+  let winCount = await game.methods
+    .winCount(from)
+    .call({
+      from: from
+    })
+  
+  dispatch({
+    type: FETCH_WIN_COUNT,
+    winCount
+  })
 }

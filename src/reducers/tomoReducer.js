@@ -6,6 +6,10 @@ const initialState = {
     tomo: null,
     game: null,
     factory: null,
+    bounty: 0,
+    questioning: false,
+    questionBounty: 0,
+    winCount: 0
 }
 
 const tomoReducer = (state = initialState, action) => {
@@ -21,6 +25,37 @@ const tomoReducer = (state = initialState, action) => {
                 ...state,
                 factory: action.factory,
                 game: action.game
+            }
+        case actions.SET_BOUNTY:
+            return {
+                ...state,
+                bounty: action.bounty
+            }
+        case actions.SET_QUESTION:
+            return {
+                ...state,
+                questioning: action.questioning
+            }
+        case actions.ANSWER:
+            return {
+                ...state,
+                questioning: action.questioning,
+                questionBounty: action.questionBounty
+            }
+        case actions.SHARE_QUESTION_BOUNTY:
+            return {
+                ...state,
+                questionBounty: action.questionBounty
+            }
+        case actions.SHARE_BOUNTY:
+            return {
+                ...state,
+                bounty: action.bounty
+            }
+        case actions.FETCH_WIN_COUNT:
+            return {
+                ...state,
+                winCount: action.winCount
             }
         default:
             return state;
