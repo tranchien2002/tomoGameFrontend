@@ -1,8 +1,9 @@
 import React from 'react';
 import '../App.css';
-import { Col, Button } from 'reactstrap'
+import { Button } from 'reactstrap'
 
 const Adminselectques = (question) => {
+    // console.log(question)
     return(
         <Button className = "answer_box " outline color="primary" >{question.ques}</Button>
     ) 

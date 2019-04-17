@@ -1,6 +1,14 @@
-export const createQues = (ques) =>{
+export const getQues = () =>{
     return (dispatch, getState, { getFirebase, getFirestore }) => {
-        //make async to database
-        dispatch({ type : 'GET_QUES', ques})
+        const question = []
+        const firestore = getFirestore();
+        firestore.collection('project_hunter').get().then(snapshot =>{
+            snapshot.docs.forEach(doc =>{
+                question.push(doc.data())
+            })
+        })
+        dispatch({ 
+            type : 'GET_QUES', 
+        })
     }
 };

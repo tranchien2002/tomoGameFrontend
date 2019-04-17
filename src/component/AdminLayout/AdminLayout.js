@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Col} from 'reactstrap'
+import { Container, Col, Row, Button} from 'reactstrap'
 // import '../../style/admin.css';
 import Adminselectques from './Adminselectques'
 import { connect } from 'react-redux'
@@ -21,6 +21,7 @@ class AdminLayout extends Component {
     
     render() {   
         const {question} =this.props;
+        
         return (   
             <div>
                 <Container>
@@ -37,6 +38,16 @@ class AdminLayout extends Component {
                                         </div>                                
                                 ))}
                             </div>
+                            <div className ="button_bounty">
+                                <Row>
+                                    <Col>
+                                        <Button color="primary">Single Question</Button>
+                                    </Col>
+                                    <Col>
+                                        <Button color="primary">All Bounty</Button>
+                                    </Col>
+                                </Row>
+                            </div>
                         </div>
                     </Col>
                 </Container>
@@ -46,6 +57,7 @@ class AdminLayout extends Component {
 }
 
 const mapStatetoProps = (state) => {
+    // console.log(state.ques.questionID[0])
     return {
         question : state.firestore.ordered.project_hunter,
     }
@@ -54,7 +66,9 @@ const mapStatetoProps = (state) => {
 export default compose(
     connect(mapStatetoProps),
     firestoreConnect([
-        { collection : 'project_hunter'}
+        { 
+            collection : 'project_hunter',
+        }
     ])
 )(AdminLayout);
 
