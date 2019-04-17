@@ -55,8 +55,28 @@
   height: 56px;
 }
 
+.rank{
+  border-radius: 10px;
+  background-color: #ffffff;
+  text-align: center;
+  height: 83%;
+}
+
+.score_board{
+  border-radius: 10px;
+  background-color: #ffffff;
+  text-align: center;
+  margin-bottom: 18px;
+  height: 14%
+}
+
+.box_color{
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+}
+
 .person_rank_box{
-  height: 86vh;
+  height: 67vh;
   overflow: auto;
 }
 
