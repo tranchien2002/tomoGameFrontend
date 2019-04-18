@@ -34,7 +34,6 @@ export const instantiateContracts = () => async (dispatch, getState) => {
     let factoryAddress = FactoryArtifact.networks[networkId].address;
     const factory = new web3.eth.Contract(Factory.abi, factoryAddress);
     let listGame = await factory.methods.getAllGames().call({ from });
-    console.log(listGame)
     let currentGameAddress = listGame[listGame.length - 1]
     const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress)
     dispatch({
@@ -52,15 +51,15 @@ export const setBounty = () => async (dispatch, getState) => {
   if (game) {
     await game.methods
       .setBounty()
-      .send({from: from, value: 10 ** 19}, (e,r) => {
-        if(!e) {
-          dispatch({
-            type: SET_BOUNTY,
-            bounty: state.tomo.bounty
-          })
-        } else {
-          console.log("Error setBounty", e)
-        }
+      .send({from: from, value: 10 ** 19})
+      .then(() => {
+        dispatch({
+          type: SET_BOUNTY,
+          bounty: state.tomo.bounty
+        })
+      })
+      .catch(e =>{ 
+        console.log("Error setBounty", e)
       })
   }
 }
@@ -72,15 +71,15 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState) => {
   const game = state.tomo.game;
   await game.methods
     .setQuestion(correctAnswer)
-    .call({from: from}, (e, r) => {
-      if(!e) {
-        dispatch({
-          type: SET_QUESTION,
-          questioning: true
-        })
-      } else {
-        console.log("Error setQuestion", e)
-      }
+    .send({from: from})
+    .then(() => {
+      dispatch({
+        type: SET_QUESTION,
+        questioning: true
+      })
+    })
+    .catch(e => {
+      console.log("Error setQuestion", e)
     })
 }
 
@@ -91,16 +90,16 @@ export const answer = (answer) => async (dispatch, getState) => {
   const from = state.tomo.account;
   await game.methods
     .answer(answer)
-    .send({from: from, value: 2*10**18}, (e,r) => {
-      if(!e) {
-        dispatch({
-          type: ANSWER,
-          questioning: false,
-          questionBounty: state.tomo.questionBounty + 2
-        })
-      } else {
-        console.log("Error answer", e)
-      }
+    .send({from: from, value: 2*10**18})
+    .then(() => {
+      dispatch({
+        type: ANSWER,
+        questioning: false,
+        questionBounty: state.tomo.questionBounty + 2
+      })
+    })
+    .catch(e => {
+      console.log("Error answer", e)
     })
 }
 
@@ -111,15 +110,15 @@ export const shareQuestionBounty = () => async (dispatch, getState) => {
   const from = state.tomo.account;
   await game.methods
     .shareQuestionBounty()
-    .call({from: from}, (e, r) => {
-      if(!e) {
-        dispatch({
-          type: SHARE_QUESTION_BOUNTY,
-          questionBounty: 0
-        })
-      } else {
-        console.log("Error bounty question", e)
-      }
+    .send({from: from})
+    .then(result => {
+      dispatch({
+        type: SHARE_QUESTION_BOUNTY,
+        bounty: 0
+      })
+    })
+    .catch(e => {
+      console.log("Error bounty question", e)
     })
 }
 
@@ -130,15 +129,15 @@ export const shareBounty = () => async (dispatch, getState) => {
   const from = state.tomo.account;
   await game.methods
     .shareBounty()
-    .call({from: from}, (e, r) => {
-      if(!e) {
-        dispatch({
-          type: SHARE_QUESTION_BOUNTY,
-          bounty: 0
-        })
-      } else {
-        console.log("Error bounty question", e)
-      }
+    .send({from: from})
+    .then(result => {
+      dispatch({
+        type: SHARE_QUESTION_BOUNTY,
+        bounty: 0
+      })
+    })
+    .catch(e => {
+      console.log("Error bounty", e)
     })
 }
 
@@ -164,16 +163,18 @@ export const createNewGame = () => async (dispatch, getState) => {
   const state = getState();
   const factory = state.tomo.factory;
   const from = state.tomo.account;
+  const GameArtifact = require('contracts/Game');
   await factory.methods
     .createGame()
-    .call({from: from}, (e, r) => {
-      if(!e) {
-        dispatch({
-          type: CREATE_NEW_GAME,
-          game: r
-        })
-      } else {
-        console.log("Error new game", e)
-      }
+    .send({from})
+    .then(result => {
+      const game = new web3.eth.Contract(GameArtifact.abi, result)
+      dispatch({
+        type: CREATE_NEW_GAME,
+        game: game
+      }) 
+    })
+    .catch(e => {
+      console.log("Error create game", e)
     })
 }

@@ -1237,31 +1237,13 @@
   "networks": {
     "89": {
       "events": {},
-      "links": {
-        "SafeMath256": "0x0bC45f834f4939B188b569e2aE9E5C9E52b54A6e"
-      },
-      "address": "0xE85CeB868c4E25A5Bfc04650b2fA3a8833A5F768",
-      "transactionHash": "0xe12e10d23ced6cbaae65eae9da656c7e5653c5000a174bf6129913c747b042fb"
-    },
-    "1554948182266": {
-      "events": {},
-      "links": {
-        "SafeMath256": "0x93560D95916344a283D05888374A5B9F664b3f68"
-      },
-      "address": "0x15e134F2F6593510c7FE35Ba189EC56faa54d51B",
-      "transactionHash": "0x2a8511d8c5391eedc55d406f8b344035ca51cd34d4eb067f554f5187d23cc155"
-    },
-    "1554953020503": {
-      "events": {},
-      "links": {
-        "SafeMath256": "0x046653d09923f919689f58953b39dfE0522C287C"
-      },
-      "address": "0x00B5afeCFc6C4A0e4DC5901c7e0265362F158364",
-      "transactionHash": "0xafd5d6456f87d527862c4ebb1305438d350f4adabba3adc71b8a51ca3aa33e64"
+      "links": {},
+      "address": "0x8830b97baAb54B3AD4D2A2c3c8e06F6A619B52E9",
+      "transactionHash": "0xf2d09019507a4241769d033bfa91a0e1736777c6ce2c17ced99220d4d9c0a9e1"
     }
   },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-04-18T02:38:01.620Z",
+  "updatedAt": "2019-04-18T07:21:19.110Z",
   "devdoc": {
     "methods": {}
   },
