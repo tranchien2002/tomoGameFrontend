@@ -19,10 +19,16 @@ const quesReducer = (state = initState, action) => {
             return {
                 ...state,
             }
+        case 'INSERT_QUES':
+            console.log("insert success");
+            return state
+        case 'INSERT_QUES_ERROR':
+            console.log("insert error");
+            return state
         default:
+            return state
     }
-
-    return state
+   
 }
 
 export default quesReducer;
