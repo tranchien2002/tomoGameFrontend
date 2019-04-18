@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Container, Col, Row, Button} from 'reactstrap'
 // import '../../style/admin.css';
-import * as insertActions from '../../actions/insertquesAction'
-import * as tomoActions from '../../actions/tomoAction'
-import store from '../../store';
-import firebase from '../../config/config'
+import * as insertActions from 'actions/insertquesAction'
+import * as tomoActions from 'actions/tomoAction'
+import store from 'store';
+import firebase from 'config/config'
 import '../App.css'
-import '../../style/admin.css'
+import 'style/admin.css'
 
 
 class AdminLayout extends Component {
@@ -42,8 +42,10 @@ class AdminLayout extends Component {
         store.dispatch(insertActions.insertQues(ques));
     }
 
-    createGame = async ()=>{    
-        store.dispatch(tomoActions.createNewGame());
+    createGame = async ()=>{
+        // debugger    
+        await store.dispatch(tomoActions.createNewGame());
+        console.log("admin", store.getState().tomo.account)
     }
 
     render() {   
