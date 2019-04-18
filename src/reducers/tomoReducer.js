@@ -57,6 +57,11 @@ const tomoReducer = (state = initialState, action) => {
                 ...state,
                 winCount: action.winCount
             }
+        case actions.CREATE_NEW_GAME:
+            return {
+                ...state,
+                game: action.game
+            }
         default:
             return state;
     }
