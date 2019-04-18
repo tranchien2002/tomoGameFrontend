@@ -158,3 +158,22 @@ export const fetchWinCount = () => async (dispatch, getState) => {
     winCount
   })
 }
+
+export const CREATE_NEW_GAME = 'CREATE_NEW_GAME'
+export const createNewGame = () => async (dispatch, getState) => {
+  const state = getState();
+  const factory = state.tomo.factory;
+  const from = state.tomo.account;
+  await factory.methods
+    .createGame()
+    .call({from: from}, (e, r) => {
+      if(!e) {
+        dispatch({
+          type: CREATE_NEW_GAME,
+          game: r
+        })
+      } else {
+        console.log("Error new game", e)
+      }
+    })
+}
