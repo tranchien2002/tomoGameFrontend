@@ -161,6 +161,7 @@ export const fetchWinCount = () => async (dispatch, getState) => {
 export const CREATE_NEW_GAME = 'CREATE_NEW_GAME'
 export const createNewGame = () => async (dispatch, getState) => {
   const state = getState();
+  let web3 = state.tomo.web3
   const factory = state.tomo.factory;
   const from = state.tomo.account;
   const GameArtifact = require('contracts/Game');
