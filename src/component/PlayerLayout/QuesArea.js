@@ -37,6 +37,7 @@ function clickC(answer){
 
 const QuesArea = (accQues) => {
     const answer = accQues.ques.correct;
+    const key = Object.keys(accQues.ques).slice(-1)[0]
     return(
         <Col className = "box_color" xs="8">
             <div className="margin_box ">
@@ -47,7 +48,7 @@ const QuesArea = (accQues) => {
                     </Col>
                     <Col className = "question_box">
                         <div className ="question_position">
-                            <h1>{accQues.ques.question}</h1>
+                            <h1>{accQues.ques[key].question}</h1>
                         </div>
                     </Col>
                 </div>
@@ -55,17 +56,17 @@ const QuesArea = (accQues) => {
                     <div className = "answer_position">
                         <Col >
                             <Button onClick={(e) => clickA(answer)} className = "answer_box" outline color="primary">
-                                A. {accQues.ques.answer[0]}
+                                A. {accQues.ques[key].answer[0]}
                             </Button>
                         </Col>                                        
                         <Col >
                             <Button onClick={(e) => clickB(answer)} className = "answer_box" outline color="primary">
-                                B. {accQues.ques.answer[1]}
+                                B. {accQues.ques[key].answer[1]}
                             </Button>                            
                         </Col>
                         <Col >
                             <Button onClick={(e) => clickC(answer)} className = "answer_box" outline color="primary">
-                                C. {accQues.ques.answer[2]}
+                                C. {accQues.ques[key].answer[2]}
                             </Button>                            
                         </Col>
                     </div>                                    

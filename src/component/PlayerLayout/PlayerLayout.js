@@ -75,13 +75,9 @@ class PlayerLayout extends Component {
 }
 
 const mapStatetoProps = (state) => {
-    const question = state.firestore.data.project_hunter
-    const id = Math.floor(Math.random()*9);
-    const quesID =state.ques.questionID[id];
-    const ques = question ? question[quesID] : null
-    
+    const question = state.firestore.data.player_question
     return {
-        question : ques,
+        question : question,
         rank : state.rank.ranking
     }
 }
@@ -90,7 +86,7 @@ export default compose(
     connect(mapStatetoProps),
     firestoreConnect([
         { 
-            collection : 'project_hunter',     
+            collection : 'player_question',     
         }
     ])
 )(PlayerLayout);
