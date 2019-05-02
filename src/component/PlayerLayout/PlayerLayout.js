@@ -33,6 +33,8 @@ class PlayerLayout extends Component {
             balance = web3.utils.fromWei(balance);
             this.setState({balance})
         })
+
+        
         
     }
 
