@@ -12,7 +12,6 @@ const clickA = (answer)=> {
         console.log("Sai");
         store.dispatch(actions.getQues());
     }
-    
 }
 
 function clickB(answer){
@@ -41,7 +40,7 @@ const QuesArea = (accQues) => {
     return(
         <Col className = "box_color" xs="8">
             <div className="margin_box ">
-                <div className = "question"> 
+                <div className = "question">
                     <Col className = "user_account">
                         <h5><strong>Your account :</strong> {accQues.acc.account}</h5>
                         <p><strong>Balance :</strong> {accQues.acc.balance} <strong>ETH</strong></p>
@@ -58,18 +57,18 @@ const QuesArea = (accQues) => {
                             <Button onClick={(e) => clickA(answer)} className = "answer_box" outline color="primary">
                                 A. {accQues.ques[key].answer[0]}
                             </Button>
-                        </Col>                                        
+                        </Col>
                         <Col >
                             <Button onClick={(e) => clickB(answer)} className = "answer_box" outline color="primary">
                                 B. {accQues.ques[key].answer[1]}
-                            </Button>                            
+                            </Button>
                         </Col>
                         <Col >
                             <Button onClick={(e) => clickC(answer)} className = "answer_box" outline color="primary">
                                 C. {accQues.ques[key].answer[2]}
-                            </Button>                            
+                            </Button>
                         </Col>
-                    </div>                                    
+                    </div>
                 </Col>
             </div>
         </Col>
