@@ -20,7 +20,7 @@ class PlayerLayout extends Component {
             balance : '',
         }
     }
-    
+
     async componentDidMount(){
 
         const web3 = await new Web3(Web3.givenProvider);
@@ -34,30 +34,29 @@ class PlayerLayout extends Component {
             this.setState({balance})
         })
 
-        
-        
     }
 
     clickA = ()=>{
         console.log("hello")
     }
-    
-    render() {   
+
+    render() {
         const { rank } = this.props;
         const { question } = this.props;
+        const { wincount } =this.props;
         if(question != null){
-            return (   
+            return (
                 <div>
                     <Container>
                         <Row className="set_height">
-                                <QuesArea ques ={question} acc={this.state}/> 
-                            <RankArea rank = {rank} />
+                                <QuesArea ques ={question} acc={this.state}/>
+                            <RankArea rank = {rank} wincount = {wincount} />
                         </Row>
                     </Container>
                 </div>
             );
         }else{
-            return (   
+            return (
                 <div>
                     <Container>
                         <Row className="set_height">
@@ -72,23 +71,24 @@ class PlayerLayout extends Component {
                 </div>
             );
         }
-        
     }
 }
 
 const mapStatetoProps = (state) => {
     const question = state.firestore.data.player_question
+    // console.log(state.tomo.winCount)
     return {
         question : question,
-        rank : state.rank.ranking
+        rank : state.rank.ranking,
+        wincount : state.tomo.winCount
     }
 }
 
 export default compose(
     connect(mapStatetoProps),
     firestoreConnect([
-        { 
-            collection : 'player_question',     
+        {
+            collection : 'player_question',
         }
     ])
 )(PlayerLayout);
