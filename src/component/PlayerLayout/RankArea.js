@@ -3,10 +3,10 @@ import { Col } from 'reactstrap'
 import ScoreBoard from './ScoreBoard'
 import '../App.css';
 
-const RankArea = ({rank}) => {
+const RankArea = ({rank,wincount}) => {
     return (
         <Col className = "box_color" xs="4">
-            <ScoreBoard />  
+            <ScoreBoard  wincount = {wincount}/>
             <div className="rank" >
                 <div className = "ranking_title">
                     <h2>Ranking</h2>

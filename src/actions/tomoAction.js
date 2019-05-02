@@ -58,7 +58,7 @@ export const setBounty = () => async (dispatch, getState) => {
           bounty: state.tomo.bounty
         })
       })
-      .catch(e =>{ 
+      .catch(e =>{
         console.log("Error setBounty", e)
       })
   }
@@ -144,6 +144,7 @@ export const shareBounty = () => async (dispatch, getState) => {
 export const FETCH_WIN_COUNT = 'FETCH_WIN_COUNT'
 export const fetchWinCount = () => async (dispatch, getState) => {
   const state = getState();
+  let web3 = state.tomo.web3
   const game = state.tomo.game;
   const from = state.tomo.account;
   let winCount = await game.methods
@@ -151,7 +152,7 @@ export const fetchWinCount = () => async (dispatch, getState) => {
     .call({
       from: from
     })
-  
+  winCount = web3.utils.hexToNumber(winCount);
   dispatch({
     type: FETCH_WIN_COUNT,
     winCount
@@ -173,7 +174,7 @@ export const createNewGame = () => async (dispatch, getState) => {
       dispatch({
         type: CREATE_NEW_GAME,
         game: game
-      }) 
+      })
     })
     .catch(e => {
       console.log("Error create game", e)

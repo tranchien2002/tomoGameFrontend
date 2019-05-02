@@ -26,15 +26,15 @@ class AdminLayout extends Component {
                 this.setState({question : [...this.state.question.concat([doc.data()])]})
             });
         });
-    }   
+    }
 
     selectQues = async (ques) =>{
         await this.setState({selected : [...this.state.selected.concat([ques.quesNumber])]});
-        
+
         let found = await this.state.selected.find((element) =>{
             return element === ques.quesNumber
         })
-        
+
         // console.log(this.state.question)
         await delete this.state.question[found];
         this.setState(this.state)
@@ -43,14 +43,14 @@ class AdminLayout extends Component {
     }
 
     createGame = async ()=>{
-        // debugger    
+        // debugger
         await store.dispatch(tomoActions.createNewGame());
         console.log("admin", store.getState().tomo.account)
     }
 
-    render() {   
-        const {question} =this.state; 
-        return (   
+    render() {
+        const {question} =this.state;
+        return (
             <div>
                 <Container>
                     <Col className="set_height">
@@ -63,8 +63,8 @@ class AdminLayout extends Component {
                                     question && question.map(ques => {
                                         return(
                                             <div className = "admin_quesbox" key = {ques.quesNumber}>
-                                                <Button onClick={() => this.selectQues(ques)} className = "answer_box " outline color="primary" >{ques.question}</Button>  
-                                            </div> 
+                                                <Button onClick={() => this.selectQues(ques)} className = "answer_box " outline color="primary" >{ques.question}</Button>
+                                            </div>
                                         )}
                                 )}
                             </div>
