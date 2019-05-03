@@ -7,6 +7,7 @@ import store from 'store';
 import firebase from 'config/config'
 import '../App.css'
 import 'style/admin.css'
+import { setQuestion } from '../../actions/tomoAction';
 
 
 class AdminLayout extends Component {
@@ -38,8 +39,9 @@ class AdminLayout extends Component {
         // console.log(this.state.question)
         await delete this.state.question[found];
         this.setState(this.state)
-
+        store.dispatch(tomoActions.setQuestion(ques))
         store.dispatch(insertActions.insertQues(ques));
+       
     }
 
     createGame = async ()=>{

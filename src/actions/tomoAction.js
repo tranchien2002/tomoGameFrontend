@@ -34,6 +34,7 @@ export const instantiateContracts = () => async (dispatch, getState) => {
     let factoryAddress = FactoryArtifact.networks[networkId].address;
     const factory = new web3.eth.Contract(Factory.abi, factoryAddress);
     let listGame = await factory.methods.getAllGames().call({ from });
+    console.log(listGame)
     let currentGameAddress = listGame[listGame.length - 1]
     const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress)
     dispatch({
@@ -70,7 +71,7 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState) => {
   const from = state.tomo.account;
   const game = state.tomo.game;
   await game.methods
-    .setQuestion(correctAnswer)
+    .setQuestion(state.tomo.web3.utils.fromAscii(correctAnswer))
     .send({from: from})
     .then(() => {
       dispatch({
