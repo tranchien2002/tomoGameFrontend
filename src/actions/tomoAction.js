@@ -1,8 +1,8 @@
 import Web3 from 'web3';
 import Factory from 'contracts/Factory.json';
-import Game from 'contracts/Game.json';
-import { default as contract } from 'truffle-contract'
-import { AST_EmptyStatement } from 'terser';
+// import Game from 'contracts/Game.json';
+// import { default as contract } from 'truffle-contract'
+// import { AST_EmptyStatement } from 'terser';
 
 export const WEB3_CONNECT = 'WEB3_CONNECT';
 export const web3Connect = () => async dispatch => {
@@ -89,6 +89,10 @@ export const answer = (answer) => async (dispatch, getState) => {
   const state = getState();
   const game = state.tomo.game;
   const from = state.tomo.account;
+  let web3 = state.tomo.web3
+  console.log(answer)
+  answer = web3.utils.fromAscii(answer.toString());
+  console.log(answer)
   await game.methods
     .answer(answer)
     .send({from: from, value: 2*10**18})
