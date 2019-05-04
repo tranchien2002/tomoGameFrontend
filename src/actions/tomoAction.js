@@ -25,23 +25,36 @@ export const web3Connect = () => async dispatch => {
 
 export const INSTANTIATE_CONTRACT = 'INSTANTIATE_CONTRACT'
 export const instantiateContracts = () => async (dispatch, getState) => {
-    const state = getState();
-    let web3 = state.tomo.web3
-    const from = state.tomo.account
-    const networkId = process.env.REACT_APP_TOMO_ID;
-    const FactoryArtifact = require('contracts/Factory');
-    const GameArtifact = require('contracts/Game');
-    let factoryAddress = FactoryArtifact.networks[networkId].address;
-    const factory = new web3.eth.Contract(Factory.abi, factoryAddress);
-    let listGame = await factory.methods.getAllGames().call({ from });
-    console.log(listGame)
-    let currentGameAddress = listGame[listGame.length - 1]
-    const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress)
+  const state = getState();
+  let web3 = state.tomo.web3
+  const from = state.tomo.account
+  const networkId = process.env.REACT_APP_TOMO_ID;
+  const FactoryArtifact = require('contracts/Factory');
+  const GameArtifact = require('contracts/Game');
+  let factoryAddress = FactoryArtifact.networks[networkId].address;
+  const factory = new web3.eth.Contract(Factory.abi, factoryAddress);
+  let listGame = await factory.methods.getAllGames().call({ from });
+  console.log(listGame)
+  let currentGameAddress = listGame[listGame.length - 1]
+  const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress)
+  dispatch({
+      type: INSTANTIATE_CONTRACT,
+      factory,
+      game
+  })
+}
+
+export const GET_BALANCE = 'GET_BALANCE'
+export const getBalance = () => async (dispatch, getState) => {
+  const state = getState();
+  let web3 = state.tomo.web3
+  const from = state.tomo.account
+  await web3.eth.getBalance(from).then((balance)=>{
     dispatch({
-        type: INSTANTIATE_CONTRACT,
-        factory,
-        game
+      type : GET_BALANCE,
+      balance : web3.utils.fromWei(balance)
     })
+  })
 }
 
 export const SET_BOUNTY = 'SET_BOUNTY'

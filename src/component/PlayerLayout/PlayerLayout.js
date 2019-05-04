@@ -6,6 +6,8 @@ import { firestoreConnect } from 'react-redux-firebase'
 import { compose } from 'redux'
 import QuesArea from './QuesArea'
 import RankArea from './RankArea'
+import store from 'store'
+import * as tomoAction from 'actions/tomoAction'
 
 import '../App.css';
 
@@ -23,21 +25,14 @@ class PlayerLayout extends Component {
 
     async componentDidMount(){
 
-        const web3 = await new Web3(Web3.givenProvider);
-
-        await web3.eth.getCoinbase().then((account)=>{
-            this.setState({account})
-        });
-
-        await web3.eth.getBalance(this.state.account).then((balance)=>{
-            balance = web3.utils.fromWei(balance);
-            this.setState({balance})
-        })
-
+        this.interval = setInterval(() => {
+            store.dispatch(tomoAction.fetchWinCount());
+            store.dispatch(tomoAction.getBalance());
+        },1000);
     }
 
-    clickA = ()=>{
-        console.log("hello")
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     render() {
@@ -49,7 +44,7 @@ class PlayerLayout extends Component {
                 <div>
                     <Container>
                         <Row className="set_height">
-                                <QuesArea ques ={question} acc={this.state}/>
+                                <QuesArea ques ={question} acc={this.props.tomo}/>
                             <RankArea rank = {rank} wincount = {wincount} />
                         </Row>
                     </Container>
@@ -76,11 +71,12 @@ class PlayerLayout extends Component {
 
 const mapStatetoProps = (state) => {
     const question = state.firestore.data.player_question
-    // console.log(state.tomo.winCount)
+    // console.log(state.tomo)
     return {
         question : question,
         rank : state.rank.ranking,
-        wincount : state.tomo.winCount
+        wincount : state.tomo.winCount,
+        tomo : state.tomo
     }
 }
 

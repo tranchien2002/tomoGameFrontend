@@ -9,7 +9,8 @@ const initialState = {
     bounty: 0,
     questioning: false,
     questionBounty: 0,
-    winCount: 0
+    winCount: 0,
+    balance: 0
 }
 
 const tomoReducer = (state = initialState, action) => {
@@ -61,6 +62,11 @@ const tomoReducer = (state = initialState, action) => {
             return {
                 ...state,
                 game: action.game
+            }
+        case actions.GET_BALANCE:
+            return{
+                ...state,
+                balance: action.balance
             }
         default:
             return state;
