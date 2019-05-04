@@ -70,8 +70,9 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState) => {
   const state = getState();
   const from = state.tomo.account;
   const game = state.tomo.game;
+  console.log("ques", correctAnswer.correct)
   await game.methods
-    .setQuestion(state.tomo.web3.utils.fromAscii(correctAnswer))
+    .setQuestion(state.tomo.web3.utils.fromAscii(correctAnswer.correct.toString()))
     .send({from: from})
     .then(() => {
       dispatch({
@@ -95,7 +96,7 @@ export const answer = (answer) => async (dispatch, getState) => {
   console.log(answer)
   await game.methods
     .answer(answer)
-    .send({from: from, value: 2*10**18})
+    .send({from: from, value: 3*10**18})
     .then(() => {
       dispatch({
         type: ANSWER,
