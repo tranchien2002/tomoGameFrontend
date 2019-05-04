@@ -40,7 +40,6 @@ function clickC(answer){
 
 const QuesArea = (accQues) => {
     const key = Object.keys(accQues.ques).slice(-1)[0]
-    // console.log(accQues.ques[key].correct)
     const answer = accQues.ques[key].correct;
     return(
         <Col className = "box_color" xs="8">
