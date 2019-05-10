@@ -1,8 +1,8 @@
 import Web3 from 'web3';
 import Factory from 'contracts/Factory.json';
-import Game from 'contracts/Game.json';
-import { default as contract } from 'truffle-contract'
-import { AST_EmptyStatement } from 'terser';
+// import Game from 'contracts/Game.json';
+// import { default as contract } from 'truffle-contract'
+// import { AST_EmptyStatement } from 'terser';
 
 export const WEB3_CONNECT = 'WEB3_CONNECT';
 export const web3Connect = () => async dispatch => {
@@ -25,22 +25,36 @@ export const web3Connect = () => async dispatch => {
 
 export const INSTANTIATE_CONTRACT = 'INSTANTIATE_CONTRACT'
 export const instantiateContracts = () => async (dispatch, getState) => {
-    const state = getState();
-    let web3 = state.tomo.web3
-    const from = state.tomo.account
-    const networkId = process.env.REACT_APP_TOMO_ID;
-    const FactoryArtifact = require('contracts/Factory');
-    const GameArtifact = require('contracts/Game');
-    let factoryAddress = FactoryArtifact.networks[networkId].address;
-    const factory = new web3.eth.Contract(Factory.abi, factoryAddress);
-    let listGame = await factory.methods.getAllGames().call({ from });
-    let currentGameAddress = listGame[listGame.length - 1]
-    const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress)
+  const state = getState();
+  let web3 = state.tomo.web3
+  const from = state.tomo.account
+  const networkId = process.env.REACT_APP_TOMO_ID;
+  const FactoryArtifact = require('contracts/Factory');
+  const GameArtifact = require('contracts/Game');
+  let factoryAddress = FactoryArtifact.networks[networkId].address;
+  const factory = new web3.eth.Contract(Factory.abi, factoryAddress);
+  let listGame = await factory.methods.getAllGames().call({ from });
+  console.log(listGame)
+  let currentGameAddress = listGame[listGame.length - 1]
+  const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress)
+  dispatch({
+      type: INSTANTIATE_CONTRACT,
+      factory,
+      game
+  })
+}
+
+export const GET_BALANCE = 'GET_BALANCE'
+export const getBalance = () => async (dispatch, getState) => {
+  const state = getState();
+  let web3 = state.tomo.web3
+  const from = state.tomo.account
+  await web3.eth.getBalance(from).then((balance)=>{
     dispatch({
-        type: INSTANTIATE_CONTRACT,
-        factory,
-        game
+      type : GET_BALANCE,
+      balance : web3.utils.fromWei(balance)
     })
+  })
 }
 
 export const SET_BOUNTY = 'SET_BOUNTY'
@@ -69,8 +83,9 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState) => {
   const state = getState();
   const from = state.tomo.account;
   const game = state.tomo.game;
+  console.log("ques", correctAnswer.correct)
   await game.methods
-    .setQuestion(correctAnswer)
+    .setQuestion(state.tomo.web3.utils.fromAscii(correctAnswer.correct.toString()))
     .send({from: from})
     .then(() => {
       dispatch({
@@ -88,9 +103,13 @@ export const answer = (answer) => async (dispatch, getState) => {
   const state = getState();
   const game = state.tomo.game;
   const from = state.tomo.account;
+  let web3 = state.tomo.web3
+  console.log(answer)
+  answer = web3.utils.fromAscii(answer.toString());
+  console.log(answer)
   await game.methods
     .answer(answer)
-    .send({from: from, value: 2*10**18})
+    .send({from: from, value: 3*10**18})
     .then(() => {
       dispatch({
         type: ANSWER,

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Col, Button } from 'reactstrap'
 import * as actions from '../../actions/quesAction'
+import * as tomoAction from 'actions/tomoAction'
 import store from '../../store';
 import '../App.css';
 
 const clickA = (answer)=> {
+    store.dispatch(tomoAction.answer(answer))
     if(answer === 0){
         console.log("Dung");
         store.dispatch(actions.getQues());
@@ -15,6 +17,7 @@ const clickA = (answer)=> {
 }
 
 function clickB(answer){
+    store.dispatch(tomoAction.answer(answer))
     if(answer === 1){
         console.log("Dung");
         store.dispatch(actions.getQues());
@@ -25,6 +28,7 @@ function clickB(answer){
 }
 
 function clickC(answer){
+    store.dispatch(tomoAction.answer(answer))
     if(answer === 2){
         console.log("Dung");
         store.dispatch(actions.getQues());
@@ -35,8 +39,8 @@ function clickC(answer){
 }
 
 const QuesArea = (accQues) => {
-    const answer = accQues.ques.correct;
     const key = Object.keys(accQues.ques).slice(-1)[0]
+    const answer = accQues.ques[key].correct;
     return(
         <Col className = "box_color" xs="8">
             <div className="margin_box ">

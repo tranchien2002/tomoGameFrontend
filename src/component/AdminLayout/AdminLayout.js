@@ -7,6 +7,7 @@ import store from 'store';
 import firebase from 'config/config'
 import '../App.css'
 import 'style/admin.css'
+// import { setQuestion } from '../../actions/tomoAction';
 
 
 class AdminLayout extends Component {
@@ -38,11 +39,21 @@ class AdminLayout extends Component {
         // console.log(this.state.question)
         await delete this.state.question[found];
         this.setState(this.state)
-
+        store.dispatch(tomoActions.setQuestion(ques))
         store.dispatch(insertActions.insertQues(ques));
     }
 
-    createGame = async ()=>{
+    setSingleBounty = async() =>{
+        await store.dispatch(tomoActions.shareQuestionBounty());
+        console.log("share complite");
+    }
+
+    setAllBounty = async() => {
+        await store.dispatch(tomoActions.shareBounty());
+        console.log("share all bounty complte");
+    }
+
+    createGame = async() => {
         // debugger
         await store.dispatch(tomoActions.createNewGame());
         console.log("admin", store.getState().tomo.account)
@@ -71,10 +82,10 @@ class AdminLayout extends Component {
                             <div className ="button_bounty">
                                 <Row>
                                     <Col>
-                                        <Button color="primary">Single Question</Button>
+                                        <Button onClick={()=>this.setSingleBounty()} color="primary">Single Question</Button>
                                     </Col>
                                     <Col>
-                                        <Button color="primary">All Bounty</Button>
+                                        <Button onClick={()=>this.setAllBounty()}color="primary">All Bounty</Button>
                                     </Col>
                                     <Col>
                                         <Button onClick={()=>this.createGame()} color="primary">Create Game</Button>
