@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
-import Web3 from 'web3';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -22,8 +21,11 @@ class PlayerLayout extends Component {
 
   async componentDidMount() {
     this.interval = setInterval(() => {
-      store.dispatch(tomoAction.fetchWinCount());
-      store.dispatch(tomoAction.getBalance());
+      console.log(this.props.tomo);
+      if (this.props.tomo.account) {
+        store.dispatch(tomoAction.fetchWinCount());
+        store.dispatch(tomoAction.getBalance());
+      }
     }, 1000);
   }
 
