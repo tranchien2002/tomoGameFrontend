@@ -1,5 +1,5 @@
 // import Web3 from 'web3';
-import { initializeWeb3 } from '../initalizeWeb3';
+import getWeb3 from '../utils/getWeb3';
 import Factory from 'contracts/Factory.json';
 // import Game from 'contracts/Game.json';
 // import { default as contract } from 'truffle-contract'
@@ -8,8 +8,7 @@ import Factory from 'contracts/Factory.json';
 export const WEB3_CONNECT = 'WEB3_CONNECT';
 export const web3Connect = () => async (dispatch) => {
   // const web3 = new Web3(Web3.givenProvider || 'ws://127.0.0.1:8545');
-  const option = null;
-  const web3 = await initializeWeb3({ option });
+  const web3 = await getWeb3();
   const accounts = await web3.eth.getAccounts();
   if (accounts.length > 0) {
     const account = accounts[0];

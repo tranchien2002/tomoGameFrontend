@@ -21,7 +21,7 @@ class PlayerLayout extends Component {
 
   async componentDidMount() {
     this.interval = setInterval(() => {
-      console.log(this.props.tomo);
+      // console.log(this.props.tomo);
       if (this.props.tomo.account) {
         store.dispatch(tomoAction.fetchWinCount());
         store.dispatch(tomoAction.getBalance());
