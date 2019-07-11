@@ -37,7 +37,6 @@ class PlayerLayout extends Component {
     const { rank } = this.props;
     const { question } = this.props;
     const { wincount } = this.props;
-    console.log("player", this.props);
     if (question != null) {
       return (
         <div>
