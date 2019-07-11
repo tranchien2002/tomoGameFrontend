@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Col, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import ReactCountdownClock from 'react-countdown-clock';
 import * as tomoAction from 'actions/tomoAction';
 import store from '../../store';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -14,6 +15,23 @@ class QuesArea extends Component {
 
   click(answer) {
     store.dispatch(tomoAction.answer(answer));
+  }
+
+  changeDisabled() {
+    this.setState({ disabled: !this.state.disabled });
+  }
+
+  countDown() {
+    // this.changeDisabled();
+    return (
+      <ReactCountdownClock
+        seconds={10}
+        color='#2e2d55'
+        alpha={0.9}
+        size={120}
+        onComplete={(e) => this.changeDisabled()}
+      />
+    );
   }
 
   render() {
@@ -33,9 +51,10 @@ class QuesArea extends Component {
               </p>
             </Col>
             <Col className='question_box'>
-              <div className='question_position'>
-                <h1>{qes[key].question}</h1>
+              <div className='question'>
+                <h3>{qes[key].question}</h3>
               </div>
+              <div className='question center'>{this.countDown()}</div>
             </Col>
           </div>
           <Col className='question'>
@@ -47,6 +66,7 @@ class QuesArea extends Component {
                     className='answer_box'
                     outline
                     color='primary'
+                    disabled={this.state.disabled}
                   >
                     {item}
                   </Button>
