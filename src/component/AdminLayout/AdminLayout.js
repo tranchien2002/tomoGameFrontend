@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
-import { Container, Col, Row, Button } from 'reactstrap';
-// import '../../style/admin.css';
-import * as insertActions from 'actions/insertquesAction';
-import * as tomoActions from 'actions/tomoAction';
-import store from 'store';
-import firebase from 'config/config';
-import '../App.css';
-import 'style/admin.css';
+import React, { Component } from "react";
+import { Container, Col, Row, Button } from "reactstrap";
+import * as insertActions from "actions/insertquesAction";
+import * as tomoActions from "actions/tomoAction";
+import store from "store";
+import firebase from "config";
+import "../App.css";
+import "style/admin.css";
+import { firestoreConnect } from "react-redux-firebase";
+import { connect } from "react-redux";
+import { compose } from "redux";
 // import { setQuestion } from '../../actions/tomoAction';
 
 class AdminLayout extends Component {
@@ -16,90 +18,106 @@ class AdminLayout extends Component {
       selected: [],
       question: []
     };
+    console.log("admin", props);
   }
 
   async componentWillMount() {
     var db = await firebase.firestore();
-    db.collection('project_hunter')
+    db.collection("list_question")
       .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          this.setState({ question: [...this.state.question.concat([doc.data()])] });
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          this.setState({
+            question: [...this.state.question.concat([doc.data()])]
+          });
         });
       });
+
+    // this.interval = setInterval(() => {
+    //   console.log("compare", this.props.questions, this.state.question);
+    // }, 1000);
   }
 
-  selectQues = async (ques) => {
-    await this.setState({ selected: [...this.state.selected.concat([ques.quesNumber])] });
+  selectQues = async ques => {
+    // await this.setState({
+    //   selected: [...this.state.selected.concat([ques.quesNumber])]
+    // });
 
-    let found = await this.state.selected.find((element) => {
-      return element === ques.quesNumber;
-    });
+    // let found = await this.state.selected.find(element => {
+    //   return element === ques.quesNumber;
+    // });
 
-    // console.log(this.state.question)
-    await delete this.state.question[found];
-    this.setState(this.state);
+    // console.log("question state", this.state.question, found);
+    // await delete this.state.question[found];
+    // this.setState(this.state);
+    console.log("question ques", ques);
     store.dispatch(tomoActions.setQuestion(ques));
     store.dispatch(insertActions.insertQues(ques));
   };
 
   setSingleBounty = async () => {
     await store.dispatch(tomoActions.shareQuestionBounty());
-    console.log('share complite');
+    console.log("share complite");
   };
 
   setAllBounty = async () => {
     await store.dispatch(tomoActions.shareBounty());
-    console.log('share all bounty complte');
+    console.log("share all bounty complte");
   };
 
   createGame = async () => {
     // debugger
     await store.dispatch(tomoActions.createNewGame());
-    console.log('admin', store.getState().tomo.account);
+    console.log("admin", store.getState().tomo.account);
   };
 
   render() {
-    const { question } = this.state;
+    let questions = this.props.questions;
     return (
       <div>
         <Container>
-          <Col className='set_height'>
-            <div className='margin_box'>
+          <Col className="set_height">
+            <div className="margin_box">
               <div>
                 <h1>Select the next question</h1>
               </div>
-              <div className='admin_question_box'>
-                {question &&
-                  question.map((ques) => {
-                    return (
-                      <div className='admin_quesbox' key={ques.quesNumber}>
-                        <Button
-                          onClick={() => this.selectQues(ques)}
-                          className='answer_box '
-                          outline
-                          color='primary'
-                        >
-                          {ques.question}
-                        </Button>
-                      </div>
-                    );
+              <div className="admin_question_box">
+                {questions &&
+                  Object.keys(questions).map(id => {
+                    let ques = questions[id];
+                    if (ques) {
+                      return (
+                        <div className="admin_quesbox" key={id}>
+                          <Button
+                            onClick={() => this.selectQues(ques)}
+                            className="answer_box "
+                            outline
+                            color="primary"
+                            dangerouslySetInnerHTML={{ __html: ques.question }}
+                          />
+                        </div>
+                      );
+                    }
+                    return true;
                   })}
               </div>
-              <div className='button_bounty'>
+              <div className="button_bounty">
                 <Row>
                   <Col>
-                    <Button onClick={() => this.setSingleBounty()} color='primary'>
+                    <Button
+                      onClick={() => this.setSingleBounty()}
+                      color="primary"
+                    >
                       Single Question
                     </Button>
                   </Col>
                   <Col>
-                    <Button onClick={() => this.setAllBounty()} color='primary'>
+                    <Button onClick={() => this.setAllBounty()} color="primary">
                       All Bounty
                     </Button>
                   </Col>
                   <Col>
-                    <Button onClick={() => this.createGame()} color='primary'>
+                    <Button onClick={() => this.createGame()} color="primary">
                       Create Game
                     </Button>
                   </Col>
@@ -113,4 +131,33 @@ class AdminLayout extends Component {
   }
 }
 
-export default AdminLayout;
+const mapStatetoProps = state => {
+  let questions = state.firestore.data.list_question;
+  // let questions = [];
+  // var db = firebase.firestore();
+  // db.collection("list_question")
+  //   .get()
+  //   .then(querySnapshot => {
+  //     querySnapshot.forEach(doc => {
+  //       // this.setState({
+  //       //   question: [...this.state.question.concat([doc.data()])]
+  //       // });
+  //       questions.push(doc.data());
+  //     });
+  //   });
+  return {
+    questions: questions,
+    rank: state.rank.ranking,
+    wincount: state.tomo.winCount,
+    tomo: state.tomo
+  };
+};
+
+export default compose(
+  connect(mapStatetoProps),
+  firestoreConnect([
+    {
+      collection: "list_question"
+    }
+  ])
+)(AdminLayout);
