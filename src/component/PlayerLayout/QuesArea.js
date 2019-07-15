@@ -9,12 +9,29 @@ import { firestoreConnect } from 'react-redux-firebase';
 import '../App.css';
 
 class QuesArea extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      disabled: false,
+      time: 10
+    };
+  }
 
   click(answer) {
     store.dispatch(tomoAction.answer(answer));
+  }
+
+  shouldComponentUpdate(nextProps) {
+    // so sanh 2 last element cua object props.question
+    if (
+      this.props.question[Object.keys(this.props.question).slice(-1)[0]] ===
+      nextProps.question[Object.keys(this.props.question).slice(-1)[0]]
+    ) {
+      return true;
+    } else {
+      this.setState({ disabled: !this.state.disabled, time: this.state.time - 0.00000000001 });
+      return false;
+    }
   }
 
   changeDisabled() {
@@ -25,7 +42,7 @@ class QuesArea extends Component {
     // this.changeDisabled();
     return (
       <ReactCountdownClock
-        seconds={10}
+        seconds={this.state.time}
         color='#2e2d55'
         alpha={0.9}
         size={120}
