@@ -1,3 +1,6 @@
+@import './button.css';
+@import './admin.css';
+
 .set_height {
   height: 100vh;
   padding: 20px;
@@ -49,12 +52,6 @@
   right: 0;
   bottom: 0;
   left: 0;
-}
-
-.answer_box {
-  width: 90%;
-  text-align: left !important;
-  border-radius: 20px !important;
 }
 
 .ranking_title {

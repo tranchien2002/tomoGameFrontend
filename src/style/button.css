@@ -1,0 +1,53 @@
+/* design button color */
+.answer_box {
+  position: relative;
+  width: 90%;
+  text-align: left !important;
+  border-radius: 10px !important;
+}
+
+.btn-outline-primary {
+  color: black !important;
+  font-weight: 800 !important;
+  border: none !important;
+}
+
+.btn {
+  padding: 0px !important;
+}
+
+/* color outline */
+.btn:focus,
+.btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.progress {
+  height: 2.4rem !important;
+  border-radius: 10px !important;
+}
+
+.progress:hover {
+  box-shadow: 0 0 3pt 2pt #55dfa1af !important;
+}
+
+.progress-bar {
+  background-color: #55dfa1 !important;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.text_in_button {
+  color: #000;
+  position: absolute;
+  text-align: left;
+  font-size: medium;
+  padding-left: 4%;
+  width: 100%;
+}
+
+.user_number {
+  text-align: right;
+  padding-right: 4%;
+}
