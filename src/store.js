@@ -1,9 +1,9 @@
-import rootReducer from 'reducers';
-import thunk from 'redux-thunk';
-import { reduxFirestore, getFirestore } from 'redux-firestore';
-import { reactReduxFirebase, getFirebase } from 'react-redux-firebase';
-import config from './config/config';
-import { createStore, applyMiddleware, compose } from 'redux';
+import rootReducer from "reducers";
+import thunk from "redux-thunk";
+import { reduxFirestore, getFirestore } from "redux-firestore";
+import { reactReduxFirebase, getFirebase } from "react-redux-firebase";
+import config from "./config";
+import { createStore, applyMiddleware, compose } from "redux";
 
 const store = createStore(
   rootReducer,

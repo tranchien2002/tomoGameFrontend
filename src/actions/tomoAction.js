@@ -1,9 +1,20 @@
-// import Web3 from 'web3';
 import getWeb3 from "../utils/getWeb3";
 import Factory from "contracts/Factory.json";
-// import Game from 'contracts/Game.json';
-// import { default as contract } from 'truffle-contract'
-// import { AST_EmptyStatement } from 'terser';
+import firebase from "config";
+
+const shuffle = myArr => {
+  let l = myArr.length;
+  let temp;
+  let index;
+  while (l > 0) {
+    index = Math.floor(Math.random() * l);
+    l--;
+    temp = myArr[l];
+    myArr[l] = myArr[index];
+    myArr[index] = temp;
+  }
+  return myArr;
+};
 
 export const WEB3_CONNECT = "WEB3_CONNECT";
 export const web3Connect = () => async dispatch => {
@@ -85,7 +96,7 @@ export const setQuestion = correctAnswer => async (dispatch, getState) => {
   const state = getState();
   const from = state.tomo.account;
   const game = state.tomo.game;
-  console.log("ques", correctAnswer.correct);
+  console.log("ques", correctAnswer);
   await game.methods
     .setQuestion(
       state.tomo.web3.utils.fromAscii(correctAnswer.correct.toString())
@@ -196,6 +207,64 @@ export const createNewGame = () => async (dispatch, getState) => {
         type: CREATE_NEW_GAME,
         game: game
       });
+      fetch(
+        "https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple",
+        {
+          method: "GET"
+        }
+      )
+        .then(res => {
+          return res.json();
+        })
+        .then(jsonRes => {
+          var db = firebase.firestore();
+          var list_questions = [];
+          jsonRes.results.forEach((e, index) => {
+            let object = {};
+            object["question"] = e.question;
+            e.incorrect_answers.push(e.correct_answer);
+            object["answer"] = shuffle(e.incorrect_answers);
+            object["quesNumber"] = index;
+            object["correct"] = object["answer"].indexOf(e.correct_answer);
+            list_questions.push(object);
+          });
+          db.collection("list_question")
+            .get()
+            .then(querySnapshot => {
+              // for (let i = 0; i < querySnapshot.docs.length; i++) {
+              //   db.collection("list_question")
+              //     .doc(querySnapshot.docs[i].id)
+              //     .delete()
+              //     .then(() => {
+              //       console.log("done");
+              //     })
+              //     .catch(function(error) {
+              //       console.error("Error removing document: ", error);
+              //     });
+              // }
+              // console.log("length", querySnapshot);
+              querySnapshot.forEach(doc => {
+                console.log("doc", doc);
+                doc.ref.delete();
+              });
+              // var batch = db.batch();
+              // querySnapshot.forEach(doc => {
+              //   batch.delete(doc.ref);
+              // });
+              // return batch.commit();
+            })
+            .then(() => {
+              console.log("delete all");
+              console.log("list question new", list_questions);
+              list_questions.forEach(e => {
+                let newId = db.collection("list_question").doc().id;
+                e["id"] = newId;
+                db.collection("list_question")
+                  .doc(e["id"])
+                  .set(e);
+              });
+            });
+        });
     })
     .catch(e => {
       console.log("Error create game", e);
