@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import PlayerLayout from './component/PlayerLayout/PlayerLayout';
-import AdminLayout from './component/AdminLayout/AdminLayout';
-import Particles from './component/Particles';
+import React, { Component } from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import PlayerLayout from "./component/PlayerLayout/PlayerLayout";
+import AdminLayout from "./component/AdminLayout/AdminLayout";
+import Particles from "./component/Particles";
 
 class App extends Component {
   render() {
