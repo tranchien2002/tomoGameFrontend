@@ -17,6 +17,7 @@ class PlayerLayout extends Component {
       account: '0x0',
       balance: ''
     };
+    console.log('player', props);
   }
 
   async componentDidMount() {
@@ -37,38 +38,44 @@ class PlayerLayout extends Component {
     const { rank } = this.props;
     const { question } = this.props;
     const { wincount } = this.props;
-    if (question != null) {
-      return (
-        <div>
-          <Container>
-            <Row className='set_height'>
-              <QuesArea ques={question} acc={this.props.tomo} />
-              <RankArea rank={rank} wincount={wincount} />
-            </Row>
-          </Container>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <Container>
+    const { tomo } = this.props;
+    return (
+      <div>
+        <Container>
+          {tomo.web3 ? (
+            question ? (
+              <Row className='set_height'>
+                <QuesArea ques={question} acc={this.props.tomo} />
+                <RankArea rank={rank} wincount={wincount} />
+              </Row>
+            ) : (
+              <Row className='set_height'>
+                <Col className='box_color' xs='8'>
+                  <div className='margin_box '>
+                    <h1> Waiting ...</h1>
+                  </div>
+                </Col>
+                <RankArea rank={rank} />
+              </Row>
+            )
+          ) : (
             <Row className='set_height'>
               <Col className='box_color' xs='8'>
                 <div className='margin_box '>
-                  <h1> Waiting ...</h1>
+                  <h1> You need to login metamask ...</h1>
                 </div>
               </Col>
               <RankArea rank={rank} />
             </Row>
-          </Container>
-        </div>
-      );
-    }
+          )}
+        </Container>
+      </div>
+    );
   }
 }
 
 const mapStatetoProps = (state) => {
-  const question = state.firestore.data.player_question;
+  const question = state.firestore.data.current_question;
   // console.log(state.tomo)
   return {
     question: question,
@@ -82,7 +89,7 @@ export default compose(
   connect(mapStatetoProps),
   firestoreConnect([
     {
-      collection: 'player_question'
+      collection: 'current_question'
     }
   ])
 )(PlayerLayout);
