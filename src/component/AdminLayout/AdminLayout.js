@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Container, Col, Row, Button } from 'reactstrap';
-import * as insertActions from 'actions/insertquesAction';
 import * as tomoActions from 'actions/tomoAction';
 import store from 'store';
 import firebase from 'config';
@@ -24,8 +23,8 @@ class AdminLayout extends Component {
     var db = await firebase.firestore();
     db.collection('list_question')
       .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
           this.setState({
             question: [...this.state.question.concat([doc.data()])]
           });
@@ -37,7 +36,7 @@ class AdminLayout extends Component {
     // }, 1000);
   }
 
-  selectQues = async (ques) => {
+  selectQues = async ques => {
     // await this.setState({
     //   selected: [...this.state.selected.concat([ques.quesNumber])]
     // });
@@ -51,7 +50,6 @@ class AdminLayout extends Component {
     // this.setState(this.state);
     console.log('question ques', ques);
     store.dispatch(tomoActions.setQuestion(ques));
-    store.dispatch(insertActions.insertQues(ques));
   };
 
   setSingleBounty = async () => {
@@ -82,7 +80,7 @@ class AdminLayout extends Component {
               </div>
               <div className='admin_question_box'>
                 {questions &&
-                  Object.keys(questions).map((id) => {
+                  Object.keys(questions).map(id => {
                     let ques = questions[id];
                     if (ques) {
                       return (
@@ -103,7 +101,10 @@ class AdminLayout extends Component {
               <div className='button_bounty'>
                 <Row>
                   <Col>
-                    <Button onClick={() => this.setSingleBounty()} color='primary'>
+                    <Button
+                      onClick={() => this.setSingleBounty()}
+                      color='primary'
+                    >
                       Single Question
                     </Button>
                   </Col>
@@ -127,7 +128,7 @@ class AdminLayout extends Component {
   }
 }
 
-const mapStatetoProps = (state) => {
+const mapStatetoProps = state => {
   let questions = state.firestore.data.list_question;
   // let questions = [];
   // var db = firebase.firestore();

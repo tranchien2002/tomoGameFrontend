@@ -1,6 +1,6 @@
-import getWeb3 from "../utils/getWeb3";
-import Factory from "contracts/Factory.json";
-import firebase from "config";
+import getWeb3 from '../utils/getWeb3';
+import Factory from 'contracts/Factory.json';
+import firebase from 'config';
 
 const shuffle = myArr => {
   let l = myArr.length;
@@ -16,14 +16,14 @@ const shuffle = myArr => {
   return myArr;
 };
 
-export const WEB3_CONNECT = "WEB3_CONNECT";
+export const WEB3_CONNECT = 'WEB3_CONNECT';
 export const web3Connect = () => async dispatch => {
   // const web3 = new Web3(Web3.givenProvider || 'ws://127.0.0.1:8545');
   const web3 = await getWeb3();
   const accounts = await web3.eth.getAccounts();
   if (accounts.length > 0) {
     const account = accounts[0];
-    console.log("Web3 Account:", account);
+    console.log('Web3 Account:', account);
     const balance = await web3.eth.getBalance(account);
     dispatch({
       type: WEB3_CONNECT,
@@ -32,18 +32,18 @@ export const web3Connect = () => async dispatch => {
       balance
     });
   } else {
-    console.log("Account not found");
+    console.log('Account not found');
   }
 };
 
-export const INSTANTIATE_CONTRACT = "INSTANTIATE_CONTRACT";
+export const INSTANTIATE_CONTRACT = 'INSTANTIATE_CONTRACT';
 export const instantiateContracts = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
   const from = state.tomo.account;
   const networkId = process.env.REACT_APP_TOMO_ID;
-  const FactoryArtifact = require("contracts/Factory");
-  const GameArtifact = require("contracts/Game");
+  const FactoryArtifact = require('contracts/Factory');
+  const GameArtifact = require('contracts/Game');
   let factoryAddress = FactoryArtifact.networks[networkId].address;
   const factory = new web3.eth.Contract(Factory.abi, factoryAddress);
   let listGame = await factory.methods.getAllGames().call({ from });
@@ -57,7 +57,7 @@ export const instantiateContracts = () => async (dispatch, getState) => {
   });
 };
 
-export const GET_BALANCE = "GET_BALANCE";
+export const GET_BALANCE = 'GET_BALANCE';
 export const getBalance = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
@@ -70,7 +70,7 @@ export const getBalance = () => async (dispatch, getState) => {
   });
 };
 
-export const SET_BOUNTY = "SET_BOUNTY";
+export const SET_BOUNTY = 'SET_BOUNTY';
 export const setBounty = () => async (dispatch, getState) => {
   const state = getState();
   const from = state.tomo.account;
@@ -86,17 +86,21 @@ export const setBounty = () => async (dispatch, getState) => {
         });
       })
       .catch(e => {
-        console.log("Error setBounty", e);
+        console.log('Error setBounty', e);
       });
   }
 };
 
-export const SET_QUESTION = "SET_QUESTION";
-export const setQuestion = correctAnswer => async (dispatch, getState) => {
+export const SET_QUESTION = 'SET_QUESTION';
+export const setQuestion = correctAnswer => async (
+  dispatch,
+  getState,
+  { getFirestore }
+) => {
+  const firestore = getFirestore();
   const state = getState();
   const from = state.tomo.account;
   const game = state.tomo.game;
-  console.log("ques", correctAnswer);
   await game.methods
     .setQuestion(
       state.tomo.web3.utils.fromAscii(correctAnswer.correct.toString())
@@ -108,12 +112,57 @@ export const setQuestion = correctAnswer => async (dispatch, getState) => {
         questioning: true
       });
     })
+    .then(async () => {
+      let querySnapshot = await firestore.collection('current_question').get();
+      await querySnapshot.forEach(async doc => {
+        await firestore
+          .collection('current_question')
+          .add({
+            ...correctAnswer,
+            question: correctAnswer.question,
+            correct: correctAnswer.correct,
+            answer: correctAnswer.answer
+          })
+          .then(() => {
+            console.log('done selected question');
+            dispatch({
+              type: 'INSERT_QUES'
+            });
+          })
+          .catch(err => {
+            dispatch({ type: 'INSERT_QUES_ERROR' }, err);
+          });
+
+        await firestore
+          .collection('list_question')
+          .doc(correctAnswer.id)
+          .delete()
+          .then(function() {
+            console.log('doc', correctAnswer.id);
+            console.log('remove selected document');
+          })
+          .catch(function(error) {
+            console.error('Error removing document: ', error);
+          });
+
+        await firestore
+          .collection('current_question')
+          .doc(doc.id)
+          .delete()
+          .then(function() {
+            console.log('Document successfully deleted!');
+          })
+          .catch(function(error) {
+            console.error('Error removing document: ', error);
+          });
+      });
+    })
     .catch(e => {
-      console.log("Error setQuestion", e);
+      console.log('Error setQuestion', e);
     });
 };
 
-export const ANSWER = "ANSWER";
+export const ANSWER = 'ANSWER';
 export const answer = answer => async (dispatch, getState) => {
   const state = getState();
   const game = state.tomo.game;
@@ -133,11 +182,11 @@ export const answer = answer => async (dispatch, getState) => {
       });
     })
     .catch(e => {
-      console.log("Error answer", e);
+      console.log('Error answer', e);
     });
 };
 
-export const SHARE_QUESTION_BOUNTY = "SHARE_QUESTION_BOUNTY";
+export const SHARE_QUESTION_BOUNTY = 'SHARE_QUESTION_BOUNTY';
 export const shareQuestionBounty = () => async (dispatch, getState) => {
   const state = getState();
   const game = state.tomo.game;
@@ -152,11 +201,11 @@ export const shareQuestionBounty = () => async (dispatch, getState) => {
       });
     })
     .catch(e => {
-      console.log("Error bounty question", e);
+      console.log('Error bounty question', e);
     });
 };
 
-export const SHARE_BOUNTY = "SHARE_BOUNTY";
+export const SHARE_BOUNTY = 'SHARE_BOUNTY';
 export const shareBounty = () => async (dispatch, getState) => {
   const state = getState();
   const game = state.tomo.game;
@@ -171,11 +220,11 @@ export const shareBounty = () => async (dispatch, getState) => {
       });
     })
     .catch(e => {
-      console.log("Error bounty", e);
+      console.log('Error bounty', e);
     });
 };
 
-export const FETCH_WIN_COUNT = "FETCH_WIN_COUNT";
+export const FETCH_WIN_COUNT = 'FETCH_WIN_COUNT';
 export const fetchWinCount = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
@@ -191,13 +240,13 @@ export const fetchWinCount = () => async (dispatch, getState) => {
   });
 };
 
-export const CREATE_NEW_GAME = "CREATE_NEW_GAME";
+export const CREATE_NEW_GAME = 'CREATE_NEW_GAME';
 export const createNewGame = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
   const factory = state.tomo.factory;
   const from = state.tomo.account;
-  const GameArtifact = require("contracts/Game");
+  const GameArtifact = require('contracts/Game');
   await factory.methods
     .createGame()
     .send({ from })
@@ -208,9 +257,9 @@ export const createNewGame = () => async (dispatch, getState) => {
         game: game
       });
       fetch(
-        "https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple",
+        'https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple',
         {
-          method: "GET"
+          method: 'GET'
         }
       )
         .then(res => {
@@ -221,14 +270,14 @@ export const createNewGame = () => async (dispatch, getState) => {
           var list_questions = [];
           jsonRes.results.forEach((e, index) => {
             let object = {};
-            object["question"] = e.question;
+            object['question'] = e.question;
             e.incorrect_answers.push(e.correct_answer);
-            object["answer"] = shuffle(e.incorrect_answers);
-            object["quesNumber"] = index;
-            object["correct"] = object["answer"].indexOf(e.correct_answer);
+            object['answer'] = shuffle(e.incorrect_answers);
+            object['quesNumber'] = index;
+            object['correct'] = object['answer'].indexOf(e.correct_answer);
             list_questions.push(object);
           });
-          db.collection("list_question")
+          db.collection('list_question')
             .get()
             .then(querySnapshot => {
               // for (let i = 0; i < querySnapshot.docs.length; i++) {
@@ -244,7 +293,7 @@ export const createNewGame = () => async (dispatch, getState) => {
               // }
               // console.log("length", querySnapshot);
               querySnapshot.forEach(doc => {
-                console.log("doc", doc);
+                console.log('doc', doc);
                 doc.ref.delete();
               });
               // var batch = db.batch();
@@ -254,19 +303,19 @@ export const createNewGame = () => async (dispatch, getState) => {
               // return batch.commit();
             })
             .then(() => {
-              console.log("delete all");
-              console.log("list question new", list_questions);
+              console.log('delete all');
+              console.log('list question new', list_questions);
               list_questions.forEach(e => {
-                let newId = db.collection("list_question").doc().id;
-                e["id"] = newId;
-                db.collection("list_question")
-                  .doc(e["id"])
+                let newId = db.collection('list_question').doc().id;
+                e['id'] = newId;
+                db.collection('list_question')
+                  .doc(e['id'])
                   .set(e);
               });
             });
         });
     })
     .catch(e => {
-      console.log("Error create game", e);
+      console.log('Error create game', e);
     });
 };
