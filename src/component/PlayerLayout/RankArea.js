@@ -1,7 +1,8 @@
 import React from 'react';
 import { Col } from 'reactstrap';
 import ScoreBoard from './ScoreBoard';
-import '../App.css';
+
+import '../../style/App.css';
 
 const RankArea = ({ rank, wincount }) => {
   return (

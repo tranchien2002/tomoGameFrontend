@@ -8,7 +8,7 @@ import RankArea from './RankArea';
 import store from 'store';
 import * as tomoAction from 'actions/tomoAction';
 
-import '../App.css';
+import '../../style/App.css';
 
 class PlayerLayout extends Component {
   constructor(props) {

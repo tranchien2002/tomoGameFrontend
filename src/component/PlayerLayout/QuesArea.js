@@ -1,20 +1,32 @@
 import React, { Component } from 'react';
-import { Col, Button } from 'reactstrap';
+import { Col, Button, Progress } from 'reactstrap';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ReactCountdownClock from 'react-countdown-clock';
 import * as tomoAction from 'actions/tomoAction';
 import store from '../../store';
 import { firestoreConnect } from 'react-redux-firebase';
-import '../App.css';
+
+import '../../style/App.css';
 
 class QuesArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
       disabled: false,
-      time: 10
+      time: 10,
+      user_choice: {
+        0: 25,
+        1: 10,
+        2: 6,
+        3: 90
+      }
     };
+
+    this.click = this.click.bind(this);
+    this.changeDisabled = this.changeDisabled.bind(this);
+    this.countDown = this.countDown.bind(this);
+    this.percent = this.percent.bind(this);
   }
 
   click(answer) {
@@ -46,12 +58,23 @@ class QuesArea extends Component {
     return (
       <ReactCountdownClock
         seconds={this.state.time}
-        color='#2e2d55'
+        color='#3c65a7'
         alpha={0.9}
         size={120}
         onComplete={(e) => this.changeDisabled()}
       />
     );
+  }
+
+  // Total calculation function
+  sumValues = (obj) => Object.values(obj).reduce((a, b) => a + b);
+
+  percent(user_number) {
+    if (this.sumValues(this.state.user_choice) !== 0) {
+      return (user_number * 100) / this.sumValues(this.state.user_choice);
+    } else {
+      return 0;
+    }
   }
 
   render() {
@@ -88,7 +111,12 @@ class QuesArea extends Component {
                     color='primary'
                     disabled={this.state.disabled}
                   >
-                    {item}
+                    <Progress value={this.percent(this.state.user_choice[key])}>
+                      <div className='text_in_button'>{item}</div>
+                      <div className='text_in_button user_number'>
+                        {this.state.user_choice[key]}
+                      </div>
+                    </Progress>
                   </Button>
                 </Col>
               ))}

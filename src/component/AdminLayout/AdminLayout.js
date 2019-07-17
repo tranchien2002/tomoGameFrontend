@@ -1,14 +1,13 @@
-import React, { Component } from "react";
-import { Container, Col, Row, Button } from "reactstrap";
-import * as insertActions from "actions/insertquesAction";
-import * as tomoActions from "actions/tomoAction";
-import store from "store";
-import firebase from "config";
-import "../App.css";
-import "style/admin.css";
-import { firestoreConnect } from "react-redux-firebase";
-import { connect } from "react-redux";
-import { compose } from "redux";
+import React, { Component } from 'react';
+import { Container, Col, Row, Button } from 'reactstrap';
+import * as insertActions from 'actions/insertquesAction';
+import * as tomoActions from 'actions/tomoAction';
+import store from 'store';
+import firebase from 'config';
+import '../../style/App.css';
+import { firestoreConnect } from 'react-redux-firebase';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 // import { setQuestion } from '../../actions/tomoAction';
 
 class AdminLayout extends Component {
@@ -18,15 +17,15 @@ class AdminLayout extends Component {
       selected: [],
       question: []
     };
-    console.log("admin", props);
+    console.log('admin', props);
   }
 
   async componentWillMount() {
     var db = await firebase.firestore();
-    db.collection("list_question")
+    db.collection('list_question')
       .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
           this.setState({
             question: [...this.state.question.concat([doc.data()])]
           });
@@ -38,7 +37,7 @@ class AdminLayout extends Component {
     // }, 1000);
   }
 
-  selectQues = async ques => {
+  selectQues = async (ques) => {
     // await this.setState({
     //   selected: [...this.state.selected.concat([ques.quesNumber])]
     // });
@@ -50,25 +49,25 @@ class AdminLayout extends Component {
     // console.log("question state", this.state.question, found);
     // await delete this.state.question[found];
     // this.setState(this.state);
-    console.log("question ques", ques);
+    console.log('question ques', ques);
     store.dispatch(tomoActions.setQuestion(ques));
     store.dispatch(insertActions.insertQues(ques));
   };
 
   setSingleBounty = async () => {
     await store.dispatch(tomoActions.shareQuestionBounty());
-    console.log("share complite");
+    console.log('share complite');
   };
 
   setAllBounty = async () => {
     await store.dispatch(tomoActions.shareBounty());
-    console.log("share all bounty complte");
+    console.log('share all bounty complte');
   };
 
   createGame = async () => {
     // debugger
     await store.dispatch(tomoActions.createNewGame());
-    console.log("admin", store.getState().tomo.account);
+    console.log('admin', store.getState().tomo.account);
   };
 
   render() {
@@ -76,23 +75,23 @@ class AdminLayout extends Component {
     return (
       <div>
         <Container>
-          <Col className="set_height">
-            <div className="margin_box">
+          <Col className='set_height'>
+            <div className='margin_box'>
               <div>
                 <h1>Select the next question</h1>
               </div>
-              <div className="admin_question_box">
+              <div className='admin_question_box'>
                 {questions &&
-                  Object.keys(questions).map(id => {
+                  Object.keys(questions).map((id) => {
                     let ques = questions[id];
                     if (ques) {
                       return (
-                        <div className="admin_quesbox" key={id}>
+                        <div className='admin_quesbox' key={id}>
                           <Button
                             onClick={() => this.selectQues(ques)}
-                            className="answer_box "
+                            className='answer_box '
                             outline
-                            color="primary"
+                            color='primary'
                             dangerouslySetInnerHTML={{ __html: ques.question }}
                           />
                         </div>
@@ -101,23 +100,20 @@ class AdminLayout extends Component {
                     return true;
                   })}
               </div>
-              <div className="button_bounty">
+              <div className='button_bounty'>
                 <Row>
                   <Col>
-                    <Button
-                      onClick={() => this.setSingleBounty()}
-                      color="primary"
-                    >
+                    <Button onClick={() => this.setSingleBounty()} color='primary'>
                       Single Question
                     </Button>
                   </Col>
                   <Col>
-                    <Button onClick={() => this.setAllBounty()} color="primary">
+                    <Button onClick={() => this.setAllBounty()} color='primary'>
                       All Bounty
                     </Button>
                   </Col>
                   <Col>
-                    <Button onClick={() => this.createGame()} color="primary">
+                    <Button onClick={() => this.createGame()} color='primary'>
                       Create Game
                     </Button>
                   </Col>
@@ -131,7 +127,7 @@ class AdminLayout extends Component {
   }
 }
 
-const mapStatetoProps = state => {
+const mapStatetoProps = (state) => {
   let questions = state.firestore.data.list_question;
   // let questions = [];
   // var db = firebase.firestore();
@@ -157,7 +153,7 @@ export default compose(
   connect(mapStatetoProps),
   firestoreConnect([
     {
-      collection: "list_question"
+      collection: 'list_question'
     }
   ])
 )(AdminLayout);
