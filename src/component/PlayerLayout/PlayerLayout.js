@@ -75,7 +75,7 @@ class PlayerLayout extends Component {
 }
 
 const mapStatetoProps = state => {
-  const question = state.firestore.data.current_question;
+  const question = state.firestore.ordered.current_question;
   // console.log(state.tomo)
   return {
     question: question,
