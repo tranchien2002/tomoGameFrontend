@@ -125,7 +125,11 @@ class AdminLayout extends Component {
   }
 }
 
+<<<<<<< HEAD
 const mapStatetoProps = (state) => {
+=======
+const mapStatetoProps = state => {
+>>>>>>> bug new game
   let questions = state.firestore.ordered.list_question;
   // let questions = [];
   // var db = firebase.firestore();

@@ -1,9 +1,9 @@
-export const insertQues = question => {
+export const insertQues = (question) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
 
     let querySnapshot = await firestore.collection('current_question').get();
-    await querySnapshot.forEach(async doc => {
+    await querySnapshot.forEach(async (doc) => {
       await firestore
         .collection('current_question')
         .add({
@@ -17,7 +17,7 @@ export const insertQues = question => {
             type: 'INSERT_QUES'
           });
         })
-        .catch(err => {
+        .catch((err) => {
           dispatch({ type: 'INSERT_QUES_ERROR' }, err);
         });
 
