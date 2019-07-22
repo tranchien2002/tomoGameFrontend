@@ -14,13 +14,7 @@ class QuesArea extends Component {
     super(props);
     this.state = {
       disabled: false,
-      time: 10,
-      user_choice: {
-        0: 25,
-        1: 10,
-        2: 6,
-        3: 90
-      }
+      time: 10
     };
 
     this.click = this.click.bind(this);
@@ -29,16 +23,9 @@ class QuesArea extends Component {
     this.percent = this.percent.bind(this);
   }
 
-  click(answer) {
-    store.dispatch(tomoAction.answer(answer));
-  }
-
   shouldComponentUpdate(nextProps) {
     // so sanh 2 last element cua object props.question
-    if (
-      this.props.question[Object.keys(this.props.question).slice(-1)[0]] ===
-      nextProps.question[Object.keys(this.props.question).slice(-1)[0]]
-    ) {
+    if (this.props.question[0].question === nextProps.question[0].question) {
       return true;
     } else {
       this.setState({
@@ -47,6 +34,10 @@ class QuesArea extends Component {
       });
       return false;
     }
+  }
+
+  click(answer) {
+    store.dispatch(tomoAction.answer(answer));
   }
 
   changeDisabled() {
@@ -70,8 +61,8 @@ class QuesArea extends Component {
   sumValues = (obj) => Object.values(obj).reduce((a, b) => a + b);
 
   percent(user_number) {
-    if (this.sumValues(this.state.user_choice) !== 0) {
-      return (user_number * 100) / this.sumValues(this.state.user_choice);
+    if (this.sumValues(this.props.question[0].user_choice) !== 0) {
+      return (user_number * 100) / this.sumValues(this.props.question[0].user_choice);
     } else {
       return 0;
     }
@@ -79,7 +70,6 @@ class QuesArea extends Component {
 
   render() {
     let acc = this.props.acc;
-    let key = Object.keys(this.props.question).slice(-1)[0];
     let qes = this.props.question;
     return (
       <Col className='box_color' xs='8'>
@@ -95,14 +85,14 @@ class QuesArea extends Component {
             </Col>
             <Col className='question_box'>
               <div className='question_position'>
-                <h1 dangerouslySetInnerHTML={{ __html: qes[key].question }} />
+                <h1 dangerouslySetInnerHTML={{ __html: qes[0].question }} />
               </div>
               <div className='question center'>{this.countDown()}</div>
             </Col>
           </div>
           <Col className='question'>
             <div className='answer_position'>
-              {qes[key].answer.map((item, key) => (
+              {qes[0].answer.map((item, key) => (
                 <Col key={key}>
                   <Button
                     onClick={(e) => this.click(key)}
@@ -111,11 +101,9 @@ class QuesArea extends Component {
                     color='primary'
                     disabled={this.state.disabled}
                   >
-                    <Progress value={this.percent(this.state.user_choice[key])}>
+                    <Progress value={this.percent(qes[0].user_choice[key])}>
                       <div className='text_in_button'>{item}</div>
-                      <div className='text_in_button user_number'>
-                        {this.state.user_choice[key]}
-                      </div>
+                      <div className='text_in_button user_number'>{qes[0].user_choice[key]}</div>
                     </Progress>
                   </Button>
                 </Col>
@@ -129,7 +117,7 @@ class QuesArea extends Component {
 }
 
 const mapStatetoProps = (state) => {
-  const question = state.firestore.data.current_question;
+  const question = state.firestore.ordered.current_question;
   return {
     question: question,
     balance: state.tomo.balance,

@@ -23,7 +23,7 @@ class PlayerLayout extends Component {
   async componentDidMount() {
     this.interval = setInterval(() => {
       // console.log(this.props.tomo);
-      if (this.props.tomo.account) {
+      if (this.props.tomo.account !== null && this.props.tomo.game !== null) {
         store.dispatch(tomoAction.fetchWinCount());
         store.dispatch(tomoAction.getBalance());
       }
