@@ -2,7 +2,7 @@ import getWeb3 from '../utils/getWeb3';
 import Factory from 'contracts/Factory.json';
 import firebase from 'config';
 
-const shuffle = myArr => {
+const shuffle = (myArr) => {
   let l = myArr.length;
   let temp;
   let index;
@@ -17,7 +17,7 @@ const shuffle = myArr => {
 };
 
 export const WEB3_CONNECT = 'WEB3_CONNECT';
-export const web3Connect = () => async dispatch => {
+export const web3Connect = () => async (dispatch) => {
   // const web3 = new Web3(Web3.givenProvider || 'ws://127.0.0.1:8545');
   const web3 = await getWeb3();
   const accounts = await web3.eth.getAccounts();
@@ -62,7 +62,7 @@ export const getBalance = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
   const from = state.tomo.account;
-  await web3.eth.getBalance(from).then(balance => {
+  await web3.eth.getBalance(from).then((balance) => {
     dispatch({
       type: GET_BALANCE,
       balance: web3.utils.fromWei(balance)
@@ -85,26 +85,67 @@ export const setBounty = () => async (dispatch, getState) => {
           bounty: state.tomo.bounty
         });
       })
-      .catch(e => {
+      .catch((e) => {
         console.log('Error setBounty', e);
       });
   }
 };
 
 export const SET_QUESTION = 'SET_QUESTION';
-export const setQuestion = correctAnswer => async (
-  dispatch,
-  getState,
-  { getFirestore }
-) => {
+export const setQuestion = (correctAnswer) => async (dispatch, getState, { getFirestore }) => {
   const firestore = getFirestore();
   const state = getState();
   const from = state.tomo.account;
   const game = state.tomo.game;
+  // await firestore
+  //   .collection('current_question')
+  //   .doc('current')
+  //   .get()
+  //   .then(async (doc) => {
+  //     if (doc.exists) {
+  //       await firestore
+  //         .collection('current_question')
+  //         .doc('current')
+  //         .set({
+  //           ...correctAnswer,
+  //           question: correctAnswer.question,
+  //           correct: correctAnswer.correct,
+  //           answer: correctAnswer.answer,
+  //           //add user choice vao database
+  //           user_choice: {
+  //             0: 0,
+  //             1: 0,
+  //             2: 0,
+  //             3: 0
+  //           }
+  //         })
+  //         .then(() => {
+  //           console.log('done selected question');
+  //           dispatch({
+  //             type: 'INSERT_QUES'
+  //           });
+  //         })
+  //         .catch((err) => {
+  //           dispatch({ type: 'INSERT_QUES_ERROR' }, err);
+  //         });
+
+  //       await firestore
+  //         .collection('list_question')
+  //         .doc(correctAnswer.id)
+  //         .delete()
+  //         .then(function() {
+  //           console.log('doc', correctAnswer.id);
+  //           console.log('remove selected document');
+  //         })
+  //         .catch(function(error) {
+  //           console.error('Error removing document: ', error);
+  //         });
+  //     } else {
+  //       console.log('No such document!');
+  //     }
+  //   });
   await game.methods
-    .setQuestion(
-      state.tomo.web3.utils.fromAscii(correctAnswer.correct.toString())
-    )
+    .setQuestion(state.tomo.web3.utils.fromAscii(correctAnswer.correct.toString()))
     .send({ from: from })
     .then(() => {
       dispatch({
@@ -113,64 +154,69 @@ export const setQuestion = correctAnswer => async (
       });
     })
     .then(async () => {
-      let querySnapshot = await firestore.collection('current_question').get();
-      await querySnapshot.forEach(async doc => {
-        await firestore
-          .collection('current_question')
-          .add({
-            ...correctAnswer,
-            question: correctAnswer.question,
-            correct: correctAnswer.correct,
-            answer: correctAnswer.answer
-          })
-          .then(() => {
-            console.log('done selected question');
-            dispatch({
-              type: 'INSERT_QUES'
-            });
-          })
-          .catch(err => {
-            dispatch({ type: 'INSERT_QUES_ERROR' }, err);
-          });
+      await firestore
+        .collection('current_question')
+        .doc('current')
+        .get()
+        .then(async (doc) => {
+          if (doc.exists) {
+            await firestore
+              .collection('current_question')
+              .doc('current')
+              .set({
+                ...correctAnswer,
+                question: correctAnswer.question,
+                correct: correctAnswer.correct,
+                answer: correctAnswer.answer,
+                //add user choice vao database
+                user_choice: {
+                  0: 0,
+                  1: 0,
+                  2: 0,
+                  3: 0
+                }
+              })
+              .then(() => {
+                console.log('done selected question');
+                dispatch({
+                  type: 'INSERT_QUES'
+                });
+              })
+              .catch((err) => {
+                dispatch({ type: 'INSERT_QUES_ERROR' }, err);
+              });
 
-        await firestore
-          .collection('list_question')
-          .doc(correctAnswer.id)
-          .delete()
-          .then(function() {
-            console.log('doc', correctAnswer.id);
-            console.log('remove selected document');
-          })
-          .catch(function(error) {
-            console.error('Error removing document: ', error);
-          });
-
-        await firestore
-          .collection('current_question')
-          .doc(doc.id)
-          .delete()
-          .then(function() {
-            console.log('Document successfully deleted!');
-          })
-          .catch(function(error) {
-            console.error('Error removing document: ', error);
-          });
-      });
+            await firestore
+              .collection('list_question')
+              .doc(correctAnswer.id)
+              .delete()
+              .then(function() {
+                console.log('doc', correctAnswer.id);
+                console.log('remove selected document');
+              })
+              .catch(function(error) {
+                console.error('Error removing document: ', error);
+              });
+          } else {
+            console.log('No such document!');
+          }
+        });
     })
-    .catch(e => {
+    .catch((e) => {
       console.log('Error setQuestion', e);
     });
 };
 
 export const ANSWER = 'ANSWER';
-export const answer = answer => async (dispatch, getState) => {
+//khi nguoi dung chon dap an update user_choice tren firebase
+export const answer = (answerIndex) => async (dispatch, getState) => {
+  var db = firebase.firestore();
   const state = getState();
   const game = state.tomo.game;
   const from = state.tomo.account;
   let web3 = state.tomo.web3;
-  console.log(answer);
-  answer = web3.utils.fromAscii(answer.toString());
-  console.log(answer);
+
+  var answer = web3.utils.fromAscii(answerIndex.toString());
   await game.methods
     .answer(answer)
     .send({ from: from, value: 3 * 10 ** 18 })
@@ -181,8 +227,30 @@ export const answer = answer => async (dispatch, getState) => {
         questionBounty: state.tomo.questionBounty + 2
       });
     })
-    .catch(e => {
+    .catch((e) => {
       console.log('Error answer', e);
+    })
+    .then(() => {
+      // tang so sau khi xac nhanj contract
+      db.collection('current_question')
+        .doc('current')
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            var data = doc.data();
+            data.user_choice[answerIndex] = data.user_choice[answerIndex] + 1;
+            console.log('Document data:', data);
+            db.collection('current_question')
+              .doc('current')
+              .set(data);
+          } else {
+            // doc.data() will be undefined in this case
+            console.log('No such document!');
+          }
+        })
+        .catch(function(error) {
+          console.log('Error getting document:', error);
+        });
     });
 };
 
@@ -194,13 +262,13 @@ export const shareQuestionBounty = () => async (dispatch, getState) => {
   await game.methods
     .shareQuestionBounty()
     .send({ from: from })
-    .then(result => {
+    .then((result) => {
       dispatch({
         type: SHARE_QUESTION_BOUNTY,
         bounty: 0
       });
     })
-    .catch(e => {
+    .catch((e) => {
       console.log('Error bounty question', e);
     });
 };
@@ -213,13 +281,13 @@ export const shareBounty = () => async (dispatch, getState) => {
   await game.methods
     .shareBounty()
     .send({ from: from })
-    .then(result => {
+    .then((result) => {
       dispatch({
         type: SHARE_QUESTION_BOUNTY,
         bounty: 0
       });
     })
-    .catch(e => {
+    .catch((e) => {
       console.log('Error bounty', e);
     });
 };
@@ -250,22 +318,19 @@ export const createNewGame = () => async (dispatch, getState) => {
   await factory.methods
     .createGame()
     .send({ from })
-    .then(result => {
+    .then((result) => {
       const game = new web3.eth.Contract(GameArtifact.abi, result);
       dispatch({
         type: CREATE_NEW_GAME,
         game: game
       });
-      fetch(
-        'https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple',
-        {
-          method: 'GET'
-        }
-      )
-        .then(res => {
+      fetch('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple', {
+        method: 'GET'
+      })
+        .then((res) => {
           return res.json();
         })
-        .then(jsonRes => {
+        .then((jsonRes) => {
           var db = firebase.firestore();
           var list_questions = [];
           jsonRes.results.forEach((e, index) => {
@@ -279,7 +344,7 @@ export const createNewGame = () => async (dispatch, getState) => {
           });
           db.collection('list_question')
             .get()
-            .then(querySnapshot => {
+            .then((querySnapshot) => {
               // for (let i = 0; i < querySnapshot.docs.length; i++) {
               //   db.collection("list_question")
               //     .doc(querySnapshot.docs[i].id)
@@ -292,7 +357,7 @@ export const createNewGame = () => async (dispatch, getState) => {
               //     });
               // }
               // console.log("length", querySnapshot);
-              querySnapshot.forEach(doc => {
+              querySnapshot.forEach((doc) => {
                 console.log('doc', doc);
                 doc.ref.delete();
               });
@@ -305,7 +370,7 @@ export const createNewGame = () => async (dispatch, getState) => {
             .then(() => {
               console.log('delete all');
               console.log('list question new', list_questions);
-              list_questions.forEach(e => {
+              list_questions.forEach((e) => {
                 let newId = db.collection('list_question').doc().id;
                 e['id'] = newId;
                 db.collection('list_question')
@@ -315,7 +380,7 @@ export const createNewGame = () => async (dispatch, getState) => {
             });
         });
     })
-    .catch(e => {
+    .catch((e) => {
       console.log('Error create game', e);
     });
 };
