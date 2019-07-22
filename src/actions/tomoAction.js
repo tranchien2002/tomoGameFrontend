@@ -154,6 +154,7 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState, { getFi
       });
     })
     .then(async () => {
+<<<<<<< HEAD
       await firestore
         .collection('current_question')
         .doc('current')
@@ -185,6 +186,39 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState, { getFi
               .catch((err) => {
                 dispatch({ type: 'INSERT_QUES_ERROR' }, err);
               });
+=======
+      let querySnapshot = await firestore.collection('current_question').get();
+      await querySnapshot.forEach(async (doc) => {
+        await firestore
+          .collection('current_question')
+          .add({
+            ...correctAnswer,
+            question: correctAnswer.question,
+            correct: correctAnswer.correct,
+            answer: correctAnswer.answer
+          })
+          .then(() => {
+            console.log('done selected question');
+            dispatch({
+              type: 'INSERT_QUES'
+            });
+          })
+          .catch((err) => {
+            dispatch({ type: 'INSERT_QUES_ERROR' }, err);
+          });
+
+        await firestore
+          .collection('list_question')
+          .doc(correctAnswer.id)
+          .delete()
+          .then(function() {
+            console.log('doc', correctAnswer.id);
+            console.log('remove selected document');
+          })
+          .catch(function(error) {
+            console.error('Error removing document: ', error);
+          });
+>>>>>>> bug new game
 
             await firestore
               .collection('list_question')
@@ -318,15 +352,31 @@ export const createNewGame = () => async (dispatch, getState) => {
   await factory.methods
     .createGame()
     .send({ from })
+<<<<<<< HEAD
     .then((result) => {
       const game = new web3.eth.Contract(GameArtifact.abi, result);
+=======
+    .then(async () => {
+      let listGame = await factory.methods.getAllGames().call({ from });
+      let currentGameAddress = listGame[listGame.length - 1];
+      const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
+>>>>>>> bug new game
       dispatch({
         type: CREATE_NEW_GAME,
         game: game
       });
+<<<<<<< HEAD
       fetch('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple', {
         method: 'GET'
       })
+=======
+      fetch(
+        'https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple',
+        {
+          method: 'GET'
+        }
+      )
+>>>>>>> bug new game
         .then((res) => {
           return res.json();
         })
@@ -367,7 +417,8 @@ export const createNewGame = () => async (dispatch, getState) => {
               // });
               // return batch.commit();
             })
-            .then(() => {
+            .then(async () => {
+              // dispatch(instantiateContracts());
               console.log('delete all');
               console.log('list question new', list_questions);
               list_questions.forEach((e) => {
