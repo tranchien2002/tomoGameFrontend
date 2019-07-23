@@ -6,11 +6,11 @@ import '../../style/App.css';
 
 const RankArea = ({ rank, wincount }) => {
   return (
-    <Col className='box_color' xs='4'>
+    <Col className='box_color' xs={{ size: 12 }} md={{ size: 4, offset: 0 }}>
       <ScoreBoard wincount={wincount} />
       <div className='rank'>
         <div className='ranking_title'>
-          <h2>Ranking</h2>
+          <span>Ranking</span>
         </div>
         <div className='person_rank_box'>
           {rank.map((rank) => (
