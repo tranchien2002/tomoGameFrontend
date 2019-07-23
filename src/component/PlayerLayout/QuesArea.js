@@ -72,20 +72,20 @@ class QuesArea extends Component {
     let acc = this.props.acc;
     let qes = this.props.question;
     return (
-      <Col className='box_color' xs='8'>
-        <div className='margin_box '>
+      <Col className='box_color' xs={{ size: 12 }} md={{ size: 8, offset: 0 }}>
+        <div className='margin_box'>
           <div className='question'>
             <Col className='user_account'>
-              <h5>
-                <strong>Your account :</strong> {acc.account}
-              </h5>
               <p>
-                <strong>Balance :</strong> {this.props.balance} <strong>ETH</strong>
+                <strong>Your account :</strong> {acc.account}
+              </p>
+              <p>
+                <strong>Balance :</strong> {this.props.balance} <strong>TOMO</strong>
               </p>
             </Col>
             <Col className='question_box'>
               <div className='question_position'>
-                <h1 dangerouslySetInnerHTML={{ __html: qes[0].question }} />
+                <span dangerouslySetInnerHTML={{ __html: qes[0].question }} />
               </div>
               <div className='question center'>{this.countDown()}</div>
             </Col>

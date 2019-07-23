@@ -52,7 +52,7 @@ class PlayerLayout extends Component {
               <Row className='set_height'>
                 <Col className='box_color' xs='8'>
                   <div className='margin_box '>
-                    <h1> Waiting ...</h1>
+                    <span> Waiting ...</span>
                   </div>
                 </Col>
                 <RankArea rank={rank} />
@@ -62,7 +62,7 @@ class PlayerLayout extends Component {
             <Row className='set_height'>
               <Col className='box_color' xs='8'>
                 <div className='margin_box '>
-                  <h1> You need to login metamask ...</h1>
+                  <span> You need to login metamask ...</span>
                 </div>
               </Col>
               <RankArea rank={rank} />
@@ -74,7 +74,7 @@ class PlayerLayout extends Component {
   }
 }
 
-const mapStatetoProps = state => {
+const mapStatetoProps = (state) => {
   const question = state.firestore.ordered.current_question;
   // console.log(state.tomo)
   return {

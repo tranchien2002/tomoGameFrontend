@@ -1,12 +1,13 @@
 import React from 'react';
 
 import '../../style/App.css';
+//import { bold } from 'ansi-colors';
 
 const ScoreBoard = ({ wincount }) => {
   return (
     <div className='score_board'>
-      <h2>Your Score</h2>
-      <h3>{wincount}/10</h3>
+      <p>Your Score</p>
+      <p>{wincount}/10</p>
     </div>
   );
 };
