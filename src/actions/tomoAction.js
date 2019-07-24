@@ -315,75 +315,52 @@ export const createNewGame = () => async (dispatch, getState) => {
   const factory = state.tomo.factory;
   const from = state.tomo.account;
   const GameArtifact = require('contracts/Game');
-  await factory.methods
-    .createGame()
-    .send({ from })
-    .then(async () => {
-      let listGame = await factory.methods.getAllGames().call({ from });
-      let currentGameAddress = listGame[listGame.length - 1];
-      const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
-      dispatch({
-        type: CREATE_NEW_GAME,
-        game: game
-      });
-      fetch('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple', {
-        method: 'GET'
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((jsonRes) => {
-          var db = firebase.firestore();
-          var list_questions = [];
-          jsonRes.results.forEach((e, index) => {
-            let object = {};
-            object['question'] = e.question;
-            e.incorrect_answers.push(e.correct_answer);
-            object['answer'] = shuffle(e.incorrect_answers);
-            object['quesNumber'] = index;
-            object['correct'] = object['answer'].indexOf(e.correct_answer);
-            list_questions.push(object);
-          });
-          db.collection('list_question')
-            .get()
-            .then((querySnapshot) => {
-              // for (let i = 0; i < querySnapshot.docs.length; i++) {
-              //   db.collection("list_question")
-              //     .doc(querySnapshot.docs[i].id)
-              //     .delete()
-              //     .then(() => {
-              //       console.log("done");
-              //     })
-              //     .catch(function(error) {
-              //       console.error("Error removing document: ", error);
-              //     });
-              // }
-              // console.log("length", querySnapshot);
-              querySnapshot.forEach((doc) => {
-                console.log('doc', doc);
-                doc.ref.delete();
-              });
-              // var batch = db.batch();
-              // querySnapshot.forEach(doc => {
-              //   batch.delete(doc.ref);
-              // });
-              // return batch.commit();
-            })
-            .then(async () => {
-              // dispatch(instantiateContracts());
-              console.log('delete all');
-              console.log('list question new', list_questions);
-              list_questions.forEach((e) => {
-                let newId = db.collection('list_question').doc().id;
-                e['id'] = newId;
-                db.collection('list_question')
-                  .doc(e['id'])
-                  .set(e);
-              });
-            });
-        });
-    })
-    .catch((e) => {
-      console.log('Error create game', e);
+  factory.methods.createGame().send({ from }, async (e, r) => {
+    if (e) return;
+    let listGame = await factory.methods.getAllGames().call({ from });
+    let currentGameAddress = listGame[listGame.length - 1];
+    const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
+    dispatch({
+      type: CREATE_NEW_GAME,
+      game: game
     });
+    fetch('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple', {
+      method: 'GET'
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((jsonRes) => {
+        var db = firebase.firestore();
+        var list_questions = [];
+        jsonRes.results.forEach((e, index) => {
+          let object = {};
+          object['question'] = e.question;
+          e.incorrect_answers.push(e.correct_answer);
+          object['answer'] = shuffle(e.incorrect_answers);
+          object['quesNumber'] = index;
+          object['correct'] = object['answer'].indexOf(e.correct_answer);
+          list_questions.push(object);
+        });
+        db.collection('list_question')
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              console.log('doc', doc);
+              doc.ref.delete();
+            });
+          })
+          .then(() => {
+            console.log('delete all');
+            console.log('list question new', list_questions);
+            list_questions.forEach((e) => {
+              let newId = db.collection('list_question').doc().id;
+              e['id'] = newId;
+              db.collection('list_question')
+                .doc(e['id'])
+                .set(e);
+            });
+          });
+      });
+  });
 };
