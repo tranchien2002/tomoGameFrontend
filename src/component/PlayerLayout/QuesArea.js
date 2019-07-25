@@ -7,6 +7,7 @@ import * as tomoAction from 'actions/tomoAction';
 import store from '../../store';
 import { firestoreConnect } from 'react-redux-firebase';
 
+import { Animated } from 'react-animated-css';
 import '../../style/App.css';
 
 class QuesArea extends Component {
@@ -73,44 +74,45 @@ class QuesArea extends Component {
     let qes = this.props.question;
     return (
       <Col className='box_color' xs={{ size: 12 }} md={{ size: 8, offset: 0 }}>
-        <div className='margin_box'>
-          <div className='question'>
-            <Col className='user_account'>
-              <p>
-                <strong>Your account :</strong> {acc.account}
-              </p>
-              <p>
-                <strong>Balance :</strong> {this.props.balance} <strong>TOMO</strong>
-              </p>
-            </Col>
-            <Col className='question_box'>
-              <div className='question_position'>
-                <span dangerouslySetInnerHTML={{ __html: qes[0].question }} />
+        <Animated className='set_full_height' animationIn='fadeInLeft'>
+          <div className='margin_box'>
+            <div className='question'>
+              <Col className='user_account'>
+                <p>
+                  <strong>Your account :</strong> {acc.account}
+                </p>
+                <p>
+                  <strong>Balance :</strong> {this.props.balance} <strong>TOMO</strong>
+                </p>
+              </Col>
+              <Col className='set_full_height'>
+                <div className='question_position'>
+                  <span dangerouslySetInnerHTML={{ __html: qes[0].question }} />
+                </div>
+                <div className='question center'>{this.countDown()}</div>
+              </Col>
+            </div>
+            <Col className='question'>
+              <div className='answer_position'>
+                {qes[0].answer.map((item, key) => (
+                  <Col key={key}>
+                    <Button
+                      onClick={(e) => this.click(key)}
+                      className='answer_box'
+                      outline
+                      color='primary'
+                      disabled={this.state.disabled}>
+                      <Progress value={this.percent(qes[0].user_choice[key])}>
+                        <div className='text_in_button'>{item}</div>
+                        <div className='text_in_button user_number'>{qes[0].user_choice[key]}</div>
+                      </Progress>
+                    </Button>
+                  </Col>
+                ))}
               </div>
-              <div className='question center'>{this.countDown()}</div>
             </Col>
           </div>
-          <Col className='question'>
-            <div className='answer_position'>
-              {qes[0].answer.map((item, key) => (
-                <Col key={key}>
-                  <Button
-                    onClick={(e) => this.click(key)}
-                    className='answer_box'
-                    outline
-                    color='primary'
-                    disabled={this.state.disabled}
-                  >
-                    <Progress value={this.percent(qes[0].user_choice[key])}>
-                      <div className='text_in_button'>{item}</div>
-                      <div className='text_in_button user_number'>{qes[0].user_choice[key]}</div>
-                    </Progress>
-                  </Button>
-                </Col>
-              ))}
-            </div>
-          </Col>
-        </div>
+        </Animated>
       </Col>
     );
   }

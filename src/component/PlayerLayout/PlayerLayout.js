@@ -8,7 +8,6 @@ import RankArea from './RankArea';
 import store from 'store';
 import * as tomoAction from 'actions/tomoAction';
 
-import { Animated } from 'react-animated-css';
 import '../../style/Sunfetti.css';
 import '../../style/App.css';
 
@@ -47,12 +46,8 @@ class PlayerLayout extends Component {
           {tomo.web3 ? (
             question && questionCount < 10 ? (
               <Row className='set_height'>
-                <Animated animationIn='fadeInLeft'>
-                  <QuesArea ques={question} acc={this.props.tomo} />
-                </Animated>
-                <Animated animationIn='fadeInRight'>
-                  <RankArea rank={rank} wincount={wincount} />
-                </Animated>
+                <QuesArea ques={question} acc={this.props.tomo} />
+                <RankArea rank={rank} wincount={wincount} />
               </Row>
             ) : (
               <Row className='set_height'>
