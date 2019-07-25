@@ -97,63 +97,14 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState, { getFi
   const state = getState();
   const from = state.tomo.account;
   const game = state.tomo.game;
-  // await firestore
-  //   .collection('current_question')
-  //   .doc('current')
-  //   .get()
-  //   .then(async (doc) => {
-  //     if (doc.exists) {
-  //       await firestore
-  //         .collection('current_question')
-  //         .doc('current')
-  //         .set({
-  //           ...correctAnswer,
-  //           question: correctAnswer.question,
-  //           correct: correctAnswer.correct,
-  //           answer: correctAnswer.answer,
-  //           //add user choice vao database
-  //           user_choice: {
-  //             0: 0,
-  //             1: 0,
-  //             2: 0,
-  //             3: 0
-  //           }
-  //         })
-  //         .then(() => {
-  //           console.log('done selected question');
-  //           dispatch({
-  //             type: 'INSERT_QUES'
-  //           });
-  //         })
-  //         .catch((err) => {
-  //           dispatch({ type: 'INSERT_QUES_ERROR' }, err);
-  //         });
-
-  //       await firestore
-  //         .collection('list_question')
-  //         .doc(correctAnswer.id)
-  //         .delete()
-  //         .then(function() {
-  //           console.log('doc', correctAnswer.id);
-  //           console.log('remove selected document');
-  //         })
-  //         .catch(function(error) {
-  //           console.error('Error removing document: ', error);
-  //         });
-  //     } else {
-  //       console.log('No such document!');
-  //     }
-  //   });
-  await game.methods
+  game.methods
     .setQuestion(state.tomo.web3.utils.fromAscii(correctAnswer.correct.toString()))
-    .send({ from: from })
-    .then(() => {
+    .send({ from: from }, async (e, r) => {
+      if (e) return;
       dispatch({
         type: SET_QUESTION,
         questioning: true
       });
-    })
-    .then(async () => {
       await firestore
         .collection('current_question')
         .doc('current')
@@ -201,9 +152,6 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState, { getFi
             console.log('No such document!');
           }
         });
-    })
-    .catch((e) => {
-      console.log('Error setQuestion', e);
     });
 };
 
