@@ -8,6 +8,8 @@ import RankArea from './RankArea';
 import store from 'store';
 import * as tomoAction from 'actions/tomoAction';
 
+import { Animated } from 'react-animated-css';
+import '../../style/Sunfetti.css';
 import '../../style/App.css';
 
 class PlayerLayout extends Component {
@@ -45,8 +47,12 @@ class PlayerLayout extends Component {
           {tomo.web3 ? (
             question && questionCount < 10 ? (
               <Row className='set_height'>
-                <QuesArea ques={question} acc={this.props.tomo} />
-                <RankArea rank={rank} wincount={wincount} />
+                <Animated animationIn='fadeInLeft'>
+                  <QuesArea ques={question} acc={this.props.tomo} />
+                </Animated>
+                <Animated animationIn='fadeInRight'>
+                  <RankArea rank={rank} wincount={wincount} />
+                </Animated>
               </Row>
             ) : (
               <Row className='set_height'>
@@ -60,12 +66,11 @@ class PlayerLayout extends Component {
             )
           ) : (
             <Row className='set_height'>
-              <Col className='box_color' xs='8'>
-                <div className='margin_box '>
-                  <span> You need to login metamask ...</span>
+              <Col xs='12'>
+                <div className='Sun_layer'>
+                  <span className='Sun_text'>SUN*FETTI</span>
                 </div>
               </Col>
-              <RankArea rank={rank} />
             </Row>
           )}
         </Container>
