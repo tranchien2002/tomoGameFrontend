@@ -8,6 +8,7 @@ import RankArea from './RankArea';
 import store from 'store';
 import * as tomoAction from 'actions/tomoAction';
 
+import '../../style/Sunfetti.css';
 import '../../style/App.css';
 
 class PlayerLayout extends Component {
@@ -60,12 +61,11 @@ class PlayerLayout extends Component {
             )
           ) : (
             <Row className='set_height'>
-              <Col className='box_color' xs='8'>
-                <div className='margin_box '>
-                  <span> You need to login metamask ...</span>
+              <Col xs='12'>
+                <div className='Sun_layer'>
+                  <span className='Sun_text'>SUN*FETTI</span>
                 </div>
               </Col>
-              <RankArea rank={rank} />
             </Row>
           )}
         </Container>

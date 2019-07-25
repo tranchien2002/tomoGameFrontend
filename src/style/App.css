@@ -18,7 +18,7 @@
   height: 50%;
 }
 
-.question_box {
+.set_full_height {
   height: 100%;
 }
 
@@ -108,8 +108,11 @@
   border-radius: 10px;
   background-color: #ffffff;
   text-align: center;
-  margin-bottom: 18px;
   height: 14%;
+}
+
+.blank_space{
+  height: 2%;
 }
 
 .score_board p:first-child {
