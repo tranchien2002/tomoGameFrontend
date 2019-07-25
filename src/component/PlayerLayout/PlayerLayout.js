@@ -36,14 +36,14 @@ class PlayerLayout extends Component {
 
   render() {
     const { rank } = this.props;
-    const { question } = this.props;
+    const { question, questionCount } = this.props;
     const { wincount } = this.props;
     const { tomo } = this.props;
     return (
       <div>
         <Container>
           {tomo.web3 ? (
-            question ? (
+            question && questionCount < 10 ? (
               <Row className='set_height'>
                 <QuesArea ques={question} acc={this.props.tomo} />
                 <RankArea rank={rank} wincount={wincount} />
@@ -76,11 +76,11 @@ class PlayerLayout extends Component {
 
 const mapStatetoProps = (state) => {
   const question = state.firestore.ordered.current_question;
-  // console.log(state.tomo)
   return {
     question: question,
     rank: state.rank.ranking,
     wincount: state.tomo.winCount,
+    questionCount: state.tomo.questionCount,
     tomo: state.tomo
   };
 };

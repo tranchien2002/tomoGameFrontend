@@ -50,10 +50,13 @@ export const instantiateContracts = () => async (dispatch, getState) => {
   console.log(listGame);
   let currentGameAddress = listGame[listGame.length - 1];
   const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
+  let questionCount = await game.methods.currentQuestion().call({ from });
+  console.log('questionCount', questionCount);
   dispatch({
     type: INSTANTIATE_CONTRACT,
     factory,
-    game
+    game,
+    questionCount
   });
 };
 
@@ -268,9 +271,11 @@ export const createNewGame = () => async (dispatch, getState) => {
     let listGame = await factory.methods.getAllGames().call({ from });
     let currentGameAddress = listGame[listGame.length - 1];
     const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
+    let questionCount = await game.methods.currentQuestion().call({ from });
     dispatch({
       type: CREATE_NEW_GAME,
-      game: game
+      game: game,
+      questionCount: questionCount
     });
     fetch('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple', {
       method: 'GET'
