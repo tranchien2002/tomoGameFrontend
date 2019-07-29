@@ -11,7 +11,11 @@ const initialState = {
   questionBounty: 0,
   winCount: 0,
   balance: 0,
-  questionCount: 0
+  questionCount: 0,
+  aliceAccount: {
+    address: '',
+    privateKey: ''
+  }
 };
 
 const tomoReducer = (state = initialState, action) => {
@@ -70,6 +74,11 @@ const tomoReducer = (state = initialState, action) => {
       return {
         ...state,
         balance: action.balance
+      };
+    case actions.GET_ALICE:
+      return {
+        ...state,
+        aliceAccount: action.aliceAccount
       };
     default:
       return state;

@@ -31,9 +31,15 @@ export const web3Connect = () => async (dispatch) => {
       account,
       balance
     });
+    dispatch({
+      type: GET_ALICE,
+      game: 1
+    });
   } else {
     console.log('Account not found');
   }
+  // call getAliceAcount() funciton to get or create alice accout
+  dispatch(getAliceAcount());
 };
 
 export const INSTANTIATE_CONTRACT = 'INSTANTIATE_CONTRACT';
@@ -49,7 +55,7 @@ export const instantiateContracts = () => async (dispatch, getState) => {
     transactionConfirmationBlocks: 1
   });
   let listGame = await factory.methods.getAllGames().call({ from });
-  console.log(listGame);
+  // console.log(listGame);
   let currentGameAddress = listGame[listGame.length - 1];
   const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
   let questionCount = await game.methods.currentQuestion().call({ from });
@@ -324,4 +330,28 @@ export const createNewGame = () => async (dispatch, getState) => {
     .catch((e) => {
       console.log('Error create game', e);
     });
+};
+
+export const GET_ALICE = 'GET_ALICE';
+export const getAliceAcount = () => async (dispatch, getState) => {
+  var aliceAccount = {
+    address: '',
+    privateKey: ''
+  };
+  if (localStorage.getItem('alice_account') === null) {
+    const state = getState();
+    let web3 = state.tomo.web3;
+    // create Alice account
+    var account = await web3.eth.accounts.create();
+
+    aliceAccount.address = account.address;
+    aliceAccount.privateKey = account.privateKey;
+    localStorage.setItem('alice_account', JSON.stringify(aliceAccount));
+  } else {
+    aliceAccount = JSON.parse(localStorage.getItem('alice_account'));
+  }
+  dispatch({
+    type: GET_ALICE,
+    aliceAccount: aliceAccount
+  });
 };
