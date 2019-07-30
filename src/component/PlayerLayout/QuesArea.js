@@ -30,7 +30,7 @@ class QuesArea extends Component {
       return true;
     } else {
       this.setState({
-        disabled: !this.state.disabled,
+        disabled: false,
         time: this.state.time - 0.00000000001
       });
       return false;
@@ -42,7 +42,7 @@ class QuesArea extends Component {
   }
 
   changeDisabled() {
-    this.setState({ disabled: !this.state.disabled });
+    this.setState({ disabled: true });
   }
 
   countDown() {
@@ -101,7 +101,8 @@ class QuesArea extends Component {
                       className='answer_box'
                       outline
                       color='primary'
-                      disabled={this.state.disabled}>
+                      disabled={this.state.disabled}
+                    >
                       <Progress value={this.percent(qes[0].user_choice[key])}>
                         <div className='text_in_button'>{item}</div>
                         <div className='text_in_button user_number'>{qes[0].user_choice[key]}</div>
