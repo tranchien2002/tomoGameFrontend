@@ -1,6 +1,7 @@
 import getWeb3 from '../utils/getWeb3';
 import Factory from 'contracts/Factory.json';
 import firebase from 'config';
+import HDWalletProvider from 'truffle-hdwallet-provider';
 
 const shuffle = (myArr) => {
   let l = myArr.length;
@@ -23,42 +24,70 @@ export const web3Connect = () => async (dispatch) => {
   const accounts = await web3.eth.getAccounts();
   if (accounts.length > 0) {
     const account = accounts[0];
-    console.log('Web3 Account:', account);
-    const balance = await web3.eth.getBalance(account);
     dispatch({
       type: WEB3_CONNECT,
       web3,
-      account,
-      balance
+      account
     });
   } else {
     console.log('Account not found');
   }
+  // call getAliasAcount() funciton to get or create alias accout
+  await dispatch(getBalance());
+  await dispatch(getAliasAcount());
 };
 
 export const INSTANTIATE_CONTRACT = 'INSTANTIATE_CONTRACT';
 export const instantiateContracts = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
-  const from = state.tomo.account;
   const networkId = process.env.REACT_APP_TOMO_ID;
   const FactoryArtifact = require('contracts/Factory');
-  const GameArtifact = require('contracts/Game');
   let factoryAddress = FactoryArtifact.networks[networkId].address;
   const factory = new web3.eth.Contract(Factory.abi, factoryAddress, {
     transactionConfirmationBlocks: 1
   });
+  dispatch({
+    type: INSTANTIATE_CONTRACT,
+    factory
+  });
+};
+
+export const LOGIN_ALIAS_ACCOUNT = 'LOGIN_ALIAS_ACCOUNT';
+export const loginAliasAccount = () => async (dispatch, getState) => {
+  const state = getState();
+  const privateKey = state.tomo.aliasAccount.privateKey;
+  console.log(privateKey.replace('0x', ''));
+  var Web3 = require('web3');
+
+  var provider = new HDWalletProvider(
+    privateKey.replace('0x', ''),
+    'https://testnet.tomochain.com'
+  );
+  var alias_web3 = new Web3(provider);
+  dispatch({
+    type: LOGIN_ALIAS_ACCOUNT,
+    alias_web3
+  });
+  dispatch(instantiateGame());
+};
+
+export const INSTANTIATE_GAME = 'INSTANTIATE_GAME';
+export const instantiateGame = () => async (dispatch, getState) => {
+  const GameArtifact = require('contracts/Game');
+  const state = getState();
+  let alias_web3 = state.tomo.alias_web3;
+  let factory = state.tomo.factory;
+  let from = state.tomo.aliasAccount.address;
   let listGame = await factory.methods.getAllGames().call({ from });
   console.log(listGame);
   let currentGameAddress = listGame[listGame.length - 1];
-  const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress, {
+  const game = new alias_web3.eth.Contract(GameArtifact.abi, currentGameAddress, {
     transactionConfirmationBlocks: 1
   });
   let questionCount = await game.methods.currentQuestion().call({ from });
-  console.log('questionCount', questionCount);
   dispatch({
-    type: INSTANTIATE_CONTRACT,
-    factory,
+    type: INSTANTIATE_GAME,
     game,
     questionCount
   });
@@ -168,13 +197,19 @@ export const answer = (answerIndex) => async (dispatch, getState) => {
   var db = firebase.firestore();
   const state = getState();
   const game = state.tomo.game;
-  const from = state.tomo.account;
-  let web3 = state.tomo.web3;
+  const from = state.tomo.aliasAccount.address;
+  let alias_web3 = state.tomo.alias_web3;
 
-  var answer = web3.utils.fromAscii(answerIndex.toString());
+  var answer = alias_web3.utils.fromAscii(answerIndex.toString());
   await game.methods
     .answer(answer)
-    .send({ from: from, value: 3 * 10 ** 18 })
+    .send({
+      from: from,
+      value: 3 * 10 ** 18,
+      // TODO tinh gas limit
+      gasLimit: alias_web3.utils.toHex(2000000),
+      gasPrice: alias_web3.utils.toHex(alias_web3.utils.toWei('0.25', 'gwei'))
+    })
     .then(() => {
       dispatch({
         type: ANSWER,
@@ -252,7 +287,7 @@ export const fetchWinCount = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
   const game = state.tomo.game;
-  const from = state.tomo.account;
+  const from = state.tomo.aliasAccount.address;
   let winCount = await game.methods.winCount(from).call({
     from: from
   });
@@ -347,5 +382,64 @@ export const updateNewGame = (newAddress) => async (dispatch, getState, { getFir
     type: CREATE_NEW_GAME,
     game: game,
     questionCount: questionCount
+  });
+};
+export const GET_ALIAS = 'GET_ALIAS';
+export const getAliasAcount = () => async (dispatch, getState) => {
+  var aliasAccount = {
+    address: '',
+    privateKey: ''
+  };
+  if (localStorage.getItem('alias_account') === null) {
+    const state = getState();
+    let web3 = state.tomo.web3;
+    // create Alias account
+    var account = await web3.eth.accounts.create();
+
+    aliasAccount = account;
+    localStorage.setItem('alias_account', JSON.stringify(aliasAccount));
+  } else {
+    aliasAccount = JSON.parse(localStorage.getItem('alias_account'));
+  }
+  dispatch({
+    type: GET_ALIAS,
+    aliasAccount: aliasAccount
+  });
+};
+
+export const SEND_MONEY_TO_ALIAS = 'SEND_MONEY_TO_ALIAS';
+export const sendMoneyToAlias = () => async (dispatch, getState) => {
+  const state = getState();
+  let web3 = state.tomo.web3;
+  await web3.eth.sendTransaction({
+    from: state.tomo.account,
+    to: state.tomo.aliasAccount.address,
+    value: 31 * 10 ** 18
+  });
+  dispatch(getAliasBalance());
+  dispatch(loginAliasAccount());
+};
+
+export const GET_ALIAS_BALANCE = 'GET_ALIAS_BALANCE';
+export const getAliasBalance = () => async (dispatch, getState) => {
+  const state = getState();
+  let web3 = state.tomo.web3;
+  let aliasBalance = await web3.eth.getBalance(state.tomo.aliasAccount.address);
+  console.log(web3.utils.fromWei(aliasBalance));
+  dispatch({
+    type: GET_ALIAS_BALANCE,
+    aliasBalance
+  });
+};
+
+export const SEND_MONEY_BACK = 'SEND_MONEY_BACK';
+export const sendMoneyBack = () => async (dispatch, getState) => {
+  const state = getState();
+  let alias_web3 = state.tomo.alias_web3;
+  await alias_web3.eth.sendTransaction({
+    from: state.tomo.aliasAccount.address,
+    to: state.tomo.account,
+    // TODO tinh gas
+    value: state.tomo.aliasBalance - 30000000000000000
   });
 };
