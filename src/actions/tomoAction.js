@@ -45,7 +45,9 @@ export const instantiateContracts = () => async (dispatch, getState) => {
   const FactoryArtifact = require('contracts/Factory');
   const GameArtifact = require('contracts/Game');
   let factoryAddress = FactoryArtifact.networks[networkId].address;
-  const factory = new web3.eth.Contract(Factory.abi, factoryAddress);
+  const factory = new web3.eth.Contract(Factory.abi, factoryAddress, {
+    transactionConfirmationBlocks: 1
+  });
   let listGame = await factory.methods.getAllGames().call({ from });
   console.log(listGame);
   let currentGameAddress = listGame[listGame.length - 1];
@@ -266,54 +268,60 @@ export const createNewGame = () => async (dispatch, getState) => {
   const factory = state.tomo.factory;
   const from = state.tomo.account;
   const GameArtifact = require('contracts/Game');
-  factory.methods.createGame().send({ from }, async (e, r) => {
-    if (e) return;
-    let listGame = await factory.methods.getAllGames().call({ from });
-    let currentGameAddress = listGame[listGame.length - 1];
-    const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
-    let questionCount = await game.methods.currentQuestion().call({ from });
-    dispatch({
-      type: CREATE_NEW_GAME,
-      game: game,
-      questionCount: questionCount
-    });
-    fetch('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple', {
-      method: 'GET'
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((jsonRes) => {
-        var db = firebase.firestore();
-        var list_questions = [];
-        jsonRes.results.forEach((e, index) => {
-          let object = {};
-          object['question'] = e.question;
-          e.incorrect_answers.push(e.correct_answer);
-          object['answer'] = shuffle(e.incorrect_answers);
-          object['quesNumber'] = index;
-          object['correct'] = object['answer'].indexOf(e.correct_answer);
-          list_questions.push(object);
-        });
-        db.collection('list_question')
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              console.log('doc', doc);
-              doc.ref.delete();
-            });
-          })
-          .then(() => {
-            console.log('delete all');
-            console.log('list question new', list_questions);
-            list_questions.forEach((e) => {
-              let newId = db.collection('list_question').doc().id;
-              e['id'] = newId;
-              db.collection('list_question')
-                .doc(e['id'])
-                .set(e);
-            });
-          });
+  factory.methods
+    .createGame()
+    .send({ from })
+    .then(async () => {
+      let listGame = await factory.methods.getAllGames().call({ from });
+      let currentGameAddress = listGame[listGame.length - 1];
+      console.log(listGame);
+      const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
+      let questionCount = await game.methods.currentQuestion().call({ from });
+      dispatch({
+        type: CREATE_NEW_GAME,
+        game: game,
+        questionCount: questionCount
       });
-  });
+      fetch('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple', {
+        method: 'GET'
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((jsonRes) => {
+          var db = firebase.firestore();
+          var list_questions = [];
+          jsonRes.results.forEach((e, index) => {
+            let object = {};
+            object['question'] = e.question;
+            e.incorrect_answers.push(e.correct_answer);
+            object['answer'] = shuffle(e.incorrect_answers);
+            object['quesNumber'] = index;
+            object['correct'] = object['answer'].indexOf(e.correct_answer);
+            list_questions.push(object);
+          });
+          db.collection('list_question')
+            .get()
+            .then((querySnapshot) => {
+              querySnapshot.forEach((doc) => {
+                console.log('doc', doc);
+                doc.ref.delete();
+              });
+            })
+            .then(() => {
+              console.log('delete all');
+              console.log('list question new', list_questions);
+              list_questions.forEach((e) => {
+                let newId = db.collection('list_question').doc().id;
+                e['id'] = newId;
+                db.collection('list_question')
+                  .doc(e['id'])
+                  .set(e);
+              });
+            });
+        });
+    })
+    .catch((e) => {
+      console.log('Error create game', e);
+    });
 };
