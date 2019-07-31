@@ -35,6 +35,12 @@ class PlayerLayout extends Component {
     clearInterval(this.interval);
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.game !== prevState.game) {
+      store.dispatch(tomoAction.updateNewGame(nextProps.game[0].address));
+    }
+  }
+
   render() {
     const { rank } = this.props;
     const { question, questionCount } = this.props;
@@ -76,7 +82,9 @@ class PlayerLayout extends Component {
 
 const mapStatetoProps = (state) => {
   const question = state.firestore.ordered.current_question;
+  const game = state.firestore.ordered.current_game;
   return {
+    game: game,
     question: question,
     rank: state.rank.ranking,
     wincount: state.tomo.winCount,
@@ -90,6 +98,9 @@ export default compose(
   firestoreConnect([
     {
       collection: 'current_question'
+    },
+    {
+      collection: 'current_game'
     }
   ])
 )(PlayerLayout);

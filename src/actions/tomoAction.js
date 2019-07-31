@@ -51,7 +51,9 @@ export const instantiateContracts = () => async (dispatch, getState) => {
   let listGame = await factory.methods.getAllGames().call({ from });
   console.log(listGame);
   let currentGameAddress = listGame[listGame.length - 1];
-  const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
+  const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress, {
+    transactionConfirmationBlocks: 1
+  });
   let questionCount = await game.methods.currentQuestion().call({ from });
   console.log('questionCount', questionCount);
   dispatch({
@@ -262,7 +264,8 @@ export const fetchWinCount = () => async (dispatch, getState) => {
 };
 
 export const CREATE_NEW_GAME = 'CREATE_NEW_GAME';
-export const createNewGame = () => async (dispatch, getState) => {
+export const createNewGame = () => async (dispatch, getState, { getFirestore }) => {
+  const firestore = getFirestore();
   const state = getState();
   let web3 = state.tomo.web3;
   const factory = state.tomo.factory;
@@ -274,7 +277,6 @@ export const createNewGame = () => async (dispatch, getState) => {
     .then(async () => {
       let listGame = await factory.methods.getAllGames().call({ from });
       let currentGameAddress = listGame[listGame.length - 1];
-      console.log(listGame);
       const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
       let questionCount = await game.methods.currentQuestion().call({ from });
       dispatch({
@@ -282,6 +284,12 @@ export const createNewGame = () => async (dispatch, getState) => {
         game: game,
         questionCount: questionCount
       });
+      await firestore
+        .collection('current_game')
+        .doc('current')
+        .set({
+          address: currentGameAddress
+        });
       fetch('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple', {
         method: 'GET'
       })
@@ -324,4 +332,20 @@ export const createNewGame = () => async (dispatch, getState) => {
     .catch((e) => {
       console.log('Error create game', e);
     });
+};
+
+export const updateNewGame = (newAddress) => async (dispatch, getState, { getFirestore }) => {
+  const state = getState();
+  let web3 = state.tomo.web3;
+  const GameArtifact = require('contracts/Game');
+  const from = state.tomo.account;
+  const game = new web3.eth.Contract(GameArtifact.abi, newAddress, {
+    transactionConfirmationBlocks: 1
+  });
+  let questionCount = await game.methods.currentQuestion().call({ from });
+  dispatch({
+    type: CREATE_NEW_GAME,
+    game: game,
+    questionCount: questionCount
+  });
 };
