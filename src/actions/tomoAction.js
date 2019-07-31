@@ -62,6 +62,8 @@ export const instantiateContracts = () => async (dispatch, getState) => {
   });
 };
 
+// TODO GET_CEO_ADDRESS
+
 export const GET_BALANCE = 'GET_BALANCE';
 export const getBalance = () => async (dispatch, getState) => {
   const state = getState();
