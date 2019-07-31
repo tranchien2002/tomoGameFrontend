@@ -30,24 +30,9 @@ class AdminLayout extends Component {
           });
         });
       });
-
-    // this.interval = setInterval(() => {
-    //   console.log("compare", this.props.questions, this.state.question);
-    // }, 1000);
   }
 
   selectQues = async (ques) => {
-    // await this.setState({
-    //   selected: [...this.state.selected.concat([ques.quesNumber])]
-    // });
-
-    // let found = await this.state.selected.find(element => {
-    //   return element === ques.quesNumber;
-    // });
-
-    // console.log("question state", this.state.question, found);
-    // await delete this.state.question[found];
-    // this.setState(this.state);
     console.log('question ques', ques);
     store.dispatch(tomoActions.setQuestion(ques));
   };
@@ -127,18 +112,6 @@ class AdminLayout extends Component {
 
 const mapStatetoProps = (state) => {
   let questions = state.firestore.ordered.list_question;
-  // let questions = [];
-  // var db = firebase.firestore();
-  // db.collection("list_question")
-  //   .get()
-  //   .then(querySnapshot => {
-  //     querySnapshot.forEach(doc => {
-  //       // this.setState({
-  //       //   question: [...this.state.question.concat([doc.data()])]
-  //       // });
-  //       questions.push(doc.data());
-  //     });
-  //   });
   return {
     questions: questions,
     rank: state.rank.ranking,
