@@ -18,7 +18,8 @@ const initialState = {
     address: '',
     privateKey: ''
   },
-  aliasBalance: 0
+  aliasBalance: 0,
+  isPlaying: false
 };
 
 const tomoReducer = (state = initialState, action) => {
@@ -107,6 +108,11 @@ const tomoReducer = (state = initialState, action) => {
       return {
         ...state,
         adminGame: action.adminGame
+      };
+    case actions.CHECK_ISPLAYING:
+      return {
+        ...state,
+        isPlaying: action.isPlaying
       };
     default:
       return state;

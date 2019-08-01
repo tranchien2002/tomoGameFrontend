@@ -33,8 +33,9 @@ export const web3Connect = () => async (dispatch) => {
     console.log('Account not found');
   }
   // call getAliasAcount() funciton to get or create alias accout
-  await dispatch(getBalance());
-  await dispatch(getAliasAcount());
+  dispatch(getBalance());
+  dispatch(instantiateContracts());
+  dispatch(getAliasAcount());
 };
 
 export const INSTANTIATE_CONTRACT = 'INSTANTIATE_CONTRACT';
@@ -54,11 +55,28 @@ export const instantiateContracts = () => async (dispatch, getState) => {
   dispatch(instantiateAdminGame());
 };
 
+export const INSTANTIATE_ADMIN_GAME = 'INSTANTIATE_ADMIN_GAME';
+export const instantiateAdminGame = () => async (dispatch, getState) => {
+  const GameArtifact = require('contracts/Game');
+  const state = getState();
+  let web3 = state.tomo.web3;
+  let factory = state.tomo.factory;
+  let from = state.tomo.account;
+  let listGame = await factory.methods.getAllGames().call({ from });
+  let currentGameAddress = listGame[listGame.length - 1];
+  const adminGame = new web3.eth.Contract(GameArtifact.abi, currentGameAddress, {
+    transactionConfirmationBlocks: 1
+  });
+  dispatch({
+    type: INSTANTIATE_ADMIN_GAME,
+    adminGame
+  });
+};
+
 export const LOGIN_ALIAS_ACCOUNT = 'LOGIN_ALIAS_ACCOUNT';
 export const loginAliasAccount = () => async (dispatch, getState) => {
   const state = getState();
   const privateKey = state.tomo.aliasAccount.privateKey;
-  console.log(privateKey.replace('0x', ''));
   var Web3 = require('web3');
 
   var provider = new HDWalletProvider(
@@ -71,24 +89,6 @@ export const loginAliasAccount = () => async (dispatch, getState) => {
     alias_web3
   });
   dispatch(instantiateGame());
-};
-
-export const INSTANTIATE_ADMIN_GAME = 'INSTANTIATE_ADMIN_GAME';
-export const instantiateAdminGame = () => async (dispatch, getState) => {
-  const GameArtifact = require('contracts/Game');
-  const state = getState();
-  let web3 = state.tomo.web3;
-  let factory = state.tomo.factory;
-  let from = state.tomo.account;
-  let listGame = await factory.methods.getAllGames().call({ from });
-  let currentGameAddress = listGame[listGame.length - 1];
-  const admingame = new web3.eth.Contract(GameArtifact.abi, currentGameAddress, {
-    transactionConfirmationBlocks: 1
-  });
-  dispatch({
-    type: INSTANTIATE_ADMIN_GAME,
-    admingame
-  });
 };
 
 export const INSTANTIATE_GAME = 'INSTANTIATE_GAME';
@@ -109,6 +109,48 @@ export const instantiateGame = () => async (dispatch, getState) => {
     type: INSTANTIATE_GAME,
     game,
     questionCount
+  });
+  dispatch(checkIsPlaying());
+};
+
+export const GET_ALIAS = 'GET_ALIAS';
+export const getAliasAcount = () => async (dispatch, getState) => {
+  var aliasAccount = {
+    address: '',
+    privateKey: ''
+  };
+  if (localStorage.getItem('alias_account') === null) {
+    var state = getState();
+    let web3 = state.tomo.web3;
+    // create Alias account
+    var account = await web3.eth.accounts.create();
+
+    aliasAccount.address = account.address;
+    aliasAccount.privateKey = account.privateKey;
+    localStorage.setItem('alias_account', JSON.stringify(aliasAccount));
+  } else {
+    aliasAccount = JSON.parse(localStorage.getItem('alias_account'));
+  }
+  dispatch({
+    type: GET_ALIAS,
+    aliasAccount: aliasAccount
+  });
+
+  dispatch(getAliasBalance());
+  dispatch(loginAliasAccount());
+};
+
+export const CHECK_ISPLAYING = 'CHECK_ISPLAYING';
+export const checkIsPlaying = () => async (dispatch, getState) => {
+  const state = getState();
+  let game = state.tomo.game;
+  let from = state.tomo.aliasAccount.address;
+  var getListPlayer = await game.methods.getAllPlayers().call({ from });
+  var isPlaying = getListPlayer.includes(from);
+  console.log('isplaying',isPlaying)
+  dispatch({
+    type: CHECK_ISPLAYING,
+    isPlaying
   });
 };
 
@@ -422,41 +464,23 @@ export const updateNewGame = (newAddress) => async (dispatch, getState, { getFir
     questionCount: questionCount
   });
 };
-export const GET_ALIAS = 'GET_ALIAS';
-export const getAliasAcount = () => async (dispatch, getState) => {
-  var aliasAccount = {
-    address: '',
-    privateKey: ''
-  };
-  if (localStorage.getItem('alias_account') === null) {
-    const state = getState();
-    let web3 = state.tomo.web3;
-    // create Alias account
-    var account = await web3.eth.accounts.create();
-
-    aliasAccount.address = account.address;
-    aliasAccount.privateKey = account.privateKey;
-    localStorage.setItem('alias_account', JSON.stringify(aliasAccount));
-  } else {
-    aliasAccount = JSON.parse(localStorage.getItem('alias_account'));
-  }
-  dispatch({
-    type: GET_ALIAS,
-    aliasAccount: aliasAccount
-  });
-};
 
 export const SEND_MONEY_TO_ALIAS = 'SEND_MONEY_TO_ALIAS';
 export const sendMoneyToAlias = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
+  console.log('before send');
   await web3.eth.sendTransaction({
     from: state.tomo.account,
     to: state.tomo.aliasAccount.address,
     value: 31 * 10 ** 18
   });
+  console.log('after send');
   dispatch(getAliasBalance());
-  dispatch(loginAliasAccount());
+  dispatch({
+    type: CHECK_ISPLAYING,
+    isPlaying: true
+  });
 };
 
 export const GET_ALIAS_BALANCE = 'GET_ALIAS_BALANCE';
@@ -464,7 +488,8 @@ export const getAliasBalance = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
   let aliasBalance = await web3.eth.getBalance(state.tomo.aliasAccount.address);
-  console.log(web3.utils.fromWei(aliasBalance));
+  aliasBalance = web3.utils.fromWei(aliasBalance);
+  console.log('alias balance', aliasBalance);
   dispatch({
     type: GET_ALIAS_BALANCE,
     aliasBalance
@@ -475,10 +500,18 @@ export const SEND_MONEY_BACK = 'SEND_MONEY_BACK';
 export const sendMoneyBack = () => async (dispatch, getState) => {
   const state = getState();
   let alias_web3 = state.tomo.alias_web3;
+  dispatch(getAliasBalance());
   await alias_web3.eth.sendTransaction({
     from: state.tomo.aliasAccount.address,
     to: state.tomo.account,
     // TODO tinh gas
-    value: state.tomo.aliasBalance - 30000000000000000
+    value: state.tomo.aliasBalance * 10 ** 18 - 6250000000000
+  });
+};
+
+export const startPlay = () => async (dispatch) => {
+  dispatch({
+    type: CHECK_ISPLAYING,
+    isPlaying: true
   });
 };

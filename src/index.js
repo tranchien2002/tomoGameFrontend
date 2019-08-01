@@ -19,6 +19,5 @@ window.addEventListener('load', async () => {
   if (window.web3) {
     await store.dispatch(actions.web3Connect());
     await store.dispatch(actions.instantiateContracts());
-    console.log('tomo', store.getState().tomo.account);
   }
 });
