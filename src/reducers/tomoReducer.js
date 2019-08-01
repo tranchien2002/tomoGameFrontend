@@ -5,6 +5,7 @@ const initialState = {
   alias_web3: null,
   account: null,
   tomo: null,
+  adminGame: null,
   game: null,
   factory: null,
   bounty: 0,
@@ -96,6 +97,11 @@ const tomoReducer = (state = initialState, action) => {
       return {
         ...state,
         aliasBalance: action.aliasBalance
+      };
+    case actions.INSTANTIATE_ADMIN_GAME:
+      return {
+        ...state,
+        adminGame: action.adminGame
       };
     default:
       return state;
