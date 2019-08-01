@@ -41,7 +41,7 @@ class QuesArea extends Component {
 
   click(answer) {
     store.dispatch(tomoAction.answer(answer));
-    store.dispatch(tomoAction.getAliasBalance());
+    // store.dispatch(tomoAction.getAliasBalance());
   }
 
   changeDisabled() {
