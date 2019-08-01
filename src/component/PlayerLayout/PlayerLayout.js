@@ -35,9 +35,9 @@ class PlayerLayout extends Component {
     clearInterval(this.interval);
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.game !== prevState.game) {
-      store.dispatch(tomoAction.updateNewGame(nextProps.game[0].address));
+  componentDidUpdate(prevProps) {
+    if (prevProps.game !== this.props.game) {
+      store.dispatch(tomoAction.updateNewGame(this.props.game[0].address));
     }
   }
 
