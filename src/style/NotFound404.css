@@ -4,7 +4,7 @@
   width: 150px;
   transform: rotate(45deg);
   position: absolute;
-  top: 55%;
+  margin-top: 15%;
   animation: animationSupperman 6s infinite linear;
 }
 
@@ -13,22 +13,8 @@
 }
 
 .site-not-found a {
+  display: inline-block;
   text-decoration: none !important;
-  color: white !important;
-}
-
-.site-not-found .title {
-  color: #fff;
-  font-size: 130px;
-  margin-top: 40px;
-}
-
-.site-not-found p {
-  font-size: 22px;
-  color: #fff;
-}
-
-.site-not-found button {
   padding: 10px 30px;
   border: 0px;
   background: #880000;
@@ -42,11 +28,23 @@
   font-family: 'Merriweather', serif;
 }
 
-.site-not-found button:hover {
-  background: #660000;
+.site-not-found .title {
+  color: #fff;
+  font-size: 130px;
+  margin-top: 40px;
 }
 
-.site-not-found button:active {
+.site-not-found p {
+  font-size: 22px;
+  color: #fff;
+}
+
+.site-not-found a:hover {
+  background: #660000;
+  color: #fff;
+}
+
+.site-not-found a:active {
   transform: translate(-5px, 5px);
 }
 

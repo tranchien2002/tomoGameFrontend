@@ -51,7 +51,9 @@ export const instantiateContracts = () => async (dispatch, getState) => {
   let listGame = await factory.methods.getAllGames().call({ from });
   console.log(listGame);
   let currentGameAddress = listGame[listGame.length - 1];
-  const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
+  const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress, {
+    transactionConfirmationBlocks: 1
+  });
   let questionCount = await game.methods.currentQuestion().call({ from });
   console.log('questionCount', questionCount);
   dispatch({
@@ -62,7 +64,24 @@ export const instantiateContracts = () => async (dispatch, getState) => {
   });
 };
 
-// TODO GET_CEO_ADDRESS
+// GET_CEO_ADDRESS
+export const GET_CEO_ADDRESS = 'GET_CEO_ADDRESS';
+export const getCeoAddress = () => async (dispatch, getState) => {
+  const state = getState();
+  let web3 = state.tomo.web3;
+  const from = state.tomo.account;
+  const networkId = process.env.REACT_APP_TOMO_ID;
+
+  const FactoryArtifact = require('contracts/Factory');
+  let factoryAddress = FactoryArtifact.networks[networkId].address;
+  const factory = new web3.eth.Contract(FactoryArtifact.abi, factoryAddress);
+
+  const ceoAddress = await factory.methods.ceoAddress().call({ from });
+  dispatch({
+    type: GET_CEO_ADDRESS,
+    ceoAddress
+  });
+};
 
 export const GET_BALANCE = 'GET_BALANCE';
 export const getBalance = () => async (dispatch, getState) => {

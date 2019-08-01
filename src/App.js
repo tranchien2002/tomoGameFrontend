@@ -3,10 +3,9 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import PlayerLayout from './component/PlayerLayout/PlayerLayout';
 import AdminLayout from './component/AdminLayout/AdminLayout';
 import Particles from './component/Particles';
-import getWeb3 from './utils/getWeb3';
+import store from 'store';
+import * as tomoAction from './actions/tomoAction';
 import Site404 from './component/NotFound404';
-import AccessControlContract from './contracts/AccessControl.json';
-import { Accounts } from 'web3-eth-accounts';
 
 class App extends Component {
   constructor(props) {
@@ -14,33 +13,22 @@ class App extends Component {
 
     this.state = {
       isAdmin: false,
-      web3: null,
-      accounts: null,
-      contract: null,
-      adminAccount: null
+      loading: false
     };
   }
 
   componentDidMount = async () => {
     try {
-      // TODO connect store to get this.props.tomo.web3 and this.props.tomo.account
-      const web3 = await getWeb3();
+      await store.dispatch(tomoAction.web3Connect());
 
-      const accounts = await web3.eth.getAccounts();
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = AccessControlContract.networks[networkId];
-      // TODO from tomoAction connect to AccessControl
-      const instance = new web3.eth.Contract(
-        AccessControlContract.abi,
-        deployedNetwork && deployedNetwork.address
-      );
+      const accountUser = store.getState().tomo.account;
 
-      this.setState({ web3, accounts, contract: instance });
+      await store.dispatch(tomoAction.getCeoAddress());
 
-      // const ad = await instance.methods.ceoAddress().call({ from: accounts });
+      const ceoAddress = store.getState().tomo.ceoAddress;
 
-      if (accounts == this.state.adminAccount) {
-        this.setState({ isAdmin: true });
+      if (accountUser === ceoAddress) {
+        this.setState({ isAdmin: true, loading: true });
       }
     } catch (error) {
       alert(`Failed to load web3, accounts, or contract. Check console for details.`);
@@ -49,21 +37,37 @@ class App extends Component {
   };
 
   render() {
-    return (
-      <BrowserRouter>
-        <Particles />
-        <div className='App'>
-          <Switch>
-            <Route exact path='/' component={PlayerLayout} />
-            <Route
-              path='/admin'
-              component={() => (this.state.isAdmin ? <AdminLayout /> : <Site404 />)}
-            />
-            <Route path='*' exact={true} component={Site404} />
-          </Switch>
-        </div>
-      </BrowserRouter>
-    );
+    console.log(this.state);
+    if (this.state.loading) {
+      return (
+        <BrowserRouter>
+          <Particles />
+          <div className='App'>
+            <Switch>
+              <Route exact path='/' component={PlayerLayout} />
+              <Route
+                path='/admin'
+                component={() => (this.state.isAdmin ? <AdminLayout /> : <Site404 />)}
+              />
+              <Route path='*' exact={true} component={Site404} />
+            </Switch>
+          </div>
+        </BrowserRouter>
+      );
+    } else {
+      return (
+        <BrowserRouter>
+          <Particles />
+          <div className='App'>
+            <Switch>
+              <Route exact path='/' component={PlayerLayout} />
+              <Route path='/admin' component={Site404} />
+              <Route path='*' exact={true} component={Site404} /> */}
+            </Switch>
+          </div>
+        </BrowserRouter>
+      );
+    }
   }
 }
 
