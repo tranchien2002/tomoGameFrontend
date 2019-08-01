@@ -51,6 +51,7 @@ export const instantiateContracts = () => async (dispatch, getState) => {
     type: INSTANTIATE_CONTRACT,
     factory
   });
+  dispatch(instantiateAdminGame());
 };
 
 export const LOGIN_ALIAS_ACCOUNT = 'LOGIN_ALIAS_ACCOUNT';
@@ -70,6 +71,24 @@ export const loginAliasAccount = () => async (dispatch, getState) => {
     alias_web3
   });
   dispatch(instantiateGame());
+};
+
+export const INSTANTIATE_ADMIN_GAME = 'INSTANTIATE_ADMIN_GAME';
+export const instantiateAdminGame = () => async (dispatch, getState) => {
+  const GameArtifact = require('contracts/Game');
+  const state = getState();
+  let web3 = state.tomo.web3;
+  let factory = state.tomo.factory;
+  let from = state.tomo.account;
+  let listGame = await factory.methods.getAllGames().call({ from });
+  let currentGameAddress = listGame[listGame.length - 1];
+  const admingame = new web3.eth.Contract(GameArtifact.abi, currentGameAddress, {
+    transactionConfirmationBlocks: 1
+  });
+  dispatch({
+    type: INSTANTIATE_ADMIN_GAME,
+    admingame
+  });
 };
 
 export const INSTANTIATE_GAME = 'INSTANTIATE_GAME';
@@ -151,8 +170,8 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState, { getFi
   const firestore = getFirestore();
   const state = getState();
   const from = state.tomo.account;
-  const game = state.tomo.game;
-  game.methods
+  const adminGame = state.tomo.adminGame;
+  adminGame.methods
     .setQuestion(state.tomo.web3.utils.fromAscii(correctAnswer.correct.toString()))
     .send({ from: from }, async (e, r) => {
       if (e) return;
@@ -266,9 +285,9 @@ export const answer = (answerIndex) => async (dispatch, getState) => {
 export const SHARE_QUESTION_BOUNTY = 'SHARE_QUESTION_BOUNTY';
 export const shareQuestionBounty = () => async (dispatch, getState) => {
   const state = getState();
-  const game = state.tomo.game;
+  const adminGame = state.tomo.adminGame;
   const from = state.tomo.account;
-  await game.methods
+  await adminGame.methods
     .shareQuestionBounty()
     .send({ from: from })
     .then((result) => {
@@ -285,9 +304,9 @@ export const shareQuestionBounty = () => async (dispatch, getState) => {
 export const SHARE_BOUNTY = 'SHARE_BOUNTY';
 export const shareBounty = () => async (dispatch, getState) => {
   const state = getState();
-  const game = state.tomo.game;
+  const adminGame = state.tomo.adminGame;
   const from = state.tomo.account;
-  await game.methods
+  await adminGame.methods
     .shareBounty()
     .send({ from: from })
     .then((result) => {
@@ -331,11 +350,11 @@ export const createNewGame = () => async (dispatch, getState, { getFirestore }) 
     .then(async () => {
       let listGame = await factory.methods.getAllGames().call({ from });
       let currentGameAddress = listGame[listGame.length - 1];
-      const game = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
-      let questionCount = await game.methods.currentQuestion().call({ from });
+      const adminGame = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
+      let questionCount = await adminGame.methods.currentQuestion().call({ from });
       dispatch({
         type: CREATE_NEW_GAME,
-        game: game,
+        adminGame: adminGame,
         questionCount: questionCount
       });
       await firestore
@@ -415,7 +434,8 @@ export const getAliasAcount = () => async (dispatch, getState) => {
     // create Alias account
     var account = await web3.eth.accounts.create();
 
-    aliasAccount = account;
+    aliasAccount.address = account.address;
+    aliasAccount.privateKey = account.privateKey;
     localStorage.setItem('alias_account', JSON.stringify(aliasAccount));
   } else {
     aliasAccount = JSON.parse(localStorage.getItem('alias_account'));
