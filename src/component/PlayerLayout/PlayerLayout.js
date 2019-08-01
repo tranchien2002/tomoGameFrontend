@@ -19,8 +19,8 @@ class PlayerLayout extends Component {
       account: '0x0',
       balance: ''
     };
-    console.log('player', props);
     this.placeABet = this.placeABet.bind(this);
+    this.startPlay = this.startPlay.bind(this);
   }
 
   async componentDidMount() {
@@ -46,16 +46,26 @@ class PlayerLayout extends Component {
     store.dispatch(tomoAction.sendMoneyToAlias());
   }
 
+  startPlay() {
+    store.dispatch(tomoAction.startPlay());
+    // instantiateGame
+  }
+
+  withdraw() {
+    store.dispatch(tomoAction.sendMoneyBack());
+  }
+
   render() {
     const { rank } = this.props;
     const { question, questionCount } = this.props;
     const { wincount } = this.props;
     const { tomo } = this.props;
+
     return (
       <div>
         <Container>
           {tomo.web3 ? (
-            tomo.alias_web3 ? (
+            tomo.isPlaying ? (
               question && questionCount < 10 ? (
                 <Row className='set_height'>
                   <QuesArea ques={question} acc={this.props.tomo} />
@@ -79,10 +89,24 @@ class PlayerLayout extends Component {
                     animationIn='bounceIn'
                     animationOut='bounceOut'>
                     <div className='margin_box '>
-                      <h1>ban phai dat cuoc 30 tomo de bat dau tro choi</h1>
-                      <Button color='primary' onClick={(e) => this.placeABet()}>
-                        Betting
-                      </Button>
+                      {tomo.aliasBalance > 30 ? (
+                        <div>
+                          <h1>Ban dang co {tomo.aliasBalance} tomo</h1>
+                          <Button color='primary' onClick={(e) => this.startPlay()}>
+                            Start
+                          </Button>
+                          <Button color='primary' onClick={(e) => this.withdraw()}>
+                            WithDraw
+                          </Button>
+                        </div>
+                      ) : (
+                        <div>
+                          <h1>ban phai dat cuoc 30 tomo de bat dau tro choi</h1>
+                          <Button color='primary' onClick={(e) => this.placeABet()}>
+                            Betting
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </Animated>
                 </Col>
