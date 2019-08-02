@@ -83,10 +83,10 @@ export const loginAliasAccount = () => async (dispatch, getState) => {
     privateKey.replace('0x', ''),
     'https://testnet.tomochain.com'
   );
-  var alias_web3 = new Web3(provider);
+  var aliasWeb3 = new Web3(provider);
   dispatch({
     type: LOGIN_ALIAS_ACCOUNT,
-    alias_web3
+    aliasWeb3
   });
   dispatch(instantiateGame());
 };
@@ -95,13 +95,12 @@ export const INSTANTIATE_GAME = 'INSTANTIATE_GAME';
 export const instantiateGame = () => async (dispatch, getState) => {
   const GameArtifact = require('contracts/Game');
   const state = getState();
-  let alias_web3 = state.tomo.alias_web3;
+  let aliasWeb3 = state.tomo.aliasWeb3;
   let factory = state.tomo.factory;
   let from = state.tomo.aliasAccount.address;
   let listGame = await factory.methods.getAllGames().call({ from });
-  console.log(listGame);
   let currentGameAddress = listGame[listGame.length - 1];
-  const game = new alias_web3.eth.Contract(GameArtifact.abi, currentGameAddress, {
+  const game = new aliasWeb3.eth.Contract(GameArtifact.abi, currentGameAddress, {
     transactionConfirmationBlocks: 1
   });
   let questionCount = await game.methods.currentQuestion().call({ from });
@@ -147,7 +146,6 @@ export const checkIsPlaying = () => async (dispatch, getState) => {
   let from = state.tomo.aliasAccount.address;
   var getListPlayer = await game.methods.getAllPlayers().call({ from });
   var isPlaying = getListPlayer.includes(from);
-  console.log('isplaying',isPlaying)
   dispatch({
     type: CHECK_ISPLAYING,
     isPlaying
@@ -259,17 +257,17 @@ export const answer = (answerIndex) => async (dispatch, getState) => {
   const state = getState();
   const game = state.tomo.game;
   const from = state.tomo.aliasAccount.address;
-  let alias_web3 = state.tomo.alias_web3;
+  let aliasWeb3 = state.tomo.aliasWeb3;
 
-  var answer = alias_web3.utils.fromAscii(answerIndex.toString());
+  var answer = aliasWeb3.utils.fromAscii(answerIndex.toString());
   await game.methods
     .answer(answer)
     .send({
       from: from,
       value: 3 * 10 ** 18,
       // TODO tinh gas limit
-      gasLimit: alias_web3.utils.toHex(2000000),
-      gasPrice: alias_web3.utils.toHex(alias_web3.utils.toWei('0.25', 'gwei'))
+      gasLimit: aliasWeb3.utils.toHex(2000000),
+      gasPrice: aliasWeb3.utils.toHex(aliasWeb3.utils.toWei('0.25', 'gwei'))
     })
     .then(() => {
       dispatch({
@@ -359,8 +357,8 @@ export const fetchWinCount = () => async (dispatch, getState) => {
   });
 };
 
-export const CREATE_NEW_GAME = 'CREATE_NEW_GAME';
-export const createNewGame = () => async (dispatch, getState, { getFirestore }) => {
+export const CREATE_ADMIN_GAME = 'CREATE_ADMIN_GAME';
+export const createAdminGame = () => async (dispatch, getState, { getFirestore }) => {
   const firestore = getFirestore();
   const state = getState();
   let web3 = state.tomo.web3;
@@ -376,7 +374,7 @@ export const createNewGame = () => async (dispatch, getState, { getFirestore }) 
       const adminGame = new web3.eth.Contract(GameArtifact.abi, currentGameAddress);
       let questionCount = await adminGame.methods.currentQuestion().call({ from });
       dispatch({
-        type: CREATE_NEW_GAME,
+        type: CREATE_ADMIN_GAME,
         adminGame: adminGame,
         questionCount: questionCount
       });
@@ -413,8 +411,6 @@ export const createNewGame = () => async (dispatch, getState, { getFirestore }) 
               });
             })
             .then(() => {
-              console.log('delete all');
-              console.log('list question new', list_questions);
               list_questions.forEach((e) => {
                 let newId = db.collection('list_question').doc().id;
                 e['id'] = newId;
@@ -430,19 +426,19 @@ export const createNewGame = () => async (dispatch, getState, { getFirestore }) 
     });
 };
 
-export const updateNewGame = (newAddress) => async (dispatch, getState, { getFirestore }) => {
+export const updateNewGame = (newAddress) => async (dispatch, getState) => {
   const state = getState();
-  let web3 = state.tomo.web3;
+  let aliasWeb3 = state.tomo.aliasWeb3;
   const GameArtifact = require('contracts/Game');
-  const from = state.tomo.account;
-  const game = new web3.eth.Contract(GameArtifact.abi, newAddress, {
+  const from = state.tomo.aliasAccount.address;
+  const game = new aliasWeb3.eth.Contract(GameArtifact.abi, newAddress, {
     transactionConfirmationBlocks: 1
   });
   let questionCount = await game.methods.currentQuestion().call({ from });
   dispatch({
-    type: CREATE_NEW_GAME,
-    game: game,
-    questionCount: questionCount
+    type: INSTANTIATE_GAME,
+    game,
+    questionCount
   });
 };
 
@@ -480,9 +476,9 @@ export const getAliasBalance = () => async (dispatch, getState) => {
 export const SEND_MONEY_BACK = 'SEND_MONEY_BACK';
 export const sendMoneyBack = () => async (dispatch, getState) => {
   const state = getState();
-  let alias_web3 = state.tomo.alias_web3;
+  let aliasWeb3 = state.tomo.aliasWeb3;
   dispatch(getAliasBalance());
-  await alias_web3.eth.sendTransaction({
+  await aliasWeb3.eth.sendTransaction({
     from: state.tomo.aliasAccount.address,
     to: state.tomo.account,
     // TODO tinh gas
