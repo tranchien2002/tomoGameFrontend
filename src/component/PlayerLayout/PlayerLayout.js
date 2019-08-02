@@ -36,11 +36,11 @@ class PlayerLayout extends Component {
     clearInterval(this.interval);
   }
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   if (nextProps.game !== prevState.game) {
-  //     store.dispatch(tomoAction.updateNewGame(nextProps.game[0].address));
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (prevProps.game !== this.props.game && this.props.tomo.web3) {
+      store.dispatch(tomoAction.updateNewGame(this.props.game[0].address));
+    }
+  }
 
   placeABet() {
     store.dispatch(tomoAction.sendMoneyToAlias());
