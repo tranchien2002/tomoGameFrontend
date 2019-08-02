@@ -71,6 +71,11 @@ const tomoReducer = (state = initialState, action) => {
         ...state,
         balance: action.balance
       };
+    case actions.GET_CEO_ADDRESS:
+      return {
+        ...state,
+        ceoAddress: action.ceoAddress
+      };
     default:
       return state;
   }
