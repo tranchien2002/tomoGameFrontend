@@ -49,7 +49,7 @@ class AdminLayout extends Component {
 
   createGame = async () => {
     // debugger
-    await store.dispatch(tomoActions.createNewGame());
+    await store.dispatch(tomoActions.createAdminGame());
     console.log('admin', store.getState().tomo.account);
   };
 

@@ -2,7 +2,7 @@ import * as actions from 'actions/tomoAction';
 
 const initialState = {
   web3: null,
-  alias_web3: null,
+  aliasWeb3: null,
   account: null,
   tomo: null,
   adminGame: null,
@@ -39,7 +39,7 @@ const tomoReducer = (state = initialState, action) => {
     case actions.LOGIN_ALIAS_ACCOUNT:
       return {
         ...state,
-        alias_web3: action.alias_web3
+        aliasWeb3: action.aliasWeb3
       };
     case actions.INSTANTIATE_GAME:
       return {
@@ -78,10 +78,10 @@ const tomoReducer = (state = initialState, action) => {
         ...state,
         winCount: action.winCount
       };
-    case actions.CREATE_NEW_GAME:
+    case actions.CREATE_ADMIN_GAME:
       return {
         ...state,
-        game: action.game,
+        adminGame: action.adminGame,
         questionCount: action.questionCount
       };
     case actions.GET_BALANCE:

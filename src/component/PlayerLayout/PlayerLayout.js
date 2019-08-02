@@ -37,7 +37,7 @@ class PlayerLayout extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.game !== this.props.game) {
+    if (prevProps.game !== this.props.game && this.props.tomo.web3) {
       store.dispatch(tomoAction.updateNewGame(this.props.game[0].address));
     }
   }
