@@ -2,8 +2,10 @@ import * as actions from 'actions/tomoAction';
 
 const initialState = {
   web3: null,
+  aliasWeb3: null,
   account: null,
   tomo: null,
+  adminGame: null,
   game: null,
   factory: null,
   bounty: 0,
@@ -11,7 +13,13 @@ const initialState = {
   questionBounty: 0,
   winCount: 0,
   balance: 0,
-  questionCount: 0
+  questionCount: 0,
+  aliasAccount: {
+    address: '',
+    privateKey: ''
+  },
+  aliasBalance: 0,
+  isPlaying: false
 };
 
 const tomoReducer = (state = initialState, action) => {
@@ -20,12 +28,22 @@ const tomoReducer = (state = initialState, action) => {
       return {
         ...state,
         web3: action.web3,
-        account: action.account
+        account: action.account,
+        balance: action.balance
       };
     case actions.INSTANTIATE_CONTRACT:
       return {
         ...state,
-        factory: action.factory,
+        factory: action.factory
+      };
+    case actions.LOGIN_ALIAS_ACCOUNT:
+      return {
+        ...state,
+        aliasWeb3: action.aliasWeb3
+      };
+    case actions.INSTANTIATE_GAME:
+      return {
+        ...state,
         game: action.game,
         questionCount: action.questionCount
       };
@@ -60,10 +78,10 @@ const tomoReducer = (state = initialState, action) => {
         ...state,
         winCount: action.winCount
       };
-    case actions.CREATE_NEW_GAME:
+    case actions.CREATE_ADMIN_GAME:
       return {
         ...state,
-        game: action.game,
+        adminGame: action.adminGame,
         questionCount: action.questionCount
       };
     case actions.GET_BALANCE:
@@ -71,10 +89,25 @@ const tomoReducer = (state = initialState, action) => {
         ...state,
         balance: action.balance
       };
-    case actions.GET_CEO_ADDRESS:
+    case actions.GET_ALIAS:
       return {
         ...state,
-        ceoAddress: action.ceoAddress
+        aliasAccount: action.aliasAccount
+      };
+    case actions.GET_ALIAS_BALANCE:
+      return {
+        ...state,
+        aliasBalance: action.aliasBalance
+      };
+    case actions.INSTANTIATE_ADMIN_GAME:
+      return {
+        ...state,
+        adminGame: action.adminGame
+      };
+    case actions.CHECK_ISPLAYING:
+      return {
+        ...state,
+        isPlaying: action.isPlaying
       };
     default:
       return state;

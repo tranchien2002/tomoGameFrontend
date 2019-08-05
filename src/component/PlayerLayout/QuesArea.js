@@ -8,6 +8,7 @@ import store from '../../store';
 import { firestoreConnect } from 'react-redux-firebase';
 
 import { Animated } from 'react-animated-css';
+import '../../style/button.css';
 import '../../style/App.css';
 
 class QuesArea extends Component {
@@ -22,6 +23,7 @@ class QuesArea extends Component {
     this.changeDisabled = this.changeDisabled.bind(this);
     this.countDown = this.countDown.bind(this);
     this.percent = this.percent.bind(this);
+    this.getMoneyBack = this.getMoneyBack.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -39,6 +41,7 @@ class QuesArea extends Component {
 
   click(answer) {
     store.dispatch(tomoAction.answer(answer));
+    // store.dispatch(tomoAction.getAliasBalance());
   }
 
   changeDisabled() {
@@ -56,6 +59,10 @@ class QuesArea extends Component {
         onComplete={(e) => this.changeDisabled()}
       />
     );
+  }
+
+  getMoneyBack() {
+    store.dispatch(tomoAction.sendMoneyBack());
   }
 
   // Total calculation function
@@ -83,6 +90,7 @@ class QuesArea extends Component {
                 </p>
                 <p>
                   <strong>Balance :</strong> {this.props.balance} <strong>TOMO</strong>
+                  <Button onClick={(e) => this.getMoneyBack()}>get money back</Button>
                 </p>
               </Col>
               <Col className='set_full_height'>
@@ -101,8 +109,7 @@ class QuesArea extends Component {
                       className='answer_box'
                       outline
                       color='primary'
-                      disabled={this.state.disabled}
-                    >
+                      disabled={this.state.disabled}>
                       <Progress value={this.percent(qes[0].user_choice[key])}>
                         <div className='text_in_button'>{item}</div>
                         <div className='text_in_button user_number'>{qes[0].user_choice[key]}</div>

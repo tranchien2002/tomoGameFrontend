@@ -1,9 +1,8 @@
-@import './button.css';
 @import './admin.css';
 
 .set_height {
   height: 100vh;
-  padding: 20px;
+  padding: 2vh;
 }
 
 .margin_box {
@@ -35,8 +34,56 @@
 }
 
 .question_position span {
-  font-size: 30px !important;
+  font-size: 30px;
   font-weight: 500;
+}
+
+.question .user_account button {
+  cursor: pointer;
+}
+
+/* sreen super mini, iphone 5, iphone se */
+
+@media only screen and (max-width: 430px) {
+  .margin_box {
+    height: 100vh;
+  }
+
+  .box_color.col-12.col-md-4.offset-md-0 {
+    margin-top: 10vh;
+  }
+  .question_position span {
+    font-size: 7vw;
+  }
+
+  .react-countdown-clock {
+    margin-top: -6vh;
+  }
+
+  .answer_position {
+    padding-bottom: 5vh;
+  }
+
+  .score_board {
+    height: 18vh !important;
+  }
+
+  .progress {
+    margin-bottom: 2vh;
+  }
+
+  .answer_position {
+    margin-top: 5vh;
+  }
+
+  .ranking_title span,
+  .score_board p:first-child {
+    font-size: 6vw !important;
+  }
+
+  .score_board p:nth-child(2) {
+    font-size: 5vw !important;
+  }
 }
 
 @media only screen and (max-width: 576px) {
@@ -44,26 +91,114 @@
     margin-bottom: 20%;
   }
 
-  .question_position span {
-    font-size: 20px !important;
-  }
-
   .question.col {
     margin-top: 20%;
+  }
+
+  .question .user_account p {
+    font-size: 3vw;
+  }
+
+  .person_rank .user_account span {
+    font-size: 4.5vw;
+  }
+
+  .person_rank p:nth-child(2) {
+    font-size: 5vw;
+    font-weight: bold;
+  }
+
+  .ranking_title span,
+  .score_board p:first-child {
+    font-size: 7vw !important;
+  }
+
+  .score_board p:nth-child(2) {
+    font-size: 5vw !important;
   }
 }
 
-@media only screen and (max-width: 900px) {
-  .question_position {
-    margin-bottom: 20%;
+/* mobible phone vertical screen */
+
+@media only screen and (max-height: 550px) and (max-width: 800px) {
+  .question .user_account p {
+    font-size: 2.5vw;
   }
 
-  .question_position span {
-    font-size: 25px !important;
+  .person_rank .user_account span {
+    font-size: 4.5vw;
   }
 
-  .question.col {
-    margin-top: 20%;
+  .margin_box {
+    height: 200vh;
+  }
+
+  .answer_position {
+    padding-bottom: 10vh;
+  }
+
+  .score_board,
+  .rank {
+    background-color: white;
+  }
+
+  .rank .ranking_title {
+    height: 0;
+  }
+
+  .box_color.col-12.col-md-4.offset-md-0 {
+    padding-top: 70vw;
+  }
+
+  .person_rank_box {
+    background: white;
+  }
+
+  .person_rank .user_account span {
+    font-size: 2.5vw;
+  }
+
+  .person_rank p:nth-child(2) {
+    font-size: 3.5vw;
+    font-weight: bold;
+  }
+
+  .ranking_title span,
+  .score_board p:first-child {
+    font-size: 3vw;
+  }
+
+  .score_board p:nth-child(2) {
+    font-size: 2.5vw;
+  }
+
+  .react-countdown-clock {
+    margin-top: -10vh;
+  }
+}
+
+/* mobile phone horizontal screen */
+
+@media only screen and (max-height: 550px) and (min-width: 801px) {
+  .margin_box {
+    height: 200vh;
+  }
+
+  .set_full_height {
+    height: 200vh;
+  }
+
+  .question {
+    height: 70vh;
+  }
+
+  .react-countdown-clock {
+    margin-top: -75vh;
+  }
+
+  .score_board {
+    height: 90px !important;
+    /* margin-bottom: 15px !important; */
   }
 }
 
@@ -111,7 +246,7 @@
   height: 14%;
 }
 
-.blank_space{
+.blank_space {
   height: 2%;
 }
 
@@ -159,6 +294,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   width: 90%;
+  padding-top: 2vh;
 }
 
 .user_account span {
