@@ -109,9 +109,13 @@ class QuesArea extends Component {
                       className='answer_box'
                       outline
                       color='primary'
-                      disabled={this.state.disabled}>
+                      disabled={this.state.disabled}
+                    >
                       <Progress value={this.percent(qes[0].user_choice[key])}>
-                        <div className='text_in_button'>{item}</div>
+                        <div
+                          className='text_in_button'
+                          dangerouslySetInnerHTML={{ __html: item }}
+                        />
                         <div className='text_in_button user_number'>{qes[0].user_choice[key]}</div>
                       </Progress>
                     </Button>

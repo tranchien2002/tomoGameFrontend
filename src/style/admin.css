@@ -6,16 +6,48 @@
   text-align: center;
 }
 
-.margin_box h1 {
-  padding-top: 15px;
+@media only screen and (max-width: 600px) {
+  .margin_box {
+    height: 110vh !important;
+  }
+
+  .margin_box span {
+    font-size: 7.5vw !important;
+    padding-top: 3vh;
+    display: inline-block;
+    font-weight: bold;
+  }
+
+  .admin_question_box {
+    margin-top: 3vh;
+  }
+
+  .admin_quesbox button {
+    font-size: 5vw !important;
+    color: #212529 !important;
+  }
+
+  .button_bounty {
+    margin-top: 5vh;
+  }
+
+  .button_bounty button {
+    width: 70%;
+    margin-top: 2vh;
+  }
 }
 
-.admin_quesbox {
-  margin: 2%;
+.margin_box span {
+  font-size: 3em;
+  padding-top: 3vh;
+  display: inline-block;
 }
 
 .admin_quesbox button {
   padding: 0.375rem 0.75rem !important;
+  font-size: 1.25em;
+  color: #212529 !important;
+  margin-top: 1%;
 }
 
 .admin_quesbox button:hover {
