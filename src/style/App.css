@@ -13,6 +13,18 @@ p {
   padding: 2vh;
 }
 
+.rule-container {
+  overflow: auto;
+  height: 70vh;
+  margin: 10px;
+}
+
+.langButton > .btn-primary{
+  padding: 0.02rem 0.75rem !important;
+  background-color: #c0c0c0 !important;
+  border-color: #c0c0c0 !important;
+}
+
 .margin_box {
   border-radius: 10px;
   background-color: #ffffff;

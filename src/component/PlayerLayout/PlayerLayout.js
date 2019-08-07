@@ -5,7 +5,9 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import QuesArea from './QuesArea';
 import RankArea from './RankArea';
+import Message from '../Message';
 import store from 'store';
+import data from '../data.json';
 import * as tomoAction from 'actions/tomoAction';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,11 +19,12 @@ class PlayerLayout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      account: '0x0',
-      balance: ''
+      lang: 'en'
     };
+
     this.placeABet = this.placeABet.bind(this);
     this.startPlay = this.startPlay.bind(this);
+    this.changeLang = this.changeLang.bind(this);
   }
 
   async componentDidMount() {
@@ -60,6 +63,9 @@ class PlayerLayout extends Component {
   notifyInfo = (message) => {
     toast.info(message);
   };
+  changeLang(lang) {
+    this.setState({ lang });
+  }
 
   render() {
     const { rank } = this.props;
@@ -67,6 +73,7 @@ class PlayerLayout extends Component {
     const { wincount } = this.props;
     const { tomo } = this.props;
 
+    const msgs = data;
     return (
       <div>
         <Container>
@@ -119,10 +126,25 @@ class PlayerLayout extends Component {
                           <ToastContainer className='toast-info' />
                         </div>
                       ) : (
-                        <div>
-                          <span className='title'>
-                            To start play game, you have to send 30 Tomo
-                          </span>
+                        <div className='container'>
+                          <span>SUN*FETTI</span>
+                          <div className='langButton'>
+                            <Button color='primary' onClick={(e) => this.changeLang('en')}>
+                              EN
+                            </Button>
+                            <Button color='primary' onClick={(e) => this.changeLang('vn')}>
+                              VN
+                            </Button>
+                            <Button color='primary' onClick={(e) => this.changeLang('jp')}>
+                              JP
+                            </Button>
+                          </div>
+                          <div className='rule-container'>
+                            {msgs.map((msg, index) => {
+                              return <Message key={index} rule={msg} lang={this.state.lang} />;
+                            })}
+                          </div>
+
                           <Button
                             className='send-tomo'
                             color='primary'
