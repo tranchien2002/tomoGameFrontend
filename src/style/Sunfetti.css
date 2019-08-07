@@ -1,7 +1,7 @@
 .Sun_layer {
   margin-top: 35vh !important;
   text-align: center;
-  font-size: 7em;
+  font-size: 13vw;
   margin: 20px 0 20px 0;
 }
 
@@ -30,28 +30,34 @@
 
 @-webkit-keyframes neon5 {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fe5653, 0 0 70px #fe5653, 0 0 80px #fe5653, 0 0 100px #fe5653, 0 0 150px #fe5653;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fe5653, 0 0 70px #fe5653,
+      0 0 80px #fe5653, 0 0 100px #fe5653, 0 0 150px #fe5653;
   }
   to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fe5653, 0 0 35px #fe5653, 0 0 40px #fe5653, 0 0 50px #fe5653, 0 0 75px #fe5653;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fe5653, 0 0 35px #fe5653,
+      0 0 40px #fe5653, 0 0 50px #fe5653, 0 0 75px #fe5653;
   }
 }
 
 @-moz-keyframes neon5 {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fe5653, 0 0 70px #fe5653, 0 0 80px #fe5653, 0 0 100px #fe5653, 0 0 150px #fe5653;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fe5653, 0 0 70px #fe5653,
+      0 0 80px #fe5653, 0 0 100px #fe5653, 0 0 150px #fe5653;
   }
   to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fe5653, 0 0 35px #fe5653, 0 0 40px #fe5653, 0 0 50px #fe5653, 0 0 75px #fe5653;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fe5653, 0 0 35px #fe5653,
+      0 0 40px #fe5653, 0 0 50px #fe5653, 0 0 75px #fe5653;
   }
 }
 
 @keyframes neon5 {
   from {
-    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fe5653, 0 0 70px #fe5653, 0 0 80px #fe5653, 0 0 100px #fe5653, 0 0 150px #fe5653;
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fe5653, 0 0 70px #fe5653,
+      0 0 80px #fe5653, 0 0 100px #fe5653, 0 0 150px #fe5653;
   }
   to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fe5653, 0 0 35px #fe5653, 0 0 40px #fe5653, 0 0 50px #fe5653, 0 0 75px #fe5653;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fe5653, 0 0 35px #fe5653,
+      0 0 40px #fe5653, 0 0 50px #fe5653, 0 0 75px #fe5653;
   }
 }
 

@@ -4,10 +4,10 @@ import * as tomoActions from 'actions/tomoAction';
 import store from 'store';
 import firebase from 'config';
 import '../../style/App.css';
+import '../../style/admin.css';
 import { firestoreConnect } from 'react-redux-firebase';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-// import { setQuestion } from '../../actions/tomoAction';
 
 class AdminLayout extends Component {
   constructor(props) {
@@ -61,7 +61,7 @@ class AdminLayout extends Component {
           <Col className='set_height'>
             <div className='margin_box'>
               <div>
-                <h1>Select the next question</h1>
+                <span>Select the next question</span>
               </div>
               <div className='admin_question_box'>
                 {questions &&
@@ -85,17 +85,17 @@ class AdminLayout extends Component {
               </div>
               <div className='button_bounty'>
                 <Row>
-                  <Col>
+                  <Col xs='12' sm='8' md='4'>
                     <Button onClick={() => this.setSingleBounty()} color='primary'>
                       Single Question
                     </Button>
                   </Col>
-                  <Col>
+                  <Col xs='12' sm='8' md='4'>
                     <Button onClick={() => this.setAllBounty()} color='primary'>
                       All Bounty
                     </Button>
                   </Col>
-                  <Col>
+                  <Col xs='12' sm='8' md='4'>
                     <Button onClick={() => this.createGame()} color='primary'>
                       Create Game
                     </Button>
