@@ -35,7 +35,28 @@ export const web3Connect = () => async (dispatch) => {
   // call getAliasAcount() funciton to get or create alias accout
   dispatch(getBalance());
   dispatch(instantiateContracts());
+  dispatch(getCeoAddress());
   dispatch(getAliasAcount());
+};
+
+export const web3TomoWalletConnect = () => async (dispatch) => {
+  var Web3 = require('web3');
+  const web3 = new Web3(window.web3.currentProvider);
+  window.web3.eth.getAccounts((e, accounts) => {
+    if (accounts.length > 0) {
+      const account = accounts[0];
+      dispatch({
+        type: WEB3_CONNECT,
+        web3,
+        account
+      });
+      dispatch(instantiateContracts());
+      dispatch(getCeoAddress());
+      dispatch(getAliasAcount());
+    } else {
+      console.log('Account not found');
+    }
+  });
 };
 
 export const INSTANTIATE_CONTRACT = 'INSTANTIATE_CONTRACT';
@@ -165,10 +186,21 @@ export const getCeoAddress = () => async (dispatch, getState) => {
   const factory = new web3.eth.Contract(FactoryArtifact.abi, factoryAddress);
 
   const ceoAddress = await factory.methods.ceoAddress().call({ from });
-  dispatch({
-    type: GET_CEO_ADDRESS,
-    ceoAddress
-  });
+  if (ceoAddress === from) {
+    dispatch({
+      type: GET_CEO_ADDRESS,
+      ceoAddress,
+      isAdmin: true,
+      isLoadDone: true
+    });
+  } else {
+    dispatch({
+      type: GET_CEO_ADDRESS,
+      ceoAddress,
+      isAdmin: false,
+      isLoadDone: true
+    });
+  }
 };
 
 export const GET_BALANCE = 'GET_BALANCE';
