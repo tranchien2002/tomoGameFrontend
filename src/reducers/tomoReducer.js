@@ -4,6 +4,9 @@ const initialState = {
   web3: null,
   aliasWeb3: null,
   account: null,
+  ceoAddress: null,
+  isAdmin: false,
+  isLoadDone: false,
   tomo: null,
   adminGame: null,
   game: null,
@@ -92,7 +95,9 @@ const tomoReducer = (state = initialState, action) => {
     case actions.GET_CEO_ADDRESS:
       return {
         ...state,
-        ceoAddress: action.ceoAddress
+        ceoAddress: action.ceoAddress,
+        isAdmin: action.isAdmin,
+        isLoadDone: action.isLoadDone
       };
     case actions.GET_ALIAS:
       return {

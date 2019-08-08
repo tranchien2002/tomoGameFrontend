@@ -16,7 +16,6 @@ class AdminLayout extends Component {
       selected: [],
       question: []
     };
-    console.log('admin', props);
   }
 
   async componentWillMount() {
