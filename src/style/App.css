@@ -1,5 +1,13 @@
 @import './admin.css';
 
+p {
+  margin-bottom: 0.5rem !important;
+}
+
+.margin_box div p.title {
+  font-size: 3em;
+}
+
 .set_height {
   height: 100vh;
   padding: 2vh;
@@ -31,11 +39,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-}
-
-.question_position span {
-  font-size: 30px;
-  font-weight: 500;
+  font-weight: 600 !important;
 }
 
 .question .user_account button {
@@ -57,7 +61,7 @@
   }
 
   .react-countdown-clock {
-    margin-top: -2vh;
+    margin-top: -10vh;
   }
 
   .answer_position {
@@ -66,10 +70,7 @@
 
   .score_board {
     height: 18vh !important;
-  }
-
-  .progress {
-    margin-bottom: 2vh;
+    padding-top: 2vh;
   }
 
   .answer_position {
@@ -87,6 +88,15 @@
 }
 
 @media only screen and (max-width: 576px) {
+  .margin_box div p {
+    font-size: 5vw !important;
+  }
+
+  .button-start,
+  .button-withdraw {
+    width: 30%;
+  }
+
   .question_position {
     margin-bottom: 20%;
   }
@@ -127,10 +137,6 @@
 
   .person_rank .user_account span {
     font-size: 4.5vw;
-  }
-
-  .margin_box {
-    height: 200vh;
   }
 
   .answer_position {
@@ -198,8 +204,32 @@
 
   .score_board {
     height: 90px !important;
-    /* margin-bottom: 15px !important; */
   }
+}
+
+@media only screen and (min-width: 768px) {
+  .question_position {
+    font-size: 24px;
+  }
+}
+
+button.withdraw {
+  padding: 2px 5px !important;
+}
+
+.Toastify {
+  margin-bottom: 10px;
+}
+
+.answer_position .progress:focus {
+  background-color: #55dfa1;
+  outline: none;
+  cursor: pointer;
+}
+
+.user_account.col button {
+  outline: none;
+  cursor: pointer;
 }
 
 .center {
@@ -233,9 +263,14 @@
   height: 84%;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
   .box_color.col-12.col-md-4 {
     margin-top: 10%;
+  }
+
+  .toast-info .Toastify__toast.Toastify__toast--info {
+    margin-left: -7% !important;
+    margin-top: -4% !important;
   }
 }
 
@@ -244,6 +279,7 @@
   background-color: #ffffff;
   text-align: center;
   height: 14%;
+  padding-top: 2vh;
 }
 
 .blank_space {

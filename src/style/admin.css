@@ -7,15 +7,10 @@
 }
 
 @media only screen and (max-width: 600px) {
-  .margin_box {
-    height: 110vh !important;
-  }
-
   .margin_box span {
     font-size: 7.5vw !important;
     padding-top: 3vh;
     display: inline-block;
-    font-weight: bold;
   }
 
   .admin_question_box {
@@ -40,7 +35,8 @@
 .margin_box span {
   font-size: 3em;
   padding-top: 3vh;
-  display: inline-block;
+  display: block;
+  margin-bottom: 2vh;
 }
 
 .admin_quesbox button {

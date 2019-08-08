@@ -7,7 +7,8 @@ import QuesArea from './QuesArea';
 import RankArea from './RankArea';
 import store from 'store';
 import * as tomoAction from 'actions/tomoAction';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Animated } from 'react-animated-css';
 import '../../style/Sunfetti.css';
 import '../../style/App.css';
@@ -55,6 +56,10 @@ class PlayerLayout extends Component {
     store.dispatch(tomoAction.sendMoneyBack());
   }
 
+  notifyInfo = (message) => {
+    toast.info(message);
+  };
+
   render() {
     const { rank } = this.props;
     const { question, questionCount } = this.props;
@@ -73,7 +78,7 @@ class PlayerLayout extends Component {
                 </Row>
               ) : (
                 <Row className='set_height'>
-                  <Col className='box_color' xs='8'>
+                  <Col className='box_color' xs='12' md='8'>
                     <div className='margin_box '>
                       <span> Waiting ...</span>
                     </div>
@@ -87,23 +92,42 @@ class PlayerLayout extends Component {
                   <Animated
                     className='set_full_height'
                     animationIn='bounceIn'
-                    animationOut='bounceOut'>
+                    animationOut='bounceOut'
+                  >
                     <div className='margin_box '>
                       {tomo.aliasBalance > 30 ? (
                         <div>
-                          <h1>Ban dang co {tomo.aliasBalance} tomo</h1>
-                          <Button color='primary' onClick={(e) => this.startPlay()}>
+                          <span>You have {tomo.aliasBalance} Tomo</span>
+                          <Button
+                            color='success'
+                            className='button-start'
+                            onClick={(e) => this.startPlay()}
+                          >
                             Start
                           </Button>
-                          <Button color='primary' onClick={(e) => this.withdraw()}>
+                          <Button
+                            color='none'
+                            className='button-withdraw'
+                            onClick={(e) => {
+                              this.withdraw();
+                              this.notifyInfo('Withdrawing...');
+                            }}
+                          >
                             WithDraw
                           </Button>
+                          <ToastContainer className='toast-info' autoClose={3000} />
                         </div>
                       ) : (
                         <div>
-                          <h1>ban phai dat cuoc 30 tomo de bat dau tro choi</h1>
-                          <Button color='primary' onClick={(e) => this.placeABet()}>
-                            Betting
+                          <span className='title'>
+                            To start play game, you have to send 30 Tomo
+                          </span>
+                          <Button
+                            className='send-tomo'
+                            color='primary'
+                            onClick={(e) => this.placeABet()}
+                          >
+                            Send
                           </Button>
                         </div>
                       )}

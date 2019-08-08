@@ -210,9 +210,17 @@ export const getBalance = () => async (dispatch, getState) => {
   let web3 = state.tomo.web3;
   const from = state.tomo.account;
   await web3.eth.getBalance(from).then((balance) => {
+    balance = web3.utils.fromWei(balance);
+
+    if (balance.includes('.')) {
+      let interger = balance.split('.', 2)[0];
+      let fractional = balance.split('.', 2)[1].substr(0, 4);
+      balance = interger.concat('.', fractional, ' ');
+    }
+
     dispatch({
       type: GET_BALANCE,
-      balance: web3.utils.fromWei(balance)
+      balance: balance
     });
   });
 };
@@ -244,6 +252,7 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState, { getFi
   const state = getState();
   const from = state.tomo.account;
   const adminGame = state.tomo.adminGame;
+
   adminGame.methods
     .setQuestion(state.tomo.web3.utils.fromAscii(correctAnswer.correct.toString()))
     .send({ from: from }, async (e, r) => {
@@ -520,8 +529,15 @@ export const getAliasBalance = () => async (dispatch, getState) => {
   const state = getState();
   let web3 = state.tomo.web3;
   let aliasBalance = await web3.eth.getBalance(state.tomo.aliasAccount.address);
+
   aliasBalance = web3.utils.fromWei(aliasBalance);
-  console.log('alias balance', aliasBalance);
+
+  if (aliasBalance.includes('.')) {
+    let interger = aliasBalance.split('.', 2)[0];
+    let fractional = aliasBalance.split('.', 2)[1].substr(0, 4);
+    aliasBalance = interger.concat('.', fractional, ' ');
+  }
+
   dispatch({
     type: GET_ALIAS_BALANCE,
     aliasBalance

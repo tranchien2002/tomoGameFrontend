@@ -6,7 +6,8 @@ import ReactCountdownClock from 'react-countdown-clock';
 import * as tomoAction from 'actions/tomoAction';
 import store from '../../store';
 import { firestoreConnect } from 'react-redux-firebase';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Animated } from 'react-animated-css';
 import '../../style/button.css';
 import '../../style/App.css';
@@ -41,7 +42,6 @@ class QuesArea extends Component {
 
   click(answer) {
     store.dispatch(tomoAction.answer(answer));
-    // store.dispatch(tomoAction.getAliasBalance());
   }
 
   changeDisabled() {
@@ -53,7 +53,7 @@ class QuesArea extends Component {
     return (
       <ReactCountdownClock
         seconds={this.state.time}
-        color='#3c65a7'
+        color='#624490'
         alpha={0.9}
         size={120}
         onComplete={(e) => this.changeDisabled()}
@@ -76,6 +76,14 @@ class QuesArea extends Component {
     }
   }
 
+  notifyInfo = (message) => {
+    toast.info(message);
+  };
+
+  notifySuccess = (message) => {
+    toast.success(message);
+  };
+
   render() {
     let acc = this.props.acc;
     let qes = this.props.question;
@@ -86,17 +94,33 @@ class QuesArea extends Component {
             <div className='question'>
               <Col className='user_account'>
                 <p>
-                  <strong>Your account :</strong> {acc.account}
+                  <strong>Your account: </strong>
+                  {`${acc.account.substr(0, 6)}...${acc.account.substr(-4)}`}
                 </p>
                 <p>
-                  <strong>Balance :</strong> {this.props.balance} <strong>TOMO</strong>
-                  <Button onClick={(e) => this.getMoneyBack()}>get money back</Button>
+                  <strong>Balance: </strong>
+                  {`${this.props.balance} `}
+                  <img width='35' src='https://i.imgur.com/VZgib3M.png' alt='tomoCoin' />
                 </p>
+                <div>
+                  <Button
+                    color='none'
+                    className='withdraw'
+                    onClick={(e) => {
+                      this.getMoneyBack();
+                      this.notifyInfo('Withdrawing...');
+                    }}
+                  >
+                    Withdraw
+                  </Button>
+                  <ToastContainer autoClose={2000} />
+                </div>
               </Col>
               <Col className='set_full_height'>
-                <div className='question_position'>
-                  <span dangerouslySetInnerHTML={{ __html: qes[0].question }} />
-                </div>
+                <div
+                  className='question_position'
+                  dangerouslySetInnerHTML={{ __html: qes[0].question }}
+                />
                 <div className='question center'>{this.countDown()}</div>
               </Col>
             </div>
@@ -105,7 +129,10 @@ class QuesArea extends Component {
                 {qes[0].answer.map((item, key) => (
                   <Col key={key}>
                     <Button
-                      onClick={(e) => this.click(key)}
+                      onClick={(e) => {
+                        this.click(key);
+                        this.notifySuccess('Success');
+                      }}
                       className='answer_box'
                       outline
                       color='primary'
