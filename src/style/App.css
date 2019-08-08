@@ -70,7 +70,6 @@ p {
 
   .score_board {
     height: 18vh !important;
-    padding-top: 2vh;
   }
 
   .answer_position {
@@ -90,6 +89,10 @@ p {
 @media only screen and (max-width: 576px) {
   .margin_box div p {
     font-size: 5vw !important;
+  }
+
+  .box_color.col-12.col-md-4 {
+    margin-top: 10%;
   }
 
   .button-start,
@@ -152,10 +155,6 @@ p {
     height: 0;
   }
 
-  .box_color.col-12.col-md-4.offset-md-0 {
-    padding-top: 70vw;
-  }
-
   .person_rank_box {
     background: white;
   }
@@ -213,6 +212,13 @@ p {
   }
 }
 
+@media only screen and (max-width: 768px) {
+  .toast-info .Toastify__toast.Toastify__toast--info {
+    margin-left: -7% !important;
+    margin-top: -4% !important;
+  }
+}
+
 button.withdraw {
   padding: 2px 5px !important;
 }
@@ -263,23 +269,12 @@ button.withdraw {
   height: 84%;
 }
 
-@media only screen and (max-width: 768px) {
-  .box_color.col-12.col-md-4 {
-    margin-top: 10%;
-  }
-
-  .toast-info .Toastify__toast.Toastify__toast--info {
-    margin-left: -7% !important;
-    margin-top: -4% !important;
-  }
-}
-
 .score_board {
   border-radius: 10px;
   background-color: #ffffff;
   text-align: center;
   height: 14%;
-  padding-top: 2vh;
+  padding-top: 1vh;
 }
 
 .blank_space {
@@ -329,7 +324,6 @@ button.withdraw {
 .user_account {
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 90%;
   padding-top: 2vh;
 }
 
