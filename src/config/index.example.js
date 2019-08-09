@@ -1,16 +1,16 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
+var firebase = require('firebase/app');
+require('firebase/firestore');
+require('firebase/auth');
 
 var config = {
-  apiKey: '',
-  authDomain: '',
-  databaseURL: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: ''
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'YOUR_AUTH_DOMAIN',
+  databaseURL: 'YOUR_DATABASE_URL',
+  projectId: 'YOUR_PROJECTID',
+  storageBucket: 'YOUR_STORAGEBUCKET',
+  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID'
 };
 
 firebase.initializeApp(config);
 
-export default firebase;
+module.exports = firebase;
