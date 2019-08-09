@@ -76,6 +76,7 @@ export const instantiateContracts = () => async (dispatch, getState) => {
   dispatch(instantiateAdminGame());
 };
 
+// adminGame: can be interacted with user, admin through metamask, tomowallet
 export const INSTANTIATE_ADMIN_GAME = 'INSTANTIATE_ADMIN_GAME';
 export const instantiateAdminGame = () => async (dispatch, getState) => {
   const GameArtifact = require('contracts/Game');
@@ -220,9 +221,9 @@ export const SET_BOUNTY = 'SET_BOUNTY';
 export const setBounty = () => async (dispatch, getState) => {
   const state = getState();
   const from = state.tomo.account;
-  const game = state.tomo.game;
-  if (game) {
-    await game.methods
+  const adminGame = state.tomo.adminGame;
+  if (adminGame) {
+    await adminGame.methods
       .setBounty()
       .send({ from: from, value: 10 ** 19 })
       .then(() => {
@@ -496,19 +497,22 @@ export const updateNewGame = (newAddress) => async (dispatch, getState) => {
 export const SEND_MONEY_TO_ALIAS = 'SEND_MONEY_TO_ALIAS';
 export const sendMoneyToAlias = () => async (dispatch, getState) => {
   const state = getState();
-  let web3 = state.tomo.web3;
-  console.log('before send');
-  await web3.eth.sendTransaction({
-    from: state.tomo.account,
-    to: state.tomo.aliasAccount.address,
-    value: 31 * 10 ** 18
-  });
-  console.log('after send');
-  dispatch(getAliasBalance());
-  dispatch({
-    type: CHECK_ISPLAYING,
-    isPlaying: true
-  });
+  const adminGame = state.tomo.adminGame;
+  const from = state.tomo.account;
+  const aliasAddress = state.tomo.aliasAccount.address;
+  await adminGame.methods
+    .transferAlias(aliasAddress)
+    .send({ from: from, value: 31 * 10 ** 18 })
+    .then(() => {
+      dispatch(getAliasBalance());
+      dispatch({
+        type: CHECK_ISPLAYING,
+        isPlaying: true
+      });
+    })
+    .catch((e) => {
+      console.log('Error send money to alias', e);
+    });
 };
 
 export const GET_ALIAS_BALANCE = 'GET_ALIAS_BALANCE';

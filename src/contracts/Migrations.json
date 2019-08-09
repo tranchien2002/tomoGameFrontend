@@ -1376,12 +1376,12 @@
     "89": {
       "events": {},
       "links": {},
-      "address": "0x6911FacB0E478E6200E7AAd3b0BeC9d964ecAd41",
-      "transactionHash": "0x8ca6a2ef293a2c579376c0b9e314591ba345106020128802a398d0b39cf2a748"
+      "address": "0xCA4a4B94e148CACF181472Ac279D6231e3981095",
+      "transactionHash": "0x4ef82f07af9b13b095ce536bdee8f1bad2a7a253a90331b948c601f2f16cf039"
     }
   },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-07-29T01:46:51.861Z",
+  "updatedAt": "2019-08-09T01:00:53.985Z",
   "devdoc": {
     "methods": {}
   },
