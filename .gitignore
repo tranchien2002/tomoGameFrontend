@@ -29,3 +29,7 @@ package-lock.json
 src/contracts
 src/styles/css
 log
+.firebase/
+.firebaserc
+firebase.json
+src/config/index.js
