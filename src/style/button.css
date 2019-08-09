@@ -16,6 +16,29 @@
   padding: 0px !important;
 }
 
+.button-start,
+.button-withdraw {
+  margin-left: 5px;
+  width: 14%;
+  padding: 5px !important;
+}
+
+.withdraw,
+.button-withdraw {
+  padding: 5px !important;
+  background: #624490 !important;
+  color: white !important;
+}
+
+.withdraw:hover,
+.button-withdraw:hover {
+  background: #320c6e !important;
+}
+
+button.answer_box {
+  margin-bottom: 1vh;
+}
+
 /* color outline */
 .btn:focus,
 .btn:active {
@@ -28,9 +51,9 @@
   border-radius: 10px !important;
 }
 
-.progress:hover {
+/* .progress:hover {
   box-shadow: 0 0 3pt 2pt #55dfa1af !important;
-}
+} */
 
 .progress-bar {
   background-color: #55dfa1 !important;
