@@ -17,6 +17,7 @@ class QuesArea extends Component {
     super(props);
     this.state = {
       disabled: false,
+      isAliasAccount: true,
       time: 10
     };
 
@@ -93,16 +94,45 @@ class QuesArea extends Component {
           <div className='margin_box'>
             <div className='question'>
               <Col className='user_account'>
-                <p>
-                  <strong>Your account: </strong>
-                  {`${acc.account.substr(0, 6)}...${acc.account.substr(-4)}`}
-                </p>
-                <p>
-                  <strong>Balance: </strong>
-                  {`${this.props.balance} `}
-                  <img width='35' src='https://i.imgur.com/VZgib3M.png' alt='tomoCoin' />
-                </p>
-                <div>
+                {this.state.isAliasAccount ? (
+                  <div>
+                    <p>
+                      <strong>Alias account: </strong>
+                      {`${this.props.aliasAddress.substr(0, 6)}...${this.props.aliasAddress.substr(
+                        -4
+                      )}`}
+                    </p>
+                    <p>
+                      <strong>Alias Balance: </strong>
+                      {`${this.props.aliasBalance} `}
+                      <img width='35' src='https://i.imgur.com/VZgib3M.png' alt='tomoCoin' />
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <p>
+                      <strong>Your account: </strong>
+                      {`${acc.account.substr(0, 6)}...${acc.account.substr(-4)}`}
+                    </p>
+
+                    <p>
+                      <strong>Balance: </strong>
+                      {`${this.props.balance} `}
+                      <img width='35' src='https://i.imgur.com/VZgib3M.png' alt='tomoCoin' />
+                    </p>
+                  </div>
+                )}
+                <div className='group-button'>
+                  <label className='switchSmall m5'>
+                    <input
+                      type='checkbox'
+                      onClick={(e) => {
+                        this.setState({ isAliasAccount: !this.state.isAliasAccount });
+                      }}
+                    />
+                    <small />
+                  </label>
+
                   <Button
                     color='none'
                     className='withdraw'
@@ -162,6 +192,8 @@ const mapStatetoProps = (state) => {
   return {
     question: question,
     balance: state.tomo.balance,
+    aliasBalance: state.tomo.aliasBalance,
+    aliasAddress: state.tomo.aliasAccount.address,
     account: state.tomo.account
   };
 };
