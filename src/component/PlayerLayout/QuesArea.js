@@ -84,6 +84,10 @@ class QuesArea extends Component {
     toast.success(message);
   };
 
+  notifyError = (message) => {
+    toast.error(message);
+  };
+
   render() {
     let acc = this.props.acc;
     let qes = this.props.question;
@@ -131,7 +135,6 @@ class QuesArea extends Component {
                     <Button
                       onClick={(e) => {
                         this.click(key);
-                        this.notifySuccess('Success');
                       }}
                       className='answer_box'
                       outline

@@ -2,6 +2,7 @@ import getWeb3 from '../utils/getWeb3';
 import Factory from 'contracts/Factory.json';
 import firebase from 'config';
 import HDWalletProvider from 'truffle-hdwallet-provider';
+import { toast } from 'react-toastify';
 
 const shuffle = (myArr) => {
   let l = myArr.length;
@@ -336,9 +337,11 @@ export const answer = (answerIndex) => async (dispatch, getState) => {
         questioning: false,
         questionBounty: state.tomo.questionBounty + 2
       });
+      toast.success('Answer Success', { hideProgressBar: true, autoClose: 1500 });
     })
     .catch((e) => {
       console.log('Error answer', e);
+      toast.error('Answer Error', { hideProgressBar: true, autoClose: 1500 });
     })
     .then(() => {
       // tang so sau khi xac nhanj contract
@@ -532,12 +535,6 @@ export const getAliasBalance = () => async (dispatch, getState) => {
 
   aliasBalance = web3.utils.fromWei(aliasBalance);
 
-  if (aliasBalance.includes('.')) {
-    let interger = aliasBalance.split('.', 2)[0];
-    let fractional = aliasBalance.split('.', 2)[1].substr(0, 4);
-    aliasBalance = interger.concat('.', fractional, ' ');
-  }
-
   dispatch({
     type: GET_ALIAS_BALANCE,
     aliasBalance
@@ -549,12 +546,19 @@ export const sendMoneyBack = () => async (dispatch, getState) => {
   const state = getState();
   let aliasWeb3 = state.tomo.aliasWeb3;
   dispatch(getAliasBalance());
-  await aliasWeb3.eth.sendTransaction({
-    from: state.tomo.aliasAccount.address,
-    to: state.tomo.account,
-    // TODO tinh gas
-    value: state.tomo.aliasBalance * 10 ** 18 - 6250000000000
-  });
+  await aliasWeb3.eth
+    .sendTransaction({
+      from: state.tomo.aliasAccount.address,
+      to: state.tomo.account,
+      // TODO tinh gas
+      value: state.tomo.aliasBalance * 10 ** 18 - 6250000000000
+    })
+    .on('receipt', function(receipt) {
+      toast.success('Withdraw Success', { hideProgressBar: true, autoClose: 1500 });
+    })
+    .on('error', function(error) {
+      toast.error('Withdraw Error', { hideProgressBar: true, autoClose: 1500 });
+    });
 };
 
 export const startPlay = () => async (dispatch) => {

@@ -95,7 +95,7 @@ class PlayerLayout extends Component {
                     animationOut='bounceOut'
                   >
                     <div className='margin_box '>
-                      {tomo.aliasBalance > 30 ? (
+                      {parseFloat(tomo.aliasBalance) > 30 ? (
                         <div>
                           <span>You have {tomo.aliasBalance} Tomo</span>
                           <Button
@@ -110,12 +110,12 @@ class PlayerLayout extends Component {
                             className='button-withdraw'
                             onClick={(e) => {
                               this.withdraw();
-                              this.notifyInfo('Withdrawing...');
+                              this.notifyInfo('Withdrawing...', { autoClose: 1000 });
                             }}
                           >
                             WithDraw
                           </Button>
-                          <ToastContainer className='toast-info' autoClose={3000} />
+                          <ToastContainer className='toast-info' />
                         </div>
                       ) : (
                         <div>
