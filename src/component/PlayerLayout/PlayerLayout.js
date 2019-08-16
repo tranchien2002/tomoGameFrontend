@@ -30,6 +30,7 @@ class PlayerLayout extends Component {
         store.dispatch(tomoAction.fetchWinCount());
         store.dispatch(tomoAction.getBalance());
         store.dispatch(tomoAction.getAliasBalance());
+        store.dispatch(tomoAction.updateRank());
       }
     }, 1000);
   }
@@ -62,7 +63,8 @@ class PlayerLayout extends Component {
   };
 
   render() {
-    const { rank } = this.props;
+    // sorting array object
+    const { ranking } = this.props;
     const { question, questionCount } = this.props;
     const { wincount } = this.props;
     const { tomo } = this.props;
@@ -75,7 +77,7 @@ class PlayerLayout extends Component {
               question && questionCount < 10 ? (
                 <Row className='set_height'>
                   <QuesArea ques={question} acc={this.props.tomo} />
-                  <RankArea rank={rank} wincount={wincount} />
+                  <RankArea ranking={ranking} wincount={wincount} />
                 </Row>
               ) : (
                 <Row className='set_height'>
@@ -84,7 +86,7 @@ class PlayerLayout extends Component {
                       <span> Waiting ...</span>
                     </div>
                   </Col>
-                  <RankArea rank={rank} />
+                  <RankArea ranking={ranking} />
                 </Row>
               )
             ) : (
@@ -158,7 +160,7 @@ const mapStatetoProps = (state) => {
   return {
     game: game,
     question: question,
-    rank: state.rank.ranking,
+    ranking: state.tomo.ranking,
     wincount: state.tomo.winCount,
     questionCount: state.tomo.questionCount,
     tomo: state.tomo

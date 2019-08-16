@@ -22,7 +22,8 @@ const initialState = {
     privateKey: ''
   },
   aliasBalance: 0,
-  isPlaying: false
+  isPlaying: false,
+  ranking: []
 };
 
 const tomoReducer = (state = initialState, action) => {
@@ -118,6 +119,11 @@ const tomoReducer = (state = initialState, action) => {
       return {
         ...state,
         isPlaying: action.isPlaying
+      };
+    case actions.UPDATE_RANKING:
+      return {
+        ...state,
+        ranking: action.ranking
       };
     default:
       return state;

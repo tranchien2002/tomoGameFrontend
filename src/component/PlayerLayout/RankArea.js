@@ -5,7 +5,7 @@ import ScoreBoard from './ScoreBoard';
 import { Animated } from 'react-animated-css';
 import '../../style/App.css';
 
-const RankArea = ({ rank, wincount }) => {
+const RankArea = ({ ranking, wincount }) => {
   return (
     <Col className='box_color' xs={{ size: 12 }} md={{ size: 4, offset: 0 }}>
       <Animated className='set_full_height' animationIn='fadeInRight'>
@@ -16,7 +16,7 @@ const RankArea = ({ rank, wincount }) => {
             <span>Ranking</span>
           </div>
           <div className='person_rank_box'>
-            {rank.map((rank) => (
+            {ranking.map((rank) => (
               <div key={rank.account} className='person_rank'>
                 <p className='user_account'>
                   <span className='ellipsis'>{rank.account}</span>

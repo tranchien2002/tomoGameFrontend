@@ -567,3 +567,27 @@ export const startPlay = () => async (dispatch) => {
     isPlaying: true
   });
 };
+
+export const UPDATE_RANKING = 'UPDATE_RANKING';
+export const updateRank = () => async (dispatch, getState) => {
+  const state = getState();
+  const from = state.tomo.aliasAccount.address;
+  const game = state.tomo.game;
+  var web3 = state.tomo.aliasWeb3;
+  var ranking = [];
+  var getListPlayer = await game.methods.getAllPlayers().call({ from });
+  for (var i = 0; i < getListPlayer.length; i++) {
+    var winCount = await game.methods.winCount(getListPlayer[i]).call({ from });
+    var correct = web3.utils.hexToNumber(winCount);
+    ranking.push({
+      account: getListPlayer[i],
+      correct: correct
+    });
+  }
+  ranking = ranking.sort((a, b) => b.correct - a.correct);
+  ranking = ranking.slice(0, 10);
+  dispatch({
+    type: UPDATE_RANKING,
+    ranking: ranking
+  });
+};
