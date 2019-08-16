@@ -113,7 +113,7 @@ class QuesArea extends Component {
                   >
                     Withdraw
                   </Button>
-                  <ToastContainer autoClose={2000} />
+                  <ToastContainer position='top-center' autoClose={2000} />
                 </div>
               </Col>
               <Col className='set_full_height'>
