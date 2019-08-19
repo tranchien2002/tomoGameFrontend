@@ -516,7 +516,6 @@ export const sendMoneyToAlias = () => async (dispatch, getState) => {
     .transferAlias(aliasAddress)
     .send({ from: from, value: 31 * 10 ** 18 })
     .then(() => {
-      dispatch(getAliasBalance());
       dispatch({
         type: CHECK_ISPLAYING,
         isPlaying: true
