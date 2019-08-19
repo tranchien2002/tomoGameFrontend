@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ReactCountdownClock from 'react-countdown-clock';
 import * as tomoAction from 'actions/tomoAction';
+import ModalDeposit from '../ModalDeposit';
 import store from '../../store';
 import { firestoreConnect } from 'react-redux-firebase';
 import { ToastContainer, toast } from 'react-toastify';
@@ -146,6 +147,15 @@ class QuesArea extends Component {
                   >
                     Withdraw
                   </Button>
+
+                  <ModalDeposit
+                    message='If your alias account is not enough tomo to play, send more tomo to
+                            answer the next questions.'
+                    classNameButton='deposit'
+                    nameButton='Deposit'
+                    className='modal'
+                    colorButton='success'
+                  />
                   <ToastContainer position='top-center' autoClose={2000} />
                 </div>
               </Col>

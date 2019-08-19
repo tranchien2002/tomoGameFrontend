@@ -5,6 +5,7 @@ import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import QuesArea from './QuesArea';
 import RankArea from './RankArea';
+import ModalDeposit from '../ModalDeposit';
 import store from 'store';
 import * as tomoAction from 'actions/tomoAction';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,7 +21,7 @@ class PlayerLayout extends Component {
       account: '0x0',
       balance: ''
     };
-    this.placeABet = this.placeABet.bind(this);
+
     this.startPlay = this.startPlay.bind(this);
   }
 
@@ -135,7 +136,7 @@ class PlayerLayout extends Component {
                     animationOut='bounceOut'
                   >
                     <div className='margin_box '>
-                      {parseFloat(tomo.aliasBalance) > 30 ? (
+                      {parseFloat(tomo.aliasBalance) > 3.1 ? (
                         <div>
                           <span>You have {tomo.aliasBalance} Tomo</span>
                           <Button
@@ -158,18 +159,13 @@ class PlayerLayout extends Component {
                           <ToastContainer className='toast-info' />
                         </div>
                       ) : (
-                        <div>
-                          <span className='title'>
-                            To start play game, you have to send 30 Tomo
-                          </span>
-                          <Button
-                            className='send-tomo'
-                            color='primary'
-                            onClick={(e) => this.placeABet()}
-                          >
-                            Send
-                          </Button>
-                        </div>
+                        <ModalDeposit
+                          message=' You should send 31 Tomo to answer all question. If you send less than 31 Tomo (minimum 3.5 Tomo), you still can play game.However, during the game, you will can have to send more Tomo.'
+                          classNameButton='playgame'
+                          nameButton='Play Game'
+                          className='modal'
+                          colorButton='danger'
+                        />
                       )}
                     </div>
                   </Animated>

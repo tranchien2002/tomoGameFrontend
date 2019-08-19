@@ -532,14 +532,14 @@ export const updateNewGame = (newAddress) => async (dispatch, getState) => {
 };
 
 export const SEND_MONEY_TO_ALIAS = 'SEND_MONEY_TO_ALIAS';
-export const sendMoneyToAlias = () => async (dispatch, getState) => {
+export const sendMoneyToAlias = (value) => async (dispatch, getState) => {
   const state = getState();
   const adminGame = state.tomo.adminGame;
   const from = state.tomo.account;
   const aliasAddress = state.tomo.aliasAccount.address;
   await adminGame.methods
     .transferAlias(aliasAddress)
-    .send({ from: from, value: 31 * 10 ** 18 })
+    .send({ from: from, value: value * 10 ** 18 })
     .then(() => {
       dispatch(getAliasBalance());
       dispatch({

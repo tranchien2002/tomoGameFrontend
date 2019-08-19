@@ -6,14 +6,14 @@
   border-radius: 10px !important;
 }
 
+button.answer_box {
+  padding: 0px !important;
+}
+
 .btn-outline-primary {
   color: black !important;
   font-weight: 800 !important;
   border: none !important;
-}
-
-.btn {
-  padding: 0px !important;
 }
 
 .button-start,
