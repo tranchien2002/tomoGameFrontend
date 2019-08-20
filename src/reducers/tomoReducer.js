@@ -80,7 +80,8 @@ const tomoReducer = (state = initialState, action) => {
     case actions.FETCH_WIN_COUNT:
       return {
         ...state,
-        winCount: action.winCount
+        winCount: action.winCount,
+        questionCount: action.questionCount
       };
     case actions.CREATE_ADMIN_GAME:
       return {

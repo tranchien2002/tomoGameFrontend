@@ -86,17 +86,17 @@ class AdminLayout extends Component {
                 <Row>
                   <Col xs='12' sm='8' md='4'>
                     <Button onClick={() => this.setSingleBounty()} color='primary'>
-                      Single Question
+                      Question Sharing
                     </Button>
                   </Col>
                   <Col xs='12' sm='8' md='4'>
                     <Button onClick={() => this.setAllBounty()} color='primary'>
-                      All Bounty
+                      Bounty Sharing
                     </Button>
                   </Col>
                   <Col xs='12' sm='8' md='4'>
                     <Button onClick={() => this.createGame()} color='primary'>
-                      Create Game
+                      New Game
                     </Button>
                   </Col>
                 </Row>

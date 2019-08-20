@@ -39,6 +39,10 @@ button.answer_box {
   margin-bottom: 1vh;
 }
 
+button.answer_box:focus {
+  border: 2px solid #55dfa1 !important;
+}
+
 /* color outline */
 .btn:focus,
 .btn:active {

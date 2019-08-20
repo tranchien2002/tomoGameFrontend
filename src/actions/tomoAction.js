@@ -282,7 +282,8 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState, { getFi
                   1: 0,
                   2: 0,
                   3: 0
-                }
+                },
+                finished: false
               })
               .then(() => {
                 console.log('done selected question');
@@ -370,16 +371,32 @@ export const answer = (answerIndex) => async (dispatch, getState) => {
 export const SHARE_QUESTION_BOUNTY = 'SHARE_QUESTION_BOUNTY';
 export const shareQuestionBounty = () => async (dispatch, getState) => {
   const state = getState();
+  var db = firebase.firestore();
   const adminGame = state.tomo.adminGame;
   const from = state.tomo.account;
   await adminGame.methods
     .shareQuestionBounty()
     .send({ from: from })
-    .then((result) => {
+    .then(async () => {
       dispatch({
         type: SHARE_QUESTION_BOUNTY,
         bounty: 0
       });
+      await db
+        .collection('current_question')
+        .doc('current')
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            let data = doc.data();
+            data.finished = true;
+            db.collection('current_question')
+              .doc('current')
+              .set(data);
+          } else {
+            console.log('No such a document');
+          }
+        });
     })
     .catch((e) => {
       console.log('Error bounty question', e);
@@ -414,10 +431,12 @@ export const fetchWinCount = () => async (dispatch, getState) => {
   let winCount = await game.methods.winCount(from).call({
     from: from
   });
+  let questionCount = await game.methods.currentQuestion().call({ from });
   winCount = web3.utils.hexToNumber(winCount);
   dispatch({
     type: FETCH_WIN_COUNT,
-    winCount
+    winCount,
+    questionCount
   });
 };
 
@@ -482,6 +501,12 @@ export const createAdminGame = () => async (dispatch, getState, { getFirestore }
                   .doc(e['id'])
                   .set(e);
               });
+            })
+            .then(async () => {
+              await db
+                .collection('current_question')
+                .doc('current')
+                .update({ finished: true });
             });
         });
     })

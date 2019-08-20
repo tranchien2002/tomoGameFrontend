@@ -68,13 +68,14 @@ class PlayerLayout extends Component {
     const { question, questionCount } = this.props;
     const { wincount } = this.props;
     const { tomo } = this.props;
-
     return (
       <div>
         <Container>
           {tomo.web3 ? (
             tomo.isPlaying ? (
-              question && questionCount < 10 ? (
+              question &&
+              questionCount < 10 &&
+              (question[0].finished === false || questionCount !== 0) ? (
                 <Row className='set_height'>
                   <QuesArea ques={question} acc={this.props.tomo} />
                   <RankArea ranking={ranking} wincount={wincount} />
@@ -83,7 +84,13 @@ class PlayerLayout extends Component {
                 <Row className='set_height'>
                   <Col className='box_color' xs='12' md='8'>
                     <div className='margin_box '>
-                      <span> Waiting ...</span>
+                      <span> Waiting a new game...</span>
+                      <img
+                        alt=''
+                        src='https://media.giphy.com/media/2A0JSxcE0eQfrQrjAZ/giphy.gif'
+                        className='gif-load'
+                        width='60%'
+                      />
                     </div>
                   </Col>
                   <RankArea ranking={ranking} />

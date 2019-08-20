@@ -19,8 +19,9 @@ const RankArea = ({ ranking, wincount }) => {
             {ranking.map((rank) => (
               <div key={rank.account} className='person_rank'>
                 <p className='user_account'>
-                  <span className='ellipsis'>{rank.account}</span>
-                  <span className='indent'>{rank.account}</span>
+                  <span className='ellipsis'>
+                    {rank.account.substr(0, 6)}...{rank.account.substr(-4)}
+                  </span>
                 </p>
                 <p>{rank.correct}/10</p>
               </div>
