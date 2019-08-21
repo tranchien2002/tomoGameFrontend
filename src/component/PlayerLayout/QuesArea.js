@@ -16,11 +16,10 @@ class QuesArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: false,
+      disabled: this.props.question[0].finished ? true : false,
       isAliasAccount: true,
-      time: 10
+      time: this.props.question[0].finished ? 0 : 10
     };
-
     this.click = this.click.bind(this);
     this.changeDisabled = this.changeDisabled.bind(this);
     this.countDown = this.countDown.bind(this);
@@ -101,13 +100,13 @@ class QuesArea extends Component {
                 {this.state.isAliasAccount ? (
                   <div>
                     <p>
-                      <strong>Alias account: </strong>
+                      <strong>Game account: </strong>
                       {`${this.props.aliasAddress.substr(0, 6)}...${this.props.aliasAddress.substr(
                         -4
                       )}`}
                     </p>
                     <p>
-                      <strong>Alias Balance: </strong>
+                      <strong>Game Balance: </strong>
                       {`${this.props.aliasBalance} `}
                       <img width='35' src='https://i.imgur.com/VZgib3M.png' alt='tomoCoin' />
                     </p>
