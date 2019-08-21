@@ -45,6 +45,10 @@ class PlayerLayout extends Component {
     }
   }
 
+  getMoneyBack() {
+    store.dispatch(tomoAction.sendMoneyBack());
+  }
+
   placeABet() {
     store.dispatch(tomoAction.sendMoneyToAlias());
   }
@@ -73,9 +77,35 @@ class PlayerLayout extends Component {
         <Container>
           {tomo.web3 ? (
             tomo.isPlaying ? (
-              question &&
-              questionCount < 10 &&
-              (question[0].finished === false || questionCount !== 0) ? (
+              wincount === 10 ? (
+                <Row className='set_height'>
+                  <Col className='box_color' xs='12' md='8'>
+                    <div className='margin_box '>
+                      <span> The winner is youuuuu</span>
+                      <Button
+                        color='none'
+                        className='withdraw'
+                        onClick={(e) => {
+                          this.getMoneyBack();
+                          this.notifyInfo('Withdrawing...');
+                        }}
+                      >
+                        Withdraw
+                      </Button>
+                      <ToastContainer position='top-center' autoClose={2000} />
+                      <img
+                        alt=''
+                        src='https://media.giphy.com/media/2A0JSxcE0eQfrQrjAZ/giphy.gif'
+                        className='gif-load'
+                        width='60%'
+                      />
+                    </div>
+                  </Col>
+                  <RankArea ranking={ranking} wincount={wincount} />
+                </Row>
+              ) : question &&
+                questionCount < 10 &&
+                (question[0].finished === false || questionCount !== 0) ? (
                 <Row className='set_height'>
                   <QuesArea ques={question} acc={this.props.tomo} />
                   <RankArea ranking={ranking} wincount={wincount} />
