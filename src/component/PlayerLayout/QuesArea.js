@@ -150,6 +150,9 @@ class QuesArea extends Component {
                 </div>
               </Col>
               <Col className='set_full_height'>
+                <div className='font-number-question'>
+                  Question {this.props.questionCount + 1} :
+                </div>
                 <div
                   className='question_position'
                   dangerouslySetInnerHTML={{ __html: qes[0].question }}
@@ -170,13 +173,42 @@ class QuesArea extends Component {
                       color='primary'
                       disabled={this.state.disabled}
                     >
-                      <Progress value={this.percent(qes[0].user_choice[key])}>
-                        <div
-                          className='text_in_button'
-                          dangerouslySetInnerHTML={{ __html: item }}
-                        />
-                        <div className='text_in_button user_number'>{qes[0].user_choice[key]}</div>
-                      </Progress>
+                      {qes[0].finished ? (
+                        qes[0].correct === key ? (
+                          <Progress value={this.percent(qes[0].user_choice[key])}>
+                            <div
+                              className='text_in_button'
+                              dangerouslySetInnerHTML={{ __html: item }}
+                            />
+                            <div className='text_in_button user_number'>
+                              {qes[0].user_choice[key]}
+                            </div>
+                          </Progress>
+                        ) : (
+                          <Progress
+                            className='wrong-answer'
+                            value={this.percent(qes[0].user_choice[key])}
+                          >
+                            <div
+                              className='text_in_button'
+                              dangerouslySetInnerHTML={{ __html: item }}
+                            />
+                            <div className='text_in_button user_number'>
+                              {qes[0].user_choice[key]}
+                            </div>
+                          </Progress>
+                        )
+                      ) : (
+                        <Progress value={this.percent(qes[0].user_choice[key])}>
+                          <div
+                            className='text_in_button'
+                            dangerouslySetInnerHTML={{ __html: item }}
+                          />
+                          <div className='text_in_button user_number'>
+                            {qes[0].user_choice[key]}
+                          </div>
+                        </Progress>
+                      )}
                     </Button>
                   </Col>
                 ))}
@@ -196,7 +228,8 @@ const mapStatetoProps = (state) => {
     balance: state.tomo.balance,
     aliasBalance: state.tomo.aliasBalance,
     aliasAddress: state.tomo.aliasAccount.address,
-    account: state.tomo.account
+    account: state.tomo.account,
+    questionCount: state.tomo.questionCount
   };
 };
 

@@ -50,11 +50,11 @@ p {
 
 @media only screen and (max-width: 430px) {
   .margin_box {
-    height: 100vh;
+    height: 120vh;
   }
 
   .box_color.col-12.col-md-4.offset-md-0 {
-    margin-top: 10vh;
+    margin-top: 26vh;
   }
   .question_position span {
     font-size: 7vw;
@@ -353,4 +353,8 @@ button.withdraw {
 
 canvas {
   display: flex;
+}
+
+.font-number-question {
+  font-weight: 600 !important;
 }

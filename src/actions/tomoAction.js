@@ -560,6 +560,12 @@ export const getAliasBalance = () => async (dispatch, getState) => {
 
   aliasBalance = web3.utils.fromWei(aliasBalance);
 
+  if (aliasBalance.includes('.')) {
+    let interger = aliasBalance.split('.', 2)[0];
+    let fractional = aliasBalance.split('.', 2)[1].substr(0, 4);
+    aliasBalance = interger.concat('.', fractional, ' ');
+  }
+
   dispatch({
     type: GET_ALIAS_BALANCE,
     aliasBalance

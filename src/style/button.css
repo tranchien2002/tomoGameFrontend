@@ -59,6 +59,12 @@ button.answer_box:focus {
   box-shadow: 0 0 3pt 2pt #55dfa1af !important;
 } */
 
+.wrong-answer > .progress-bar {
+  background-color: #adadad !important;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
 .progress-bar {
   background-color: #55dfa1 !important;
   border-top-right-radius: 10px;
