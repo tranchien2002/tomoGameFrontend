@@ -4,6 +4,15 @@ p {
   margin-bottom: 0.5rem !important;
 }
 
+label {
+  font-size: 1.25em !important;
+  text-align: center !important;
+}
+
+button.play-game {
+  margin-top: 3vh;
+}
+
 .margin_box div p.title {
   font-size: 3em;
 }
@@ -219,8 +228,21 @@ p {
   }
 }
 
-button.withdraw {
+div.modal-container {
+  display: inline-block;
+}
+
+button.withdraw,
+button.deposit {
   padding: 2px 5px !important;
+}
+
+button.playgame {
+  margin-top: 3vh;
+}
+
+button.deposit {
+  margin-left: 3px;
 }
 
 .Toastify {
