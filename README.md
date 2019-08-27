@@ -3,24 +3,77 @@
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
 </p>
 
-## Prerequisites
+![](/image/logo.png)
 
-- npm >= 6.9.0
-- node >= 10.16.0
+## Description
 
-## Install
+This is the game that answers the question. There are a total of 10 questions, each player will have to bet 3 `Tomo` for a question. If true, they will receive some `Tomo` equal to the total number of tomo of all participants answered divided by the number of correct respondents. If the answer is wrong, the player will not get anything back. The players answer all questions correctly will receive a reward from Admin. If no one answers correctly in a question, the bet amount will be transferred to Admin and the game will end.
 
-```sh
-npm install
-```
+## Feature
 
-or
+- Build on ReactJS, Firebase .
+- Blockchain tech with Tomochain.
 
-```sh
-yarn install
-```
+## For end user: Play the game
 
-## Setup firebase
+The game participants will have 2 roles
+
+- Admin
+- Player
+
+### For Admin
+
+If you are Admin go to /admin
+
+![playGame](/image/admin.png)
+
+If you are the Admin you need to create game first and then select the question. After 10s Admin can publish the answer of the question and divide Tomo for the players who have answered correctly by pressing the `Question Sharing` button. After everyone answers 10 questions , press `Bounty Sharing` button to divide the money for players who have correctly answered 10 questions .
+
+### For Player
+
+Open the app, click `Play Game` Button
+
+![playGame](/image/playGame.png)
+
+After send Tomo to Game Account . Players will wait for Admin to create a new game
+
+![waitingNewGame](/image/waitingNewGame.png)
+
+After the Admin created the game and choose the first question the game will start. Player will have 10 seconds to answer the question. Players can see what other player choose and give own answers.
+
+![answerQuestion](/image/answerQuestion.png)
+
+The game has a scoreboard and a ranking to see who answers the most questions correctly.
+
+![scoreAndRanking](/image/scoreAndRanking.png)
+
+The player who answered correctly all 10 questions will be the final winner.
+
+![winner](/image/winner.png)
+
+In the process of playing, you can withdraw the initial deposit and the interest amount when give correct answer at any time.
+
+## For developer
+
+### General
+
+There are serveral main components in this project:
+
+- Contracts
+  - Solidity
+  - Tomochain testnet
+- Frontend
+  - ReactJs
+  - Redux
+  - Web3.js
+- Database
+  - Firebase
+
+(we will update latest source code later)
+
+### How to install
+
+**Set up Firebase**
 
 We are using firebase for database , you need to create a project in firebase after that click **`Add Firebase to you web app`** and copy script **firebaseConfig** to `src/config/index.example.js`
 
@@ -55,7 +108,23 @@ or
 yarn firebase
 ```
 
-## Usage
+**Set up Contract**
+
+// TODO
+
+**Set up Frontend**
+
+```sh
+npm install
+```
+
+or
+
+```sh
+yarn install
+```
+
+then
 
 ```sh
 npm start
@@ -67,44 +136,17 @@ or
 yarn start
 ```
 
-Runs the app in the development mode.
-Open http://localhost:3000 to view it in the browser.
+## Known issues
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+Due of short duration of development in this hackathon, we've faced many trouble, and some even still exitst in latest build.
 
-### If you are Admin
+- Displays the number of players who choose the answer sometimes wrong.
+- 10 seconds for players to answer questions confirmed on the blockchain by counting next 5 block confirmation, sometimes users have less than 10 seconds to answer the question.
+- Other minor bugs...
 
-- First go to http://localhost:3000/admin to create new game (If you don't create game it make an error in player screen)
-- Choice a question for player ,
-- share bounty after single question and after 10 question .
+## Next Plan
 
-## Run tests
-
-```sh
-npm test
-```
-
-or
-
-```sh
-yarn test
-```
-
-Launches the test runner in the interactive watch mode.
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-## Run build
-
-```sh
-npm run build
-```
-
-Builds the app for production to the build folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.
-Your app is ready to be deployed!
+In future in next versions, we are going to fix all bugs and publish the game in other platforms version, too. And of course, support multichain like Tomochain mainnet, ETH mainnet, Ropsten, Loom, Rinkeby....
 
 ## Show your support
 
