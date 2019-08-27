@@ -5,6 +5,7 @@ import { compose } from 'redux';
 import ReactCountdownClock from 'react-countdown-clock';
 import * as tomoAction from 'actions/tomoAction';
 import ModalDeposit from '../ModalDeposit';
+import * as Scroll from 'react-scroll';
 import store from '../../store';
 import { firestoreConnect } from 'react-redux-firebase';
 import { ToastContainer, toast } from 'react-toastify';
@@ -26,6 +27,11 @@ class QuesArea extends Component {
     this.countDown = this.countDown.bind(this);
     this.percent = this.percent.bind(this);
     this.getMoneyBack = this.getMoneyBack.bind(this);
+  }
+
+  // auto scroll name='fixedScrol' when loading page
+  componentDidMount() {
+    Scroll.scroller.scrollTo('fixedScroll');
   }
 
   shouldComponentUpdate(nextProps) {
@@ -126,7 +132,7 @@ class QuesArea extends Component {
                     </p>
                   </div>
                 )}
-                <div className='group-button'>
+                <div className='group-button' name='fixedScroll'>
                   <label className='switchSmall m5'>
                     <input
                       type='checkbox'
