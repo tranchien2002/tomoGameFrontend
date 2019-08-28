@@ -110,7 +110,33 @@ yarn firebase
 
 **Set up Contract**
 
-// TODO
+```sh
+npm install
+```
+
+or
+
+```sh
+yarn install
+```
+
+Then, adding a new .env file :
+
+```js
+MNENOMIC = 'YOUR PRIVATE SEED PHRASE';
+```
+
+Migrate contract:
+
+In this application, we are using Tomochain testnet to migrate smart contract and truffle framework to deploy.
+
+You can migrate your contracts by command:
+
+```js
+yarn truffle migrate --network tomotestnet
+```
+
+Some files will appear in **_build/contracts_** folder, there are contracts code after migrated. You need to move folder **_contracts_** to **_/src_** in frontend folder.
 
 **Set up Frontend**
 
