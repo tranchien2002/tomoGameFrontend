@@ -82,7 +82,13 @@ class PlayerLayout extends Component {
                 <Row className='set_height'>
                   <Col className='box_color' xs='12' md='8'>
                     <div className='margin_box '>
-                      <span> The winner is youuuuu</span>
+                      <br />
+                      <p className='congrat'>Congratulation! You are winner</p>
+                      <div>
+                        <strong>Game Balance:</strong> {this.props.aliasBalance}
+                        <img width='35' src='https://i.imgur.com/VZgib3M.png' alt='tomoCoin' />
+                      </div>
+
                       <Button
                         color='none'
                         className='withdraw'
@@ -96,9 +102,9 @@ class PlayerLayout extends Component {
                       <ToastContainer position='top-center' autoClose={2000} />
                       <img
                         alt=''
-                        src='https://media.giphy.com/media/2A0JSxcE0eQfrQrjAZ/giphy.gif'
-                        className='gif-load'
-                        width='60%'
+                        src='https://media.giphy.com/media/fxsqOYnIMEefC/giphy.gif'
+                        className='gif-congrat mt-3'
+                        width='80%'
                       />
                     </div>
                   </Col>
@@ -116,6 +122,22 @@ class PlayerLayout extends Component {
                   <Col className='box_color' xs='12' md='8'>
                     <div className='margin_box '>
                       <span> Waiting a new game...</span>
+                      <div>
+                        <strong>Game Balance:</strong> {this.props.aliasBalance}
+                        <img width='35' src='https://i.imgur.com/VZgib3M.png' alt='tomoCoin' />
+                      </div>
+
+                      <Button
+                        color='none'
+                        className='withdraw'
+                        onClick={(e) => {
+                          this.getMoneyBack();
+                          this.notifyInfo('Withdrawing...');
+                        }}
+                      >
+                        Withdraw
+                      </Button>
+                      <ToastContainer position='top-center' autoClose={2000} />
                       <img
                         alt=''
                         src='https://media.giphy.com/media/2A0JSxcE0eQfrQrjAZ/giphy.gif'
@@ -196,7 +218,8 @@ const mapStatetoProps = (state) => {
     ranking: state.tomo.ranking,
     wincount: state.tomo.winCount,
     questionCount: state.tomo.questionCount,
-    tomo: state.tomo
+    tomo: state.tomo,
+    aliasBalance: state.tomo.aliasBalance
   };
 };
 

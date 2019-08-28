@@ -380,3 +380,11 @@ canvas {
 .font-number-question {
   font-weight: 600 !important;
 }
+
+.congrat {
+  background: linear-gradient(to left, violet, indigo, blue, green, orange, red);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-size: 20px;
+}
