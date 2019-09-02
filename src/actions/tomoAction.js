@@ -563,7 +563,13 @@ export const getAliasBalance = () => async (dispatch, getState) => {
   if (aliasBalance.includes('.')) {
     let interger = aliasBalance.split('.', 2)[0];
     let fractional = aliasBalance.split('.', 2)[1].substr(0, 4);
-    aliasBalance = interger.concat('.', fractional, ' ');
+    if (interger === '0' && fractional === '0000') {
+      aliasBalance = '0 ';
+    } else if (fractional === '0000') {
+      aliasBalance = interger + ' ';
+    } else {
+      aliasBalance = interger.concat('.', fractional, ' ');
+    }
   }
 
   dispatch({

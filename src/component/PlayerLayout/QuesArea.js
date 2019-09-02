@@ -31,7 +31,9 @@ class QuesArea extends Component {
 
   // auto scroll name='fixedScrol' when loading page
   componentDidMount() {
-    Scroll.scroller.scrollTo('fixedScroll');
+    if (this.props.winCount < 10) {
+      Scroll.scroller.scrollTo('fixedScroll');
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -245,7 +247,8 @@ const mapStatetoProps = (state) => {
     aliasBalance: state.tomo.aliasBalance,
     aliasAddress: state.tomo.aliasAccount.address,
     account: state.tomo.account,
-    questionCount: state.tomo.questionCount
+    questionCount: state.tomo.questionCount,
+    winCount: state.tomo.winCount
   };
 };
 

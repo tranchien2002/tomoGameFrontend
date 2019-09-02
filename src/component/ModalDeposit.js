@@ -83,7 +83,7 @@ class ModalDeposit extends React.Component {
               </ModalBody>
             </FormGroup>
             <ModalFooter>
-              <Button color='primary' type='submit'>
+              <Button color='primary' type='submit' onClick={this.toggle}>
                 Send
               </Button>
               <Button color='secondary' onClick={this.toggle}>
