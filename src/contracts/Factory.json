@@ -13,8 +13,7 @@
       ],
       "payable": false,
       "stateMutability": "view",
-      "type": "function",
-      "signature": "0x0a0f8168"
+      "type": "function"
     },
     {
       "constant": true,
@@ -33,28 +32,7 @@
       ],
       "payable": false,
       "stateMutability": "view",
-      "type": "function",
-      "signature": "0x117a5b90"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_newCeo",
-          "type": "address"
-        }
-      ],
-      "name": "setCeo",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0x88975198"
-    },
-    {
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "fallback"
+      "type": "function"
     },
     {
       "constant": false,
@@ -68,8 +46,21 @@
       ],
       "payable": false,
       "stateMutability": "nonpayable",
-      "type": "function",
-      "signature": "0x7255d729"
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newCeo",
+          "type": "address"
+        }
+      ],
+      "name": "setCeo",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": true,
@@ -83,8 +74,12 @@
       ],
       "payable": false,
       "stateMutability": "view",
-      "type": "function",
-      "signature": "0xdb1c45f9"
+      "type": "function"
+    },
+    {
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "fallback"
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.5.0+commit.1d4f565a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[],\"name\":\"ceoAddress\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"games\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"createGame\",\"outputs\":[{\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_newCeo\",\"type\":\"address\"}],\"name\":\"setCeo\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getAllGames\",\"outputs\":[{\"name\":\"\",\"type\":\"address[]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"fallback\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/tran.minh.chien/Workspace/Blockchain/tomoGame/contracts/Factory.sol\":\"Factory\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/tran.minh.chien/Workspace/Blockchain/tomoGame/contracts/AccessControl.sol\":{\"keccak256\":\"0x6e3a38a1277d59d48a1cea457e60f9b3f37595e14d224a790858365139565632\",\"urls\":[\"bzzr://aa5dd29c65d56fcdf49130352f79096d60e04f197891ab4b7ac5c1adc78b0c22\"]},\"/home/tran.minh.chien/Workspace/Blockchain/tomoGame/contracts/Factory.sol\":{\"keccak256\":\"0x5e99b2c1a00168dedbb5040df4029403030787a6246a41c95289b3d1a25bc2ed\",\"urls\":[\"bzzr://dbe9f8f41697719a440fa9702ad75943af5ac3dad1db3c3342b5f0601956bcf2\"]},\"/home/tran.minh.chien/Workspace/Blockchain/tomoGame/contracts/Game.sol\":{\"keccak256\":\"0x0d700d2e1ec163cc0272b2a3863e4893387f67b57f21103605eaf6b4c01c1a1a\",\"urls\":[\"bzzr://3e5da20192112b12019db3a7581416f24357bc1127002b889a7c5861ac971758\"]}},\"version\":1}",
@@ -97,21 +92,14 @@
   "ast": {
     "absolutePath": "/home/tran.minh.chien/Workspace/Blockchain/tomoGame/contracts/Factory.sol",
     "exportedSymbols": {
-      "Factory": [
-        94
-      ]
+      "Factory": [94]
     },
     "id": 95,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 47,
-        "literals": [
-          "solidity",
-          "^",
-          "0.5",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.5", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:1"
       },
@@ -158,18 +146,12 @@
             "src": "96:13:1"
           }
         ],
-        "contractDependencies": [
-          45,
-          776
-        ],
+        "contractDependencies": [45, 776],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
         "id": 94,
-        "linearizedBaseContracts": [
-          94,
-          45
-        ],
+        "linearizedBaseContracts": [94, 45],
         "name": "Factory",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -217,9 +199,7 @@
               "src": "231:108:1",
               "statements": [
                 {
-                  "assignments": [
-                    62
-                  ],
+                  "assignments": [62],
                   "declarations": [
                     {
                       "constant": false,
@@ -665,21 +645,14 @@
   "legacyAST": {
     "absolutePath": "/home/tran.minh.chien/Workspace/Blockchain/tomoGame/contracts/Factory.sol",
     "exportedSymbols": {
-      "Factory": [
-        94
-      ]
+      "Factory": [94]
     },
     "id": 95,
     "nodeType": "SourceUnit",
     "nodes": [
       {
         "id": 47,
-        "literals": [
-          "solidity",
-          "^",
-          "0.5",
-          ".0"
-        ],
+        "literals": ["solidity", "^", "0.5", ".0"],
         "nodeType": "PragmaDirective",
         "src": "0:23:1"
       },
@@ -726,18 +699,12 @@
             "src": "96:13:1"
           }
         ],
-        "contractDependencies": [
-          45,
-          776
-        ],
+        "contractDependencies": [45, 776],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
         "id": 94,
-        "linearizedBaseContracts": [
-          94,
-          45
-        ],
+        "linearizedBaseContracts": [94, 45],
         "name": "Factory",
         "nodeType": "ContractDefinition",
         "nodes": [
@@ -785,9 +752,7 @@
               "src": "231:108:1",
               "statements": [
                 {
-                  "assignments": [
-                    62
-                  ],
+                  "assignments": [62],
                   "declarations": [
                     {
                       "constant": false,
@@ -1238,8 +1203,14 @@
     "89": {
       "events": {},
       "links": {},
-      "address": "0xCbd308dd511c930Ccc6E581279DEbFFcF7038AFF",
-      "transactionHash": "0x8f7700fefa3e2ccf2e10eb7e9ade4fa5c0c9dfb9a96cf43d2370ddcd60acf03f"
+      "address": "0xaF962F7eD6FDc7F13fA14586d05b64A0076b0c79",
+      "transactionHash": "0x5fc3a7f9d820768e73692f5c8fe4ea2e17c3ff2e7475e4a9fb786aa0032ecaeb"
+    },
+    "88": {
+      "events": {},
+      "links": {},
+      "address": "0x52eD2A8bc0a78D62c032F53A8f97D80a04C7A687",
+      "transactionHash": "0xe89a9fb3318504af724576405bb67e750f6198f537709adf2ff24012eb16d065"
     }
   },
   "schemaVersion": "3.0.6",

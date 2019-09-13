@@ -23,6 +23,10 @@ export const web3Connect = () => async (dispatch) => {
   // const web3 = new Web3(Web3.givenProvider || 'ws://127.0.0.1:8545');
   const web3 = await getWeb3();
   const accounts = await web3.eth.getAccounts();
+  if (web3.currentProvider.connection.networkVersion !== '88') {
+    alert('Unknown network, please change network to TomoChain network');
+    return;
+  }
   if (accounts.length > 0) {
     const account = accounts[0];
     dispatch({
@@ -43,6 +47,14 @@ export const web3Connect = () => async (dispatch) => {
 export const web3TomoWalletConnect = () => async (dispatch) => {
   var Web3 = require('web3');
   const web3 = new Web3(window.web3.currentProvider);
+  let network_fail = false
+  window.web3.version.getNetwork((e, netId) => {
+    if (netId !== '88') {
+      network_fail = true
+      alert('Unknown network, please change network to TomoChain network');
+    }
+  });
+  if(network_fail) return;
   window.web3.eth.getAccounts((e, accounts) => {
     if (accounts.length > 0) {
       const account = accounts[0];
@@ -104,7 +116,7 @@ export const loginAliasAccount = () => async (dispatch, getState) => {
 
   var provider = new HDWalletProvider(
     privateKey.replace('0x', ''),
-    'https://testnet.tomochain.com'
+    'https://rpc.tomochain.com'
   );
   var aliasWeb3 = new Web3(provider);
   dispatch({
@@ -123,6 +135,7 @@ export const instantiateGame = () => async (dispatch, getState) => {
   let from = state.tomo.aliasAccount.address;
   let listGame = await factory.methods.getAllGames().call({ from });
   let currentGameAddress = listGame[listGame.length - 1];
+  debugger
   const game = new aliasWeb3.eth.Contract(GameArtifact.abi, currentGameAddress, {
     transactionConfirmationBlocks: 1
   });
@@ -327,7 +340,7 @@ export const answer = (answerIndex) => async (dispatch, getState) => {
     .answer(answer)
     .send({
       from: from,
-      value: 3 * 10 ** 18,
+      value: 10 ** 18,
       // TODO tinh gas limit
       gasLimit: aliasWeb3.utils.toHex(2000000),
       gasPrice: aliasWeb3.utils.toHex(aliasWeb3.utils.toWei('0.25', 'gwei'))
@@ -607,6 +620,8 @@ export const updateRank = () => async (dispatch, getState) => {
   var web3 = state.tomo.aliasWeb3;
   var ranking = [];
   var getListPlayer = await game.methods.getAllPlayers().call({ from });
+  console.log("players", getListPlayer)
+  if(!getListPlayer) return
   for (var i = 0; i < getListPlayer.length; i++) {
     var winCount = await game.methods.winCount(getListPlayer[i]).call({ from });
     var correct = web3.utils.hexToNumber(winCount);

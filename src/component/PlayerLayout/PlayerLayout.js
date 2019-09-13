@@ -136,7 +136,7 @@ class PlayerLayout extends Component {
                     animationOut='bounceOut'
                   >
                     <div className='margin_box '>
-                      {parseFloat(tomo.aliasBalance) > 3.1 ? (
+                      {parseFloat(tomo.aliasBalance) > 1.1 ? (
                         <div>
                           <span>You have {tomo.aliasBalance} Tomo</span>
                           <Button
@@ -160,7 +160,7 @@ class PlayerLayout extends Component {
                         </div>
                       ) : (
                         <ModalDeposit
-                          message=' You should send 31 Tomo to answer all question. If you send less than 31 Tomo (minimum 3.5 Tomo), you still can play game.However, during the game, you will can have to send more Tomo.'
+                          message=' You should send 11 Tomo to answer all question. If you send less than 11 Tomo (minimum 1.5 Tomo), you still can play game.However, during the game, you may have to send more Tomo as you need to place 1 Tomo for each answer. You can withdraw Tomo whenever you want'
                           classNameButton='playgame'
                           nameButton='Play Game'
                           className='modal'

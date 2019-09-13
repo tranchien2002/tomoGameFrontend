@@ -19,7 +19,7 @@ class ModalDeposit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 31,
+      value: 11,
       modal: false,
       unmountOnClose: true
     };
@@ -31,7 +31,7 @@ class ModalDeposit extends React.Component {
   }
 
   handleChange(event) {
-    if (event.target.value > 3 || event.target.value <= 31) {
+    if (event.target.value > 1 || event.target.value <= 11) {
       this.setState({ value: event.target.value });
     }
   }
