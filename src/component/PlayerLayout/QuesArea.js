@@ -20,7 +20,7 @@ class QuesArea extends Component {
     this.state = {
       disabled: this.props.question[0].finished ? true : false,
       isAliasAccount: true,
-      time: this.props.question[0].finished ? 0 : 10
+      time: this.props.question[0].finished ? 0 : (this.props.question[1].epoch_time ? this.props.question[1].epoch_time : 0)
     };
     this.click = this.click.bind(this);
     this.changeDisabled = this.changeDisabled.bind(this);
@@ -239,6 +239,7 @@ class QuesArea extends Component {
 
 const mapStatetoProps = (state) => {
   const question = state.firestore.ordered.current_question;
+  let date = new Date();
   return {
     question: question,
     balance: state.tomo.balance,

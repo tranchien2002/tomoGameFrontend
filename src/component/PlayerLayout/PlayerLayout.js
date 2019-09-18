@@ -31,7 +31,7 @@ class PlayerLayout extends Component {
         store.dispatch(tomoAction.fetchWinCount());
         store.dispatch(tomoAction.getBalance());
         store.dispatch(tomoAction.getAliasBalance());
-        store.dispatch(tomoAction.updateRank());
+        // store.dispatch(tomoAction.updateRank());
       }
     }, 1000);
   }

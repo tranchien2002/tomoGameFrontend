@@ -306,6 +306,19 @@ export const setQuestion = (correctAnswer) => async (dispatch, getState, { getFi
               .catch(function(error) {
                 console.error('Error removing document: ', error);
               });
+            
+            let date = new Date();
+            let dateUtc = new Date( date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds() );
+            await firestore
+              .collection('current_question')
+              .doc('time')
+              .set({epoch_time: Math.floor(dateUtc.getTime() / 1000)})
+              .then(() => {
+                console.log("set timer")
+              })
+              .catch(function(err) {
+                console.log(err)
+              })
           } else {
             console.log('No such document!');
           }
